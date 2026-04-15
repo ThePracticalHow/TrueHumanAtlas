@@ -1,0 +1,124 @@
+{
+  "atlas": "hongyan_v0.2",
+  "name": "Hongyan Atlas (\u7ea2\u989c) \u2014 The Red Goddess",
+  "date": "2026-04-13",
+  "viruses": [
+    "Influenza_A",
+    "HCV",
+    "SARS-CoV-2"
+  ],
+  "conditions": {
+    "hongyan_Influenza_A_GSE97672_all": {
+      "n_samples": 64,
+      "n_genes": 26485,
+      "op_genes": {
+        "RIBO": 296,
+        "MITO": 203,
+        "GOLGI": 187
+      },
+      "ribo_indep": 0.2528,
+      "det_k": 0.0088,
+      "K_RM": 0.7241,
+      "K_RG": 0.5416,
+      "K_MN": 0.757,
+      "virus": "Influenza_A",
+      "infection_type": "host_infection"
+    },
+    "hongyan_Influenza_A_GSE97672_MDM-315": {
+      "n_samples": 16,
+      "n_genes": 26485,
+      "op_genes": {
+        "RIBO": 296,
+        "MITO": 203,
+        "GOLGI": 187
+      },
+      "ribo_indep": 0.3245,
+      "det_k": 0.0177,
+      "K_RM": 0.3588,
+      "K_RG": 0.7029,
+      "K_MN": 0.3971,
+      "virus": "Influenza_A",
+      "infection_type": "host_infection"
+    },
+    "hongyan_Influenza_A_GSE97672_MDM-418": {
+      "n_samples": 16,
+      "n_genes": 26485,
+      "op_genes": {
+        "RIBO": 296,
+        "MITO": 203,
+        "GOLGI": 187
+      },
+      "ribo_indep": 0.1225,
+      "det_k": 0.0013,
+      "K_RM": 0.8853,
+      "K_RG": 0.7735,
+      "K_MN": 0.8676,
+      "virus": "Influenza_A",
+      "infection_type": "host_infection"
+    },
+    "hongyan_Influenza_A_GSE97672_MDM-513": {
+      "n_samples": 16,
+      "n_genes": 26485,
+      "op_genes": {
+        "RIBO": 296,
+        "MITO": 203,
+        "GOLGI": 187
+      },
+      "ribo_indep": 0.2461,
+      "det_k": 0.0153,
+      "K_RM": 0.7471,
+      "K_RG": 0.6294,
+      "K_MN": 0.8647,
+      "virus": "Influenza_A",
+      "infection_type": "host_infection"
+    },
+    "hongyan_Influenza_A_GSE97672_MDM-520": {
+      "n_samples": 16,
+      "n_genes": 26485,
+      "op_genes": {
+        "RIBO": 296,
+        "MITO": 203,
+        "GOLGI": 187
+      },
+      "ribo_indep": 0.3931,
+      "det_k": 0.013,
+      "K_RM": 0.8088,
+      "K_RG": 0.0618,
+      "K_MN": 0.8647,
+      "virus": "Influenza_A",
+      "infection_type": "host_infection"
+    },
+    "hongyan_HCV_GSE84346_all": {
+      "n_samples": 46,
+      "n_genes": 55719,
+      "op_genes": {
+        "RIBO": 1759,
+        "MITO": 211,
+        "GOLGI": 206
+      },
+      "ribo_indep": 0.7427,
+      "det_k": 0.2,
+      "K_RM": 0.5388,
+      "K_RG": -0.0152,
+      "K_MN": 0.6559,
+      "virus": "HCV",
+      "infection_type": "host_infection"
+    },
+    "hongyan_SARS-CoV-2_blanco_melo_all": {
+      "n_samples": 78,
+      "n_genes": 21797,
+      "op_genes": {
+        "RIBO": 286,
+        "MITO": 99,
+        "GOLGI": 178
+      },
+      "ribo_indep": 0.0387,
+      "det_k": 0.0,
+      "K_RM": 0.9865,
+      "K_RG": 0.9369,
+      "K_MN": 0.9533,
+      "virus": "SARS-CoV-2",
+      "infection_type": "host_infection"
+    }
+  }
+}

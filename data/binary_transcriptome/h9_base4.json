@@ -1,0 +1,45 @@
+{
+  "tool": "STAFF_Binary_Transcripter_v2_Base4",
+  "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+  "n_reads": 337364,
+  "n_spliced": 233258,
+  "total_bases": 516275464,
+  "base4": {
+    "A": 135977249,
+    "T": 135244322,
+    "C": 124050812,
+    "G": 121003081
+  },
+  "gc_content": 47.4657,
+  "junction_xor_base4": {
+    "00_IDENTITY": 472871,
+    "01_COMPLEMENT": 197597,
+    "10_TRANSVERSION": 236095,
+    "11_TRANSITION": 380478
+  },
+  "background_xor_base4": {
+    "00_IDENTITY": 2008382,
+    "01_COMPLEMENT": 1494541,
+    "10_TRANSVERSION": 1576826,
+    "11_TRANSITION": 1667531
+  },
+  "junction_pairs": {
+    "C|C": 208393,
+    "G|G": 190426,
+    "T|C": 133336,
+    "G|A": 121707,
+    "G|C": 120889,
+    "A|C": 85920,
+    "G|T": 73928,
+    "A|G": 69848,
+    "C|T": 55587,
+    "T|G": 40413,
+    "A|A": 38396,
+    "C|A": 35834,
+    "T|T": 35656,
+    "A|T": 30528,
+    "T|A": 29064,
+    "C|G": 17116
+  },
+  "compute_time": 300.2
+}

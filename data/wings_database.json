@@ -1,0 +1,3084 @@
+{
+  "version": "1.0",
+  "created": "2026-04-12",
+  "project": "27_Project_WingsAboveMorning",
+  "description": "Binary transcriptome + coupling tensor database",
+  "total_cells_analyzed": 500000,
+  "total_reads_analyzed": 500000000,
+  "datasets": 10,
+  "cell_types": 26,
+  "eto_tensor": {
+    "group_key": "sample",
+    "n_cells_total": 29181,
+    "n_genes": 36601,
+    "groups": {
+      "ETO_day_0": {
+        "n_cells": 6518,
+        "det_K": 0.020219800873393066,
+        "RIBO_independence": 0.24169238748695376,
+        "K_RM": 0.608965604088268,
+        "K_RN": 0.8444741095631589,
+        "K_RG": 0.8214831238877114,
+        "K_MN": 0.6952564065330619,
+        "K_MG": 0.677319826048204,
+        "K_NG": 0.9249615609608803
+      },
+      "ETO_day_1": {
+        "n_cells": 4221,
+        "det_K": 0.04799539577453388,
+        "RIBO_independence": 0.40678875449171814,
+        "K_RM": 0.2921869035337584,
+        "K_RN": 0.7707208502069867,
+        "K_RG": 0.7167259827841007,
+        "K_MN": 0.3651193010174772,
+        "K_MG": 0.2667848410938035,
+        "K_NG": 0.926089734698159
+      },
+      "ETO_day_10": {
+        "n_cells": 3858,
+        "det_K": 0.01594492993189154,
+        "RIBO_independence": 0.3993014823982116,
+        "K_RM": 0.17704309122740625,
+        "K_RN": 0.8058312454513545,
+        "K_RG": 0.8192212161266045,
+        "K_MN": 0.43871926692065283,
+        "K_MG": 0.34529380890338524,
+        "K_NG": 0.9628684785361065
+      },
+      "ETO_day_2": {
+        "n_cells": 5135,
+        "det_K": 0.024244813478795542,
+        "RIBO_independence": 0.3622120584746408,
+        "K_RM": -0.18069895547894302,
+        "K_RN": 0.8688385087168958,
+        "K_RG": 0.8638263603802389,
+        "K_MN": -0.06160882469658739,
+        "K_MG": -0.19225958270608096,
+        "K_NG": 0.9325476968061408
+      },
+      "ETO_day_4": {
+        "n_cells": 4700,
+        "det_K": 0.0105500537486489,
+        "RIBO_independence": 0.4169693950665193,
+        "K_RM": -0.034899996185903004,
+        "K_RN": 0.8521864891083399,
+        "K_RG": 0.8620053295061993,
+        "K_MN": 0.1465949898285448,
+        "K_MG": 0.11584644448238358,
+        "K_NG": 0.9762482251600553
+      },
+      "ETO_day_7": {
+        "n_cells": 4749,
+        "det_K": 0.017600347069118897,
+        "RIBO_independence": 0.4352382330536141,
+        "K_RM": 0.027842738884330483,
+        "K_RN": 0.8314490976213332,
+        "K_RG": 0.8349934643334939,
+        "K_MN": 0.3037954787584289,
+        "K_MG": 0.2109293283414136,
+        "K_NG": 0.9564522397180664
+      }
+    },
+    "source": "lgg_genesis/results/GSE226225_timecourse/ETO_timecourse.h5ad",
+    "compute_time": 3.9231770038604736
+  },
+  "gse226225_tensor": {
+    "group_key": "sample",
+    "n_cells_total": 27622,
+    "n_genes": 36601,
+    "groups": {
+      "CTRL_2": {
+        "n_cells": 5608,
+        "det_K": 0.05012933029737872,
+        "RIBO_independence": 0.3449022070449814,
+        "K_RM": 0.40624654014551725,
+        "K_RN": 0.7977630067825832,
+        "K_RG": 0.7612838319369554,
+        "K_MN": 0.6033261213386775,
+        "K_MG": 0.533995980524435,
+        "K_NG": 0.8754046245465406
+      },
+      "ETO_1": {
+        "n_cells": 3928,
+        "det_K": 0.010472300979432,
+        "RIBO_independence": 0.3858143918020758,
+        "K_RM": -0.02608601117442678,
+        "K_RN": 0.9411600003878594,
+        "K_RG": 0.8753108130314865,
+        "K_MN": 0.05542792417050972,
+        "K_MG": 0.09293398671575823,
+        "K_NG": 0.948335682615961
+      },
+      "ETO_2": {
+        "n_cells": 3804,
+        "det_K": 0.017797486131600173,
+        "RIBO_independence": 0.40487958186447814,
+        "K_RM": -0.02977747699218383,
+        "K_RN": 0.9213066556076482,
+        "K_RG": 0.8342771218067336,
+        "K_MN": 0.08453650767602745,
+        "K_MG": 0.13244845404682212,
+        "K_NG": 0.930818261085521
+      },
+      "IR_1": {
+        "n_cells": 5173,
+        "det_K": 0.01918436070643706,
+        "RIBO_independence": 0.3937462865344925,
+        "K_RM": 0.031123394399461844,
+        "K_RN": 0.9292240212234856,
+        "K_RG": 0.858413724773575,
+        "K_MN": 0.09511079932122943,
+        "K_MG": 0.11760303452205584,
+        "K_NG": 0.92400620421331
+      },
+      "IR_2": {
+        "n_cells": 3519,
+        "det_K": 0.00628528948306254,
+        "RIBO_independence": 0.3511491823766585,
+        "K_RM": 0.0670074500807456,
+        "K_RN": 0.958674110189969,
+        "K_RG": 0.9208708925993101,
+        "K_MN": 0.12893551293508035,
+        "K_MG": 0.10867722547218811,
+        "K_NG": 0.9578428674692705
+      },
+      "RS_1": {
+        "n_cells": 2920,
+        "det_K": 0.025483371413589983,
+        "RIBO_independence": 0.3976234134458513,
+        "K_RM": -0.05572252835849244,
+        "K_RN": 0.8746246697319414,
+        "K_RG": 0.8767825615720124,
+        "K_MN": 0.11875084280747814,
+        "K_MG": 0.04586446717879,
+        "K_NG": 0.9256666726270059
+      },
+      "RS_2": {
+        "n_cells": 2670,
+        "det_K": 0.008800663125435778,
+        "RIBO_independence": 0.28246330808865505,
+        "K_RM": 0.3383431771895859,
+        "K_RN": 0.9021883908256411,
+        "K_RG": 0.9120785077188079,
+        "K_MN": 0.4621488498513677,
+        "K_MG": 0.43804671087786345,
+        "K_NG": 0.9627291724656996
+      }
+    },
+    "source": "lgg_genesis/results/GSE226225/GSE226225.h5ad",
+    "compute_time": 3.192068099975586
+  },
+  "gse250041_tensor": {
+    "group_key": "condition",
+    "n_cells_total": 13613,
+    "n_genes": 36609,
+    "groups": {
+      "Proliferating": {
+        "n_cells": 8664,
+        "det_K": 0.0030500771565994153,
+        "RIBO_independence": 0.1540346478293113,
+        "K_RM": 0.6498757822322965,
+        "K_RN": 0.9573151881693011,
+        "K_RG": 0.9307050861104689,
+        "K_MN": 0.6978761845149479,
+        "K_MG": 0.6789999805625485,
+        "K_NG": 0.9628960705847585
+      },
+      "Senescent": {
+        "n_cells": 4949,
+        "det_K": 0.01729431266221117,
+        "RIBO_independence": 0.27618063823437644,
+        "K_RM": 0.44459066881154385,
+        "K_RN": 0.8904271583503983,
+        "K_RG": 0.8364402581349285,
+        "K_MN": 0.49863934362696927,
+        "K_MG": 0.41135875932932275,
+        "K_NG": 0.9404579656351714
+      }
+    },
+    "source": "lgg_genesis/results/GSE250041/GSE250041.h5ad",
+    "compute_time": 2.7004480361938477
+  },
+  "h9_base4": {
+    "tool": "STAFF_Binary_Transcripter_v2_Base4",
+    "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+    "n_reads": 337364,
+    "n_spliced": 233258,
+    "total_bases": 516275464,
+    "base4": {
+      "A": 135977249,
+      "T": 135244322,
+      "C": 124050812,
+      "G": 121003081
+    },
+    "gc_content": 47.4657,
+    "junction_xor_base4": {
+      "00_IDENTITY": 472871,
+      "01_COMPLEMENT": 197597,
+      "10_TRANSVERSION": 236095,
+      "11_TRANSITION": 380478
+    },
+    "background_xor_base4": {
+      "00_IDENTITY": 2008382,
+      "01_COMPLEMENT": 1494541,
+      "10_TRANSVERSION": 1576826,
+      "11_TRANSITION": 1667531
+    },
+    "junction_pairs": {
+      "C|C": 208393,
+      "G|G": 190426,
+      "T|C": 133336,
+      "G|A": 121707,
+      "G|C": 120889,
+      "A|C": 85920,
+      "G|T": 73928,
+      "A|G": 69848,
+      "C|T": 55587,
+      "T|G": 40413,
+      "A|A": 38396,
+      "C|A": 35834,
+      "T|T": 35656,
+      "A|T": 30528,
+      "T|A": 29064,
+      "C|G": 17116
+    },
+    "compute_time": 300.2
+  },
+  "h9_binary": {
+    "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+    "n_reads": 337364,
+    "n_spliced": 233258,
+    "total_bases": 516275464,
+    "base_composition": {
+      "G": 121003081,
+      "C": 124050812,
+      "T": 135244322,
+      "A": 135977249
+    },
+    "gc_content": 47.47,
+    "unique_splice_sigs": 135603,
+    "junction_dinucs": {
+      "AT|CT": 47159,
+      "AC|CT": 42186,
+      "AG|GT": 37198,
+      "AG|CT": 33902,
+      "AG|AT": 33497,
+      "TC|CT": 25988,
+      "AG|GA": 24247,
+      "GC|CT": 22615,
+      "AG|GG": 21868,
+      "CC|CT": 21718,
+      "AG|GC": 21033,
+      "TT|CT": 20506,
+      "AG|AA": 20194,
+      "AA|CT": 18248,
+      "TG|GT": 17702,
+      "AC|CA": 17298,
+      "CA|CT": 16695,
+      "AG|TT": 16369,
+      "AG|AG": 15373,
+      "AC|CC": 15075,
+      "CT|CT": 14904,
+      "AG|CA": 14499,
+      "TG|CT": 12726,
+      "GG|CT": 12461,
+      "AG|CC": 12357,
+      "AG|TG": 11640,
+      "GG|GT": 11603,
+      "GT|CT": 11205,
+      "GC|CC": 10285,
+      "AG|AC": 10100,
+      "GC|CA": 9843,
+      "CA|GT": 9639,
+      "GA|CT": 9588,
+      "AG|TA": 9374,
+      "TA|CT": 9155,
+      "AA|GT": 9008,
+      "TC|CA": 8957,
+      "TG|GA": 8773,
+      "TC|CC": 8690,
+      "AT|CA": 8325,
+      "TG|GC": 8312,
+      "TG|AT": 8001,
+      "CC|CA": 7888,
+      "AG|TC": 7457,
+      "AC|TT": 7219,
+      "GG|GA": 7212,
+      "GG|GC": 7124,
+      "TG|GG": 7003,
+      "CG|GT": 6774,
+      "AA|GA": 6695
+    },
+    "n_active_loci": 26980,
+    "mean_binary_diversity": 1.0
+  },
+  "h9_denovo": {
+    "total_junctions": 241159,
+    "total_junction_usage": 1287041,
+    "median_junction_count": 1,
+    "mean_junction_count": 5.3,
+    "rare_junctions_le2": 168047,
+    "common_junctions_ge100": 1131,
+    "pct_rare": 69.7,
+    "median_intron_size": 2027,
+    "mean_intron_size": 5959,
+    "size_dist": {
+      "micro": 9437,
+      "small": 70153,
+      "medium": 128178,
+      "large": 32167,
+      "huge": 1224
+    },
+    "median_junctions_per_molecule": 4,
+    "max_junctions_per_molecule": 86,
+    "top_patterns": [
+      {
+        "chrom": "17",
+        "start": 81510833,
+        "end": 81512231,
+        "n_junctions": 4,
+        "count": 684,
+        "intron_sizes": [
+          93,
+          79,
+          276,
+          89
+        ]
+      },
+      {
+        "chrom": "7",
+        "start": 5527891,
+        "end": 5529160,
+        "n_junctions": 3,
+        "count": 561,
+        "intron_sizes": [
+          112,
+          95,
+          441
+        ]
+      },
+      {
+        "chrom": "8",
+        "start": 144789962,
+        "end": 144791991,
+        "n_junctions": 4,
+        "count": 541,
+        "intron_sizes": [
+          392,
+          806,
+          277,
+          77
+        ]
+      },
+      {
+        "chrom": "15",
+        "start": 69453020,
+        "end": 69455427,
+        "n_junctions": 3,
+        "count": 500,
+        "intron_sizes": [
+          626,
+          1448,
+          140
+        ]
+      },
+      {
+        "chrom": "5",
+        "start": 82276255,
+        "end": 82277692,
+        "n_junctions": 2,
+        "count": 490,
+        "intron_sizes": [
+          142,
+          1174
+        ]
+      },
+      {
+        "chrom": "22",
+        "start": 39312984,
+        "end": 39318399,
+        "n_junctions": 8,
+        "count": 481,
+        "intron_sizes": [
+          206,
+          323,
+          377,
+          477,
+          522,
+          1150,
+          619,
+          770
+        ]
+      },
+      {
+        "chrom": "6",
+        "start": 30720563,
+        "end": 30723339,
+        "n_junctions": 3,
+        "count": 434,
+        "intron_sizes": [
+          1973,
+          272,
+          311
+        ]
+      },
+      {
+        "chrom": "7",
+        "start": 5527891,
+        "end": 5528280,
+        "n_junctions": 2,
+        "count": 423,
+        "intron_sizes": [
+          112,
+          95
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 55386438,
+        "end": 55388242,
+        "n_junctions": 3,
+        "count": 415,
+        "intron_sizes": [
+          131,
+          1236,
+          194
+        ]
+      },
+      {
+        "chrom": "17",
+        "start": 81510833,
+        "end": 81511902,
+        "n_junctions": 3,
+        "count": 374,
+        "intron_sizes": [
+          93,
+          79,
+          276
+        ]
+      },
+      {
+        "chrom": "17",
+        "start": 38850214,
+        "end": 38853021,
+        "n_junctions": 3,
+        "count": 370,
+        "intron_sizes": [
+          147,
+          2128,
+          289
+        ]
+      },
+      {
+        "chrom": "16",
+        "start": 89561063,
+        "end": 89562883,
+        "n_junctions": 4,
+        "count": 367,
+        "intron_sizes": [
+          163,
+          209,
+          583,
+          492
+        ]
+      },
+      {
+        "chrom": "12",
+        "start": 6536593,
+        "end": 6538100,
+        "n_junctions": 6,
+        "count": 348,
+        "intron_sizes": [
+          90,
+          129,
+          90,
+          92,
+          193,
+          104
+        ]
+      },
+      {
+        "chrom": "1",
+        "start": 44776140,
+        "end": 44778575,
+        "n_junctions": 4,
+        "count": 339,
+        "intron_sizes": [
+          534,
+          839,
+          210,
+          446
+        ]
+      },
+      {
+        "chrom": "22",
+        "start": 23894582,
+        "end": 23895039,
+        "n_junctions": 2,
+        "count": 339,
+        "intron_sizes": [
+          189,
+          95
+        ]
+      },
+      {
+        "chrom": "12",
+        "start": 49128938,
+        "end": 49129499,
+        "n_junctions": 2,
+        "count": 337,
+        "intron_sizes": [
+          303,
+          109
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 48965609,
+        "end": 48966582,
+        "n_junctions": 3,
+        "count": 329,
+        "intron_sizes": [
+          160,
+          364,
+          176
+        ]
+      },
+      {
+        "chrom": "2",
+        "start": 216499398,
+        "end": 216501340,
+        "n_junctions": 2,
+        "count": 329,
+        "intron_sizes": [
+          550,
+          1309
+        ]
+      },
+      {
+        "chrom": "3",
+        "start": 23918031,
+        "end": 23919195,
+        "n_junctions": 2,
+        "count": 327,
+        "intron_sizes": [
+          408,
+          619
+        ]
+      },
+      {
+        "chrom": "1",
+        "start": 92833458,
+        "end": 92841765,
+        "n_junctions": 6,
+        "count": 317,
+        "intron_sizes": [
+          86,
+          1118,
+          1276,
+          1063,
+          2917,
+          1126
+        ]
+      }
+    ],
+    "per_chrom": {
+      "19": {
+        "unique_junctions": 19444,
+        "total_usage": 130955
+      },
+      "1": {
+        "unique_junctions": 23190,
+        "total_usage": 124385
+      },
+      "17": {
+        "unique_junctions": 15637,
+        "total_usage": 86640
+      },
+      "2": {
+        "unique_junctions": 16531,
+        "total_usage": 86346
+      },
+      "12": {
+        "unique_junctions": 13780,
+        "total_usage": 84468
+      },
+      "11": {
+        "unique_junctions": 14243,
+        "total_usage": 77591
+      },
+      "6": {
+        "unique_junctions": 11259,
+        "total_usage": 63573
+      },
+      "3": {
+        "unique_junctions": 13173,
+        "total_usage": 62584
+      },
+      "5": {
+        "unique_junctions": 11116,
+        "total_usage": 58627
+      },
+      "16": {
+        "unique_junctions": 11418,
+        "total_usage": 56767
+      },
+      "7": {
+        "unique_junctions": 11159,
+        "total_usage": 56124
+      },
+      "X": {
+        "unique_junctions": 8117,
+        "total_usage": 47665
+      },
+      "8": {
+        "unique_junctions": 7930,
+        "total_usage": 45849
+      },
+      "9": {
+        "unique_junctions": 9616,
+        "total_usage": 44109
+      },
+      "15": {
+        "unique_junctions": 7625,
+        "total_usage": 41798
+      },
+      "22": {
+        "unique_junctions": 5908,
+        "total_usage": 38838
+      },
+      "10": {
+        "unique_junctions": 8707,
+        "total_usage": 36912
+      },
+      "14": {
+        "unique_junctions": 7675,
+        "total_usage": 34702
+      },
+      "20": {
+        "unique_junctions": 7083,
+        "total_usage": 34387
+      },
+      "4": {
+        "unique_junctions": 7647,
+        "total_usage": 33207
+      },
+      "13": {
+        "unique_junctions": 3931,
+        "total_usage": 16859
+      },
+      "18": {
+        "unique_junctions": 3185,
+        "total_usage": 13646
+      },
+      "21": {
+        "unique_junctions": 2606,
+        "total_usage": 10671
+      },
+      "KI270734.1": {
+        "unique_junctions": 40,
+        "total_usage": 191
+      },
+      "MT": {
+        "unique_junctions": 122,
+        "total_usage": 129
+      },
+      "GL000195.1": {
+        "unique_junctions": 8,
+        "total_usage": 9
+      },
+      "KI270713.1": {
+        "unique_junctions": 4,
+        "total_usage": 4
+      },
+      "Y": {
+        "unique_junctions": 3,
+        "total_usage": 3
+      },
+      "GL000205.2": {
+        "unique_junctions": 2,
+        "total_usage": 2
+      }
+    },
+    "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam"
+  },
+  "h9_frame": {
+    "tool": "STAFF_Reading_Frame",
+    "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+    "n_reads": 337364,
+    "n_spliced": 233258,
+    "n_junctions": 1287041,
+    "intron_mod3": {
+      "0": 424429,
+      "1": 424974,
+      "2": 437638
+    },
+    "junction_frame_pos": {
+      "0": 428568,
+      "1": 429566,
+      "2": 428907
+    },
+    "junction_xor_base4": {
+      "00": 472871,
+      "01": 197597,
+      "10": 236095,
+      "11": 380478
+    },
+    "pre_aa_top10": {
+      "Q": 137996,
+      "K": 116832,
+      "L": 108775,
+      "S": 96791,
+      "E": 71202,
+      "N": 70296,
+      "R": 67376,
+      "H": 60791,
+      "G": 56837,
+      "*": 55472
+    },
+    "post_aa_top10": {
+      "L": 353624,
+      "V": 114727,
+      "P": 90432,
+      "G": 65296,
+      "Q": 64615,
+      "R": 62161,
+      "I": 62123,
+      "A": 61406,
+      "S": 61107,
+      "F": 41584
+    },
+    "split_aa_top10": {
+      "S": 117493,
+      "G": 89915,
+      "P": 89657,
+      "R": 89603,
+      "T": 67254,
+      "A": 62770,
+      "L": 45979,
+      "V": 36935,
+      "I": 36633,
+      "D": 30397
+    },
+    "starts_near_junction": 256981,
+    "stops_near_junction": 680955,
+    "compute_time": 174.5
+  },
+  "h9_splice_history": {
+    "tool": "STAFF_Splice_History",
+    "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+    "n_reads": 337364,
+    "n_spliced": 233258,
+    "unique_chains": 233207,
+    "unique_introns": 241159,
+    "total_excisions": 1287041,
+    "intron_size_median": 972,
+    "intron_flank_xor": {
+      "00_ID": 472871,
+      "01_WC": 197597,
+      "10_TV": 236095,
+      "11_TI": 380478
+    },
+    "loci_compared": 18082,
+    "pairwise_comparisons": 288076,
+    "compute_time": 180.0
+  },
+  "hepg2_base4": {
+    "tool": "STAFF_Binary_Transcripter_v2_Base4",
+    "source": "marathon_lament/bams/SGNex_HepG2_directRNA_replicate1_run3.bam",
+    "n_reads": 1095654,
+    "n_spliced": 782326,
+    "total_bases": 1320354744,
+    "base4": {
+      "A": 341114363,
+      "T": 336142658,
+      "C": 325979476,
+      "G": 317118247
+    },
+    "gc_content": 48.7064,
+    "junction_xor_base4": {
+      "00_IDENTITY": 1957146,
+      "01_COMPLEMENT": 701682,
+      "10_TRANSVERSION": 659991,
+      "11_TRANSITION": 1158308
+    },
+    "background_xor_base4": {
+      "00_IDENTITY": 6641736,
+      "01_COMPLEMENT": 4895152,
+      "10_TRANSVERSION": 5155013,
+      "11_TRANSITION": 5221146
+    },
+    "junction_pairs": {
+      "C|C": 898644,
+      "G|G": 856327,
+      "G|C": 490280,
+      "T|C": 467061,
+      "G|A": 429548,
+      "A|C": 241550,
+      "G|T": 203142,
+      "A|G": 148818,
+      "T|G": 132618,
+      "C|T": 112881,
+      "A|A": 112284,
+      "T|T": 89891,
+      "C|A": 82681,
+      "C|G": 75415,
+      "A|T": 69796,
+      "T|A": 66191
+    },
+    "compute_time": 739.0
+  },
+  "hepg2_binary": {
+    "source": "marathon_lament/bams/SGNex_HepG2_directRNA_replicate1_run3.bam",
+    "n_reads": 1095654,
+    "n_spliced": 782326,
+    "total_bases": 1320354744,
+    "base_composition": {
+      "G": 317118247,
+      "C": 325979476,
+      "T": 336142658,
+      "A": 341114363
+    },
+    "gc_content": 48.71,
+    "unique_splice_sigs": 137274,
+    "junction_dinucs": {
+      "AC|CT": 236741,
+      "AG|GT": 212081,
+      "TC|CT": 156147,
+      "AT|CT": 139057,
+      "AG|GA": 136522,
+      "AG|CT": 132329,
+      "GC|CT": 118528,
+      "AG|GC": 114509,
+      "AG|AT": 94313,
+      "AG|GG": 84369,
+      "TT|CT": 78612,
+      "CC|CT": 77565,
+      "AG|AA": 69301,
+      "AG|CC": 65455,
+      "AG|CA": 65382,
+      "AC|CA": 58343,
+      "AG|AG": 56359,
+      "GT|CT": 52510,
+      "TG|GT": 50187,
+      "AA|CT": 47921,
+      "TG|CT": 47555,
+      "AG|AC": 46174,
+      "CA|CT": 44556,
+      "CT|CT": 41744,
+      "AG|TT": 40051,
+      "GG|GT": 37976,
+      "GG|CT": 37661,
+      "GC|CA": 36112,
+      "AG|TG": 34879,
+      "TG|GC": 34102,
+      "AC|CC": 33074,
+      "TC|CA": 32058,
+      "TG|GG": 31594,
+      "TG|GA": 28988,
+      "AC|CG": 27209,
+      "AA|GT": 27140,
+      "AT|CA": 26844,
+      "TG|AT": 26481,
+      "TC|CC": 25248,
+      "AA|AT": 24431,
+      "CC|CA": 23285,
+      "GG|GC": 22977,
+      "CG|GT": 22632,
+      "GA|CT": 22627,
+      "AT|CC": 21843,
+      "GG|CC": 21678,
+      "TG|CC": 21542,
+      "GG|AT": 21518,
+      "AT|TT": 21084,
+      "GG|GA": 20822
+    },
+    "n_active_loci": 30312,
+    "mean_binary_diversity": 1.0
+  },
+  "hepg2_denovo": {
+    "total_junctions": 182929,
+    "total_junction_usage": 4477127,
+    "median_junction_count": 3,
+    "mean_junction_count": 24.5,
+    "rare_junctions_le2": 88617,
+    "common_junctions_ge100": 6727,
+    "pct_rare": 48.4,
+    "median_intron_size": 1594,
+    "mean_intron_size": 5565,
+    "size_dist": {
+      "micro": 8999,
+      "small": 61464,
+      "medium": 89820,
+      "large": 21734,
+      "huge": 912
+    },
+    "median_junctions_per_molecule": 4,
+    "max_junctions_per_molecule": 90,
+    "top_patterns": [
+      {
+        "chrom": "15",
+        "start": 69453020,
+        "end": 69455427,
+        "n_junctions": 3,
+        "count": 6406,
+        "intron_sizes": [
+          626,
+          1448,
+          140
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 48965609,
+        "end": 48966582,
+        "n_junctions": 3,
+        "count": 5908,
+        "intron_sizes": [
+          160,
+          364,
+          176
+        ]
+      },
+      {
+        "chrom": "13",
+        "start": 45337388,
+        "end": 45341041,
+        "n_junctions": 5,
+        "count": 5514,
+        "intron_sizes": [
+          1271,
+          720,
+          391,
+          527,
+          256
+        ]
+      },
+      {
+        "chrom": "16",
+        "start": 89561063,
+        "end": 89562883,
+        "n_junctions": 4,
+        "count": 4943,
+        "intron_sizes": [
+          163,
+          209,
+          583,
+          492
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 61964891,
+        "end": 61967311,
+        "n_junctions": 3,
+        "count": 4932,
+        "intron_sizes": [
+          95,
+          256,
+          1796
+        ]
+      },
+      {
+        "chrom": "4",
+        "start": 73404406,
+        "end": 73421091,
+        "n_junctions": 14,
+        "count": 4673,
+        "intron_sizes": [
+          709,
+          1455,
+          1832,
+          549,
+          824,
+          1586,
+          1294,
+          1400,
+          1088,
+          1177,
+          418,
+          1195,
+          614,
+          770
+        ]
+      },
+      {
+        "chrom": "3",
+        "start": 186613354,
+        "end": 186620585,
+        "n_junctions": 6,
+        "count": 4579,
+        "intron_sizes": [
+          2330,
+          647,
+          659,
+          1185,
+          1219,
+          645
+        ]
+      },
+      {
+        "chrom": "14",
+        "start": 94612447,
+        "end": 94623610,
+        "n_junctions": 4,
+        "count": 4485,
+        "intron_sizes": [
+          1986,
+          4110,
+          2872,
+          1119
+        ]
+      },
+      {
+        "chrom": "16",
+        "start": 18783102,
+        "end": 18788980,
+        "n_junctions": 3,
+        "count": 4385,
+        "intron_sizes": [
+          1635,
+          3239,
+          838
+        ]
+      },
+      {
+        "chrom": "2",
+        "start": 216498877,
+        "end": 216501340,
+        "n_junctions": 3,
+        "count": 4316,
+        "intron_sizes": [
+          392,
+          550,
+          1309
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 116836411,
+        "end": 116837344,
+        "n_junctions": 2,
+        "count": 4257,
+        "intron_sizes": [
+          589,
+          187
+        ]
+      },
+      {
+        "chrom": "14",
+        "start": 94378640,
+        "end": 94388559,
+        "n_junctions": 4,
+        "count": 3907,
+        "intron_sizes": [
+          823,
+          1259,
+          1450,
+          5318
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 810039,
+        "end": 812759,
+        "n_junctions": 4,
+        "count": 3535,
+        "intron_sizes": [
+          194,
+          1239,
+          889,
+          126
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 41860289,
+        "end": 41871350,
+        "n_junctions": 5,
+        "count": 3456,
+        "intron_sizes": [
+          485,
+          266,
+          7818,
+          484,
+          1597
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 75399577,
+        "end": 75405613,
+        "n_junctions": 6,
+        "count": 3372,
+        "intron_sizes": [
+          1116,
+          815,
+          618,
+          1573,
+          464,
+          745
+        ]
+      },
+      {
+        "chrom": "17",
+        "start": 38850214,
+        "end": 38853697,
+        "n_junctions": 4,
+        "count": 3315,
+        "intron_sizes": [
+          147,
+          2128,
+          289,
+          592
+        ]
+      },
+      {
+        "chrom": "14",
+        "start": 94378640,
+        "end": 94382591,
+        "n_junctions": 3,
+        "count": 3096,
+        "intron_sizes": [
+          823,
+          1259,
+          1450
+        ]
+      },
+      {
+        "chrom": "14",
+        "start": 49583675,
+        "end": 49586284,
+        "n_junctions": 2,
+        "count": 2976,
+        "intron_sizes": [
+          2274,
+          235
+        ]
+      },
+      {
+        "chrom": "6",
+        "start": 33272122,
+        "end": 33276390,
+        "n_junctions": 5,
+        "count": 2935,
+        "intron_sizes": [
+          505,
+          3070,
+          81,
+          109,
+          123
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 41860845,
+        "end": 41871350,
+        "n_junctions": 4,
+        "count": 2927,
+        "intron_sizes": [
+          266,
+          7818,
+          484,
+          1597
+        ]
+      }
+    ],
+    "per_chrom": {
+      "19": {
+        "unique_junctions": 11350,
+        "total_usage": 424674
+      },
+      "2": {
+        "unique_junctions": 14007,
+        "total_usage": 347873
+      },
+      "1": {
+        "unique_junctions": 17290,
+        "total_usage": 333721
+      },
+      "11": {
+        "unique_junctions": 11411,
+        "total_usage": 318511
+      },
+      "12": {
+        "unique_junctions": 10111,
+        "total_usage": 306929
+      },
+      "17": {
+        "unique_junctions": 11936,
+        "total_usage": 306720
+      },
+      "6": {
+        "unique_junctions": 9604,
+        "total_usage": 240443
+      },
+      "3": {
+        "unique_junctions": 10181,
+        "total_usage": 225885
+      },
+      "16": {
+        "unique_junctions": 9499,
+        "total_usage": 215232
+      },
+      "4": {
+        "unique_junctions": 6307,
+        "total_usage": 214232
+      },
+      "20": {
+        "unique_junctions": 6242,
+        "total_usage": 189351
+      },
+      "9": {
+        "unique_junctions": 7535,
+        "total_usage": 176047
+      },
+      "14": {
+        "unique_junctions": 6537,
+        "total_usage": 174105
+      },
+      "5": {
+        "unique_junctions": 7373,
+        "total_usage": 164862
+      },
+      "10": {
+        "unique_junctions": 6996,
+        "total_usage": 136487
+      },
+      "8": {
+        "unique_junctions": 5792,
+        "total_usage": 127747
+      },
+      "7": {
+        "unique_junctions": 7952,
+        "total_usage": 123195
+      },
+      "15": {
+        "unique_junctions": 5474,
+        "total_usage": 115410
+      },
+      "X": {
+        "unique_junctions": 5052,
+        "total_usage": 105228
+      },
+      "22": {
+        "unique_junctions": 4283,
+        "total_usage": 95854
+      },
+      "13": {
+        "unique_junctions": 3149,
+        "total_usage": 70926
+      },
+      "18": {
+        "unique_junctions": 2491,
+        "total_usage": 35391
+      },
+      "21": {
+        "unique_junctions": 1806,
+        "total_usage": 23570
+      },
+      "Y": {
+        "unique_junctions": 169,
+        "total_usage": 4188
+      },
+      "MT": {
+        "unique_junctions": 283,
+        "total_usage": 306
+      },
+      "GL000219.1": {
+        "unique_junctions": 12,
+        "total_usage": 47
+      },
+      "GL000218.1": {
+        "unique_junctions": 13,
+        "total_usage": 45
+      },
+      "KI270711.1": {
+        "unique_junctions": 20,
+        "total_usage": 44
+      },
+      "GL000008.2": {
+        "unique_junctions": 16,
+        "total_usage": 31
+      },
+      "GL000195.1": {
+        "unique_junctions": 16,
+        "total_usage": 31
+      },
+      "GL000194.1": {
+        "unique_junctions": 6,
+        "total_usage": 21
+      },
+      "KI270742.1": {
+        "unique_junctions": 7,
+        "total_usage": 11
+      },
+      "GL000205.2": {
+        "unique_junctions": 5,
+        "total_usage": 6
+      },
+      "GL000009.2": {
+        "unique_junctions": 1,
+        "total_usage": 1
+      },
+      "KI270733.1": {
+        "unique_junctions": 1,
+        "total_usage": 1
+      },
+      "KI270706.1": {
+        "unique_junctions": 1,
+        "total_usage": 1
+      },
+      "GL000220.1": {
+        "unique_junctions": 1,
+        "total_usage": 1
+      }
+    },
+    "source": "marathon_lament/bams/SGNex_HepG2_directRNA_replicate1_run3.bam"
+  },
+  "hepg2_frame": {
+    "tool": "STAFF_Reading_Frame",
+    "source": "marathon_lament/bams/SGNex_HepG2_directRNA_replicate1_run3.bam",
+    "n_reads": 1095654,
+    "n_spliced": 782326,
+    "n_junctions": 4477127,
+    "intron_mod3": {
+      "0": 1428939,
+      "1": 1518845,
+      "2": 1529343
+    },
+    "junction_frame_pos": {
+      "0": 1493546,
+      "1": 1491763,
+      "2": 1491818
+    },
+    "junction_xor_base4": {
+      "00": 1957146,
+      "01": 701682,
+      "10": 659991,
+      "11": 1158308
+    },
+    "pre_aa_top10": {
+      "Q": 565988,
+      "K": 479540,
+      "L": 303165,
+      "E": 297051,
+      "S": 290241,
+      "H": 270561,
+      "R": 251119,
+      "N": 200715,
+      "V": 179313,
+      "T": 174179
+    },
+    "post_aa_top10": {
+      "L": 1355456,
+      "V": 442162,
+      "P": 312506,
+      "A": 253167,
+      "G": 234826,
+      "R": 233469,
+      "Q": 187236,
+      "H": 177328,
+      "I": 169547,
+      "E": 156516
+    },
+    "split_aa_top10": {
+      "S": 404856,
+      "G": 378808,
+      "R": 371579,
+      "P": 361554,
+      "A": 244693,
+      "T": 229663,
+      "L": 109721,
+      "V": 109334,
+      "I": 106748,
+      "D": 97513
+    },
+    "starts_near_junction": 1116146,
+    "stops_near_junction": 2141558,
+    "compute_time": 413.8
+  },
+  "hepg2_splice_history": {
+    "tool": "STAFF_Splice_History",
+    "source": "marathon_lament/bams/SGNex_HepG2_directRNA_replicate1_run3.bam",
+    "n_reads": 1095654,
+    "n_spliced": 782326,
+    "unique_chains": 769766,
+    "unique_introns": 182929,
+    "total_excisions": 4477127,
+    "intron_size_median": 874,
+    "intron_flank_xor": {
+      "00_ID": 1957146,
+      "01_WC": 701682,
+      "10_TV": 659991,
+      "11_TI": 1158308
+    },
+    "loci_compared": 24002,
+    "pairwise_comparisons": 466036,
+    "compute_time": 464.6
+  },
+  "k562_base4": {
+    "tool": "STAFF_Binary_Transcripter_v2_Base4",
+    "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam",
+    "n_reads": 554250,
+    "n_spliced": 357597,
+    "total_bases": 523100901,
+    "base4": {
+      "A": 135763631,
+      "T": 133361245,
+      "C": 130718782,
+      "G": 123257243
+    },
+    "gc_content": 48.552,
+    "junction_xor_base4": {
+      "00_IDENTITY": 740917,
+      "01_COMPLEMENT": 265111,
+      "10_TRANSVERSION": 240066,
+      "11_TRANSITION": 431571
+    },
+    "background_xor_base4": {
+      "00_IDENTITY": 3295982,
+      "01_COMPLEMENT": 2466471,
+      "10_TRANSVERSION": 2650870,
+      "11_TRANSITION": 2671673
+    },
+    "junction_pairs": {
+      "G|G": 338486,
+      "C|C": 329905,
+      "G|C": 186404,
+      "G|A": 167218,
+      "T|C": 160579,
+      "A|C": 90629,
+      "G|T": 74335,
+      "A|G": 62196,
+      "T|G": 46349,
+      "C|T": 41578,
+      "A|A": 38809,
+      "T|T": 33717,
+      "C|A": 28753,
+      "C|G": 27236,
+      "A|T": 26362,
+      "T|A": 25109
+    },
+    "compute_time": 286.2
+  },
+  "k562_binary": {
+    "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam",
+    "n_reads": 554250,
+    "n_spliced": 357597,
+    "total_bases": 523100901,
+    "base_composition": {
+      "G": 123257243,
+      "C": 130718782,
+      "T": 133361245,
+      "A": 135763631
+    },
+    "gc_content": 48.55,
+    "unique_splice_sigs": 82402,
+    "junction_dinucs": {
+      "AG|GT": 85500,
+      "AC|CT": 81553,
+      "AG|CT": 57739,
+      "TC|CT": 57002,
+      "AG|GA": 54221,
+      "GC|CT": 50884,
+      "AT|CT": 46463,
+      "AG|GC": 46278,
+      "AG|AT": 37210,
+      "AG|GG": 29985,
+      "TT|CT": 29965,
+      "AG|AA": 29922,
+      "CC|CT": 28100,
+      "TG|GT": 21721,
+      "AG|CA": 20681,
+      "AC|CA": 19048,
+      "AG|CC": 18917,
+      "GT|CT": 18539,
+      "AG|AG": 17769,
+      "TG|CT": 16549,
+      "CA|CT": 16341,
+      "GG|GT": 16085,
+      "GG|CT": 15756,
+      "AG|AC": 15738,
+      "AA|CT": 15562,
+      "CT|CT": 15084,
+      "TG|GC": 14494,
+      "GC|CA": 14487,
+      "AG|TT": 14291,
+      "AG|TG": 13606,
+      "TC|CA": 13155,
+      "TG|GA": 12730,
+      "AC|CC": 11933,
+      "TG|GG": 11912,
+      "TG|AT": 11650,
+      "AA|GT": 10547,
+      "AT|CA": 10081,
+      "GG|CC": 10057,
+      "CC|CA": 9233,
+      "CG|GT": 8988,
+      "GC|CC": 8737,
+      "TC|CC": 8682,
+      "AG|TA": 8606,
+      "GA|CT": 8420,
+      "AC|CG": 8418,
+      "AA|GG": 8378,
+      "AA|AT": 7841,
+      "GG|AT": 7762,
+      "GG|GC": 7664,
+      "AT|TT": 7649
+    },
+    "n_active_loci": 26691,
+    "mean_binary_diversity": 1.0
+  },
+  "k562_denovo": {
+    "total_junctions": 131558,
+    "total_junction_usage": 1677665,
+    "median_junction_count": 2,
+    "mean_junction_count": 12.8,
+    "rare_junctions_le2": 69756,
+    "common_junctions_ge100": 2052,
+    "pct_rare": 53.0,
+    "median_intron_size": 1397,
+    "mean_intron_size": 4909,
+    "size_dist": {
+      "micro": 7344,
+      "small": 47619,
+      "medium": 62954,
+      "large": 13072,
+      "huge": 569
+    },
+    "median_junctions_per_molecule": 4,
+    "max_junctions_per_molecule": 69,
+    "top_patterns": [
+      {
+        "chrom": "11",
+        "start": 5253405,
+        "end": 5254636,
+        "n_junctions": 2,
+        "count": 4452,
+        "intron_sizes": [
+          886,
+          122
+        ]
+      },
+      {
+        "chrom": "15",
+        "start": 69453020,
+        "end": 69455427,
+        "n_junctions": 3,
+        "count": 3130,
+        "intron_sizes": [
+          626,
+          1448,
+          140
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 5248487,
+        "end": 5249712,
+        "n_junctions": 2,
+        "count": 2486,
+        "intron_sizes": [
+          880,
+          122
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 48965609,
+        "end": 48966582,
+        "n_junctions": 3,
+        "count": 2481,
+        "intron_sizes": [
+          160,
+          364,
+          176
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 61964891,
+        "end": 61967311,
+        "n_junctions": 3,
+        "count": 2429,
+        "intron_sizes": [
+          95,
+          256,
+          1796
+        ]
+      },
+      {
+        "chrom": "16",
+        "start": 89561063,
+        "end": 89562883,
+        "n_junctions": 4,
+        "count": 2041,
+        "intron_sizes": [
+          163,
+          209,
+          583,
+          492
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 810039,
+        "end": 812759,
+        "n_junctions": 4,
+        "count": 1988,
+        "intron_sizes": [
+          194,
+          1239,
+          889,
+          126
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 5268597,
+        "end": 5269798,
+        "n_junctions": 2,
+        "count": 1829,
+        "intron_sizes": [
+          856,
+          122
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 39433418,
+        "end": 39435847,
+        "n_junctions": 4,
+        "count": 1796,
+        "intron_sizes": [
+          103,
+          95,
+          1845,
+          139
+        ]
+      },
+      {
+        "chrom": "8",
+        "start": 56073272,
+        "end": 56074380,
+        "n_junctions": 3,
+        "count": 1697,
+        "intron_sizes": [
+          422,
+          291,
+          221
+        ]
+      },
+      {
+        "chrom": "6",
+        "start": 33272122,
+        "end": 33276390,
+        "n_junctions": 5,
+        "count": 1694,
+        "intron_sizes": [
+          505,
+          3070,
+          81,
+          109,
+          123
+        ]
+      },
+      {
+        "chrom": "1",
+        "start": 44776140,
+        "end": 44778575,
+        "n_junctions": 4,
+        "count": 1567,
+        "intron_sizes": [
+          534,
+          839,
+          210,
+          446
+        ]
+      },
+      {
+        "chrom": "11",
+        "start": 75399577,
+        "end": 75405613,
+        "n_junctions": 6,
+        "count": 1517,
+        "intron_sizes": [
+          1116,
+          815,
+          618,
+          1573,
+          464,
+          745
+        ]
+      },
+      {
+        "chrom": "3",
+        "start": 12836223,
+        "end": 12841493,
+        "n_junctions": 3,
+        "count": 1515,
+        "intron_sizes": [
+          3125,
+          611,
+          1251
+        ]
+      },
+      {
+        "chrom": "1",
+        "start": 23692759,
+        "end": 23696343,
+        "n_junctions": 4,
+        "count": 1332,
+        "intron_sizes": [
+          1047,
+          746,
+          1006,
+          435
+        ]
+      },
+      {
+        "chrom": "15",
+        "start": 82536881,
+        "end": 82539980,
+        "n_junctions": 3,
+        "count": 1202,
+        "intron_sizes": [
+          1424,
+          508,
+          995
+        ]
+      },
+      {
+        "chrom": "16",
+        "start": 18783102,
+        "end": 18788980,
+        "n_junctions": 3,
+        "count": 1166,
+        "intron_sizes": [
+          1635,
+          3239,
+          838
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 55386438,
+        "end": 55388242,
+        "n_junctions": 3,
+        "count": 1153,
+        "intron_sizes": [
+          131,
+          1236,
+          194
+        ]
+      },
+      {
+        "chrom": "19",
+        "start": 49496471,
+        "end": 49499511,
+        "n_junctions": 4,
+        "count": 1131,
+        "intron_sizes": [
+          722,
+          194,
+          321,
+          1465
+        ]
+      },
+      {
+        "chrom": "4",
+        "start": 108622024,
+        "end": 108625127,
+        "n_junctions": 3,
+        "count": 1127,
+        "intron_sizes": [
+          80,
+          310,
+          2509
+        ]
+      }
+    ],
+    "per_chrom": {
+      "19": {
+        "unique_junctions": 9662,
+        "total_usage": 192550
+      },
+      "1": {
+        "unique_junctions": 13915,
+        "total_usage": 180028
+      },
+      "11": {
+        "unique_junctions": 8256,
+        "total_usage": 152521
+      },
+      "17": {
+        "unique_junctions": 8112,
+        "total_usage": 98981
+      },
+      "6": {
+        "unique_junctions": 6772,
+        "total_usage": 97688
+      },
+      "12": {
+        "unique_junctions": 7108,
+        "total_usage": 94851
+      },
+      "16": {
+        "unique_junctions": 6626,
+        "total_usage": 87306
+      },
+      "2": {
+        "unique_junctions": 8851,
+        "total_usage": 86882
+      },
+      "3": {
+        "unique_junctions": 7040,
+        "total_usage": 73989
+      },
+      "5": {
+        "unique_junctions": 5608,
+        "total_usage": 72701
+      },
+      "7": {
+        "unique_junctions": 6655,
+        "total_usage": 68170
+      },
+      "9": {
+        "unique_junctions": 5165,
+        "total_usage": 58889
+      },
+      "15": {
+        "unique_junctions": 4319,
+        "total_usage": 57620
+      },
+      "8": {
+        "unique_junctions": 4377,
+        "total_usage": 56483
+      },
+      "X": {
+        "unique_junctions": 4297,
+        "total_usage": 51930
+      },
+      "22": {
+        "unique_junctions": 3556,
+        "total_usage": 51483
+      },
+      "10": {
+        "unique_junctions": 4721,
+        "total_usage": 46867
+      },
+      "20": {
+        "unique_junctions": 3286,
+        "total_usage": 40452
+      },
+      "4": {
+        "unique_junctions": 3997,
+        "total_usage": 32670
+      },
+      "14": {
+        "unique_junctions": 3873,
+        "total_usage": 30910
+      },
+      "13": {
+        "unique_junctions": 1904,
+        "total_usage": 16771
+      },
+      "21": {
+        "unique_junctions": 1509,
+        "total_usage": 14949
+      },
+      "18": {
+        "unique_junctions": 1606,
+        "total_usage": 12323
+      },
+      "MT": {
+        "unique_junctions": 197,
+        "total_usage": 207
+      },
+      "GL000219.1": {
+        "unique_junctions": 20,
+        "total_usage": 124
+      },
+      "KI270721.1": {
+        "unique_junctions": 7,
+        "total_usage": 105
+      },
+      "KI270744.1": {
+        "unique_junctions": 12,
+        "total_usage": 40
+      },
+      "GL000009.2": {
+        "unique_junctions": 10,
+        "total_usage": 25
+      },
+      "GL000218.1": {
+        "unique_junctions": 9,
+        "total_usage": 24
+      },
+      "GL000194.1": {
+        "unique_junctions": 7,
+        "total_usage": 17
+      },
+      "GL000205.2": {
+        "unique_junctions": 12,
+        "total_usage": 16
+      },
+      "KI270742.1": {
+        "unique_junctions": 7,
+        "total_usage": 14
+      },
+      "KI270711.1": {
+        "unique_junctions": 6,
+        "total_usage": 12
+      },
+      "GL000195.1": {
+        "unique_junctions": 9,
+        "total_usage": 10
+      },
+      "KI270734.1": {
+        "unique_junctions": 5,
+        "total_usage": 10
+      },
+      "KI270442.1": {
+        "unique_junctions": 6,
+        "total_usage": 6
+      },
+      "KI270750.1": {
+        "unique_junctions": 2,
+        "total_usage": 6
+      },
+      "GL000008.2": {
+        "unique_junctions": 5,
+        "total_usage": 5
+      },
+      "KI270714.1": {
+        "unique_junctions": 5,
+        "total_usage": 5
+      },
+      "KI270754.1": {
+        "unique_junctions": 5,
+        "total_usage": 5
+      },
+      "KI270728.1": {
+        "unique_junctions": 4,
+        "total_usage": 4
+      },
+      "KI270745.1": {
+        "unique_junctions": 3,
+        "total_usage": 4
+      },
+      "KI270720.1": {
+        "unique_junctions": 4,
+        "total_usage": 4
+      },
+      "GL000221.1": {
+        "unique_junctions": 3,
+        "total_usage": 3
+      },
+      "KI270743.1": {
+        "unique_junctions": 2,
+        "total_usage": 2
+      },
+      "KI270741.1": {
+        "unique_junctions": 2,
+        "total_usage": 2
+      },
+      "KI270713.1": {
+        "unique_junctions": 1,
+        "total_usage": 1
+      }
+    },
+    "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam"
+  },
+  "k562_frame": {
+    "tool": "STAFF_Reading_Frame",
+    "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam",
+    "n_reads": 554250,
+    "n_spliced": 357597,
+    "n_junctions": 1677665,
+    "intron_mod3": {
+      "0": 540860,
+      "1": 570278,
+      "2": 566527
+    },
+    "junction_frame_pos": {
+      "0": 561001,
+      "1": 558431,
+      "2": 558233
+    },
+    "junction_xor_base4": {
+      "00": 740917,
+      "01": 265111,
+      "10": 240066,
+      "11": 431571
+    },
+    "pre_aa_top10": {
+      "Q": 200229,
+      "K": 188928,
+      "E": 124742,
+      "S": 119137,
+      "L": 118298,
+      "R": 95239,
+      "H": 87809,
+      "T": 70547,
+      "N": 69243,
+      "G": 65083
+    },
+    "post_aa_top10": {
+      "L": 505115,
+      "V": 178904,
+      "P": 105707,
+      "A": 99036,
+      "R": 85263,
+      "G": 83221,
+      "Q": 68596,
+      "I": 67279,
+      "H": 63544,
+      "E": 61990
+    },
+    "split_aa_top10": {
+      "G": 147807,
+      "S": 147306,
+      "R": 144769,
+      "P": 133661,
+      "A": 94952,
+      "T": 79920,
+      "L": 40708,
+      "V": 40468,
+      "D": 38428,
+      "I": 37003
+    },
+    "starts_near_junction": 404750,
+    "stops_near_junction": 803119,
+    "compute_time": 160.1
+  },
+  "k562_illumina_base4": {
+    "tool": "STAFF_Binary_Transcripter_v2_Base4",
+    "source": "marathon_lament/bams/SGNex_K562_Illumina_replicate5_run1.bam",
+    "n_reads": 76727254,
+    "n_spliced": 31938186,
+    "total_bases": 11585815354,
+    "base4": {
+      "A": 3056981931,
+      "T": 3003556628,
+      "C": 2820897914,
+      "G": 2704378881
+    },
+    "gc_content": 47.69,
+    "junction_xor_base4": {
+      "00_IDENTITY": 18038175,
+      "01_COMPLEMENT": 5914972,
+      "10_TRANSVERSION": 5333232,
+      "11_TRANSITION": 10097057
+    },
+    "background_xor_base4": {
+      "00_IDENTITY": 426699152,
+      "01_COMPLEMENT": 296845284,
+      "10_TRANSVERSION": 384223481,
+      "11_TRANSITION": 426777163
+    },
+    "junction_pairs": {
+      "G|G": 7792207,
+      "C|C": 7470461,
+      "T|C": 4651206,
+      "G|C": 4092439,
+      "G|A": 3610948,
+      "A|C": 2048387,
+      "G|T": 1744437,
+      "T|T": 1545788,
+      "A|A": 1229466,
+      "A|G": 1106041,
+      "T|G": 794131,
+      "C|A": 745639,
+      "C|T": 728187,
+      "A|T": 671609,
+      "T|A": 666385,
+      "C|G": 484187
+    },
+    "compute_time": 6367.3
+  },
+  "k562_illumina_frame": {
+    "tool": "STAFF_Reading_Frame",
+    "source": "marathon_lament/bams/SGNex_K562_Illumina_replicate5_run1.bam",
+    "n_reads": 76727254,
+    "n_spliced": 31938186,
+    "n_junctions": 39383436,
+    "intron_mod3": {
+      "0": 12916049,
+      "1": 13326950,
+      "2": 13140437
+    },
+    "junction_frame_pos": {
+      "0": 13170130,
+      "1": 13305324,
+      "2": 12907982
+    },
+    "junction_xor_base4": {
+      "00": 18038175,
+      "01": 5914972,
+      "10": 5333232,
+      "11": 10097057
+    },
+    "pre_aa_top10": {
+      "K": 4463599,
+      "Q": 4373285,
+      "S": 2995930,
+      "E": 2775013,
+      "L": 2742374,
+      "H": 2437646,
+      "R": 2197597,
+      "V": 1646868,
+      "D": 1551109,
+      "A": 1463138
+    },
+    "post_aa_top10": {
+      "L": 12497495,
+      "V": 3621488,
+      "P": 2256375,
+      "I": 2240943,
+      "A": 2061267,
+      "E": 1763287,
+      "Q": 1697876,
+      "G": 1661985,
+      "R": 1652390,
+      "H": 1634939
+    },
+    "split_aa_top10": {
+      "S": 3569138,
+      "G": 3463953,
+      "R": 2985543,
+      "P": 2916281,
+      "A": 2050641,
+      "T": 1807373,
+      "I": 1175248,
+      "L": 1159882,
+      "V": 915595,
+      "D": 848771
+    },
+    "starts_near_junction": 8838515,
+    "stops_near_junction": 19750999,
+    "compute_time": 3001.7
+  },
+  "k562_splice_history": {
+    "tool": "STAFF_Splice_History",
+    "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam",
+    "n_reads": 554250,
+    "n_spliced": 357597,
+    "unique_chains": 354011,
+    "unique_introns": 131558,
+    "total_excisions": 1677665,
+    "intron_size_median": 740,
+    "intron_flank_xor": {
+      "00_ID": 740917,
+      "01_WC": 265111,
+      "10_TV": 240066,
+      "11_TI": 431571
+    },
+    "loci_compared": 16472,
+    "pairwise_comparisons": 283911,
+    "compute_time": 162.4
+  },
+  "korean_nsclc_tensor": {
+    "TUMOR": {
+      "n_cells": 45149,
+      "det_K": 0.05767426952646547,
+      "K_RM": 0.6859300970344429,
+      "K_RN": 0.7407015496058228,
+      "K_RG": 0.6423567704233849,
+      "K_MN": 0.7332359285683466,
+      "K_MG": 0.672449867809281,
+      "K_NG": 0.8270837723208789,
+      "RIBO_independence": 0.31033719431211637
+    },
+    "NORMAL": {
+      "n_cells": 42995,
+      "det_K": 0.01830522804250979,
+      "K_RM": 0.7721572874613847,
+      "K_RN": 0.8390929269734878,
+      "K_RG": 0.7302413971920723,
+      "K_MN": 0.8743804081616969,
+      "K_MG": 0.7765919360610984,
+      "K_NG": 0.8527571102058898,
+      "RIBO_independence": 0.21950279612435164
+    },
+    "LYMPH_NODE": {
+      "n_cells": 37446,
+      "det_K": 0.2777671530154598,
+      "K_RM": 0.4923182821387209,
+      "K_RN": 0.651736906951674,
+      "K_RG": 0.33143276104193786,
+      "K_MN": 0.5512942727775114,
+      "K_MG": 0.29959627282403883,
+      "K_NG": 0.5232512187628442,
+      "RIBO_independence": 0.5081706832892223
+    },
+    "EFFUSION": {
+      "n_cells": 20304,
+      "det_K": 0.1253806011855362,
+      "K_RM": 0.6546565949453613,
+      "K_RN": 0.672856808389461,
+      "K_RG": 0.4247608247029845,
+      "K_MN": 0.6979636629255476,
+      "K_MG": 0.5103255752962161,
+      "K_NG": 0.69593047337241,
+      "RIBO_independence": 0.4159085906540644
+    },
+    "NORMAL_STROMA": {
+      "n_cells": 29060,
+      "det_K": 0.0171804631665281,
+      "K_RM": 0.7258462064978518,
+      "K_RN": 0.847549875835416,
+      "K_RG": 0.809091573983357,
+      "K_MN": 0.7956518786596006,
+      "K_MG": 0.7894665757008525,
+      "K_NG": 0.899994633861959,
+      "RIBO_independence": 0.20583744789445835
+    },
+    "EBUS": {
+      "n_cells": 27561,
+      "det_K": 0.035794130780823295,
+      "K_RM": 0.7158190134297308,
+      "K_RN": 0.7566792915352191,
+      "K_RG": 0.6754691555099718,
+      "K_MN": 0.7746836571435672,
+      "K_MG": 0.7157546880467788,
+      "K_NG": 0.8740726962051674,
+      "RIBO_independence": 0.2840108465083594
+    },
+    "BRONCHO": {
+      "n_cells": 5991,
+      "det_K": 0.11322988911476889,
+      "K_RM": 0.6679842458510908,
+      "K_RN": 0.681095660787803,
+      "K_RG": 0.4888411869488768,
+      "K_MN": 0.6421388961249838,
+      "K_MG": 0.4822866312966339,
+      "K_NG": 0.7525743572709812,
+      "RIBO_independence": 0.38735963547074315
+    }
+  },
+  "staff_h9": {
+    "tool": "STAFF_Binary_Transcripter",
+    "version": "1.0",
+    "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+    "n_reads": 337364,
+    "n_spliced": 233258,
+    "n_unspliced": 104106,
+    "total_bases": 516275464,
+    "base_composition": {
+      "A_00": 135977249,
+      "T_01": 135244322,
+      "C_10": 124050812,
+      "G_11": 121003081
+    },
+    "gc_content": 47.4657,
+    "bit_high_pct": 47.4657,
+    "bit_low_pct": 49.6339,
+    "unique_splice_sigs": 135603,
+    "unique_junctions": 241159,
+    "junction_dinucs": {
+      "AT|CT": 47159,
+      "AC|CT": 42186,
+      "AG|GT": 37198,
+      "AG|CT": 33902,
+      "AG|AT": 33497,
+      "TC|CT": 25988,
+      "AG|GA": 24247,
+      "GC|CT": 22615,
+      "AG|GG": 21868,
+      "CC|CT": 21718,
+      "AG|GC": 21033,
+      "TT|CT": 20506,
+      "AG|AA": 20194,
+      "AA|CT": 18248,
+      "TG|GT": 17702,
+      "AC|CA": 17298,
+      "CA|CT": 16695,
+      "AG|TT": 16369,
+      "AG|AG": 15373,
+      "AC|CC": 15075,
+      "CT|CT": 14904,
+      "AG|CA": 14499,
+      "TG|CT": 12726,
+      "GG|CT": 12461,
+      "AG|CC": 12357,
+      "AG|TG": 11640,
+      "GG|GT": 11603,
+      "GT|CT": 11205,
+      "GC|CC": 10285,
+      "AG|AC": 10100,
+      "GC|CA": 9843,
+      "CA|GT": 9639,
+      "GA|CT": 9588,
+      "AG|TA": 9374,
+      "TA|CT": 9155,
+      "AA|GT": 9008,
+      "TC|CA": 8957,
+      "TG|GA": 8773,
+      "TC|CC": 8690,
+      "AT|CA": 8325,
+      "TG|GC": 8312,
+      "TG|AT": 8001,
+      "CC|CA": 7888,
+      "AG|TC": 7457,
+      "AC|TT": 7219,
+      "GG|GA": 7212,
+      "GG|GC": 7124,
+      "TG|GG": 7003,
+      "CG|GT": 6774,
+      "AA|GA": 6695
+    },
+    "xor_distribution": {
+      "0000": 63253,
+      "0001": 69239,
+      "0010": 87384,
+      "0011": 77245,
+      "0100": 71791,
+      "0101": 70001,
+      "0110": 82011,
+      "0111": 71379,
+      "1000": 100903,
+      "1001": 81104,
+      "1010": 99534,
+      "1011": 91143,
+      "1100": 79757,
+      "1101": 69414,
+      "1110": 87111,
+      "1111": 85772
+    },
+    "junction_size_median": 972,
+    "n_active_loci": 26980,
+    "per_chrom_junctions": {
+      "1": 23190,
+      "10": 8707,
+      "11": 14243,
+      "12": 13780,
+      "13": 3931,
+      "14": 7675,
+      "15": 7625,
+      "16": 11418,
+      "17": 15637,
+      "18": 3185,
+      "19": 19444,
+      "2": 16531,
+      "20": 7083,
+      "21": 2606,
+      "22": 5908,
+      "3": 13173,
+      "4": 7647,
+      "5": 11116,
+      "6": 11259,
+      "7": 11159,
+      "8": 7930,
+      "9": 9616,
+      "GL000195.1": 8,
+      "GL000205.2": 2,
+      "KI270713.1": 4,
+      "KI270734.1": 40,
+      "MT": 122,
+      "X": 8117,
+      "Y": 3
+    },
+    "compute_time": 298.3
+  },
+  "staff_hepg2": {
+    "tool": "STAFF_Binary_Transcripter",
+    "version": "1.0",
+    "source": "marathon_lament/bams/SGNex_HepG2_directRNA_replicate1_run3.bam",
+    "n_reads": 1095654,
+    "n_spliced": 782326,
+    "n_unspliced": 313328,
+    "total_bases": 1320354744,
+    "base_composition": {
+      "A_00": 341114363,
+      "T_01": 336142658,
+      "C_10": 325979476,
+      "G_11": 317118247
+    },
+    "gc_content": 48.7064,
+    "bit_high_pct": 48.7064,
+    "bit_low_pct": 49.4762,
+    "unique_splice_sigs": 137274,
+    "unique_junctions": 182929,
+    "junction_dinucs": {
+      "AC|CT": 236741,
+      "AG|GT": 212081,
+      "TC|CT": 156147,
+      "AT|CT": 139057,
+      "AG|GA": 136522,
+      "AG|CT": 132329,
+      "GC|CT": 118528,
+      "AG|GC": 114509,
+      "AG|AT": 94313,
+      "AG|GG": 84369,
+      "TT|CT": 78612,
+      "CC|CT": 77565,
+      "AG|AA": 69301,
+      "AG|CC": 65455,
+      "AG|CA": 65382,
+      "AC|CA": 58343,
+      "AG|AG": 56359,
+      "GT|CT": 52510,
+      "TG|GT": 50187,
+      "AA|CT": 47921,
+      "TG|CT": 47555,
+      "AG|AC": 46174,
+      "CA|CT": 44556,
+      "CT|CT": 41744,
+      "AG|TT": 40051,
+      "GG|GT": 37976,
+      "GG|CT": 37661,
+      "GC|CA": 36112,
+      "AG|TG": 34879,
+      "TG|GC": 34102,
+      "AC|CC": 33074,
+      "TC|CA": 32058,
+      "TG|GG": 31594,
+      "TG|GA": 28988,
+      "AC|CG": 27209,
+      "AA|GT": 27140,
+      "AT|CA": 26844,
+      "TG|AT": 26481,
+      "TC|CC": 25248,
+      "AA|AT": 24431,
+      "CC|CA": 23285,
+      "GG|GC": 22977,
+      "CG|GT": 22632,
+      "GA|CT": 22627,
+      "AT|CC": 21843,
+      "GG|CC": 21678,
+      "TG|CC": 21542,
+      "GG|AT": 21518,
+      "AT|TT": 21084,
+      "GG|GA": 20822
+    },
+    "xor_distribution": {
+      "0000": 206406,
+      "0001": 218825,
+      "0010": 270763,
+      "0011": 250631,
+      "0100": 232097,
+      "0101": 175834,
+      "0110": 229406,
+      "0111": 270498,
+      "1000": 282202,
+      "1001": 260434,
+      "1010": 338116,
+      "1011": 409717,
+      "1100": 278303,
+      "1101": 266050,
+      "1110": 375575,
+      "1111": 412270
+    },
+    "junction_size_median": 874,
+    "n_active_loci": 30312,
+    "per_chrom_junctions": {
+      "1": 17290,
+      "10": 6996,
+      "11": 11411,
+      "12": 10111,
+      "13": 3149,
+      "14": 6537,
+      "15": 5474,
+      "16": 9499,
+      "17": 11936,
+      "18": 2491,
+      "19": 11350,
+      "2": 14007,
+      "20": 6242,
+      "21": 1806,
+      "22": 4283,
+      "3": 10181,
+      "4": 6307,
+      "5": 7373,
+      "6": 9604,
+      "7": 7952,
+      "8": 5792,
+      "9": 7535,
+      "GL000008.2": 16,
+      "GL000009.2": 1,
+      "GL000194.1": 6,
+      "GL000195.1": 16,
+      "GL000205.2": 5,
+      "GL000218.1": 13,
+      "GL000219.1": 12,
+      "GL000220.1": 1,
+      "KI270706.1": 1,
+      "KI270711.1": 20,
+      "KI270733.1": 1,
+      "KI270742.1": 7,
+      "MT": 283,
+      "X": 5052,
+      "Y": 169
+    },
+    "compute_time": 702.3
+  },
+  "staff_k562": {
+    "tool": "STAFF_Binary_Transcripter",
+    "version": "1.0",
+    "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam",
+    "n_reads": 554250,
+    "n_spliced": 357597,
+    "n_unspliced": 196653,
+    "total_bases": 523100901,
+    "base_composition": {
+      "A_00": 135763631,
+      "T_01": 133361245,
+      "C_10": 130718782,
+      "G_11": 123257243
+    },
+    "gc_content": 48.552,
+    "bit_high_pct": 48.552,
+    "bit_low_pct": 49.0572,
+    "unique_splice_sigs": 82402,
+    "unique_junctions": 131558,
+    "junction_dinucs": {
+      "AG|GT": 85500,
+      "AC|CT": 81553,
+      "AG|CT": 57739,
+      "TC|CT": 57002,
+      "AG|GA": 54221,
+      "GC|CT": 50884,
+      "AT|CT": 46463,
+      "AG|GC": 46278,
+      "AG|AT": 37210,
+      "AG|GG": 29985,
+      "TT|CT": 29965,
+      "AG|AA": 29922,
+      "CC|CT": 28100,
+      "TG|GT": 21721,
+      "AG|CA": 20681,
+      "AC|CA": 19048,
+      "AG|CC": 18917,
+      "GT|CT": 18539,
+      "AG|AG": 17769,
+      "TG|CT": 16549,
+      "CA|CT": 16341,
+      "GG|GT": 16085,
+      "GG|CT": 15756,
+      "AG|AC": 15738,
+      "AA|CT": 15562,
+      "CT|CT": 15084,
+      "TG|GC": 14494,
+      "GC|CA": 14487,
+      "AG|TT": 14291,
+      "AG|TG": 13606,
+      "TC|CA": 13155,
+      "TG|GA": 12730,
+      "AC|CC": 11933,
+      "TG|GG": 11912,
+      "TG|AT": 11650,
+      "AA|GT": 10547,
+      "AT|CA": 10081,
+      "GG|CC": 10057,
+      "CC|CA": 9233,
+      "CG|GT": 8988,
+      "GC|CC": 8737,
+      "TC|CC": 8682,
+      "AG|TA": 8606,
+      "GA|CT": 8420,
+      "AC|CG": 8418,
+      "AA|GG": 8378,
+      "AA|AT": 7841,
+      "GG|AT": 7762,
+      "GG|GC": 7664,
+      "AT|TT": 7649
+    },
+    "xor_distribution": {
+      "0000": 68732,
+      "0001": 76072,
+      "0010": 102851,
+      "0011": 93072,
+      "0100": 88874,
+      "0101": 72870,
+      "0110": 89996,
+      "0111": 109221,
+      "1000": 102785,
+      "1001": 89490,
+      "1010": 128571,
+      "1011": 144073,
+      "1100": 103955,
+      "1101": 101200,
+      "1110": 148137,
+      "1111": 157766
+    },
+    "junction_size_median": 740,
+    "n_active_loci": 26691,
+    "per_chrom_junctions": {
+      "1": 13915,
+      "10": 4721,
+      "11": 8256,
+      "12": 7108,
+      "13": 1904,
+      "14": 3873,
+      "15": 4319,
+      "16": 6626,
+      "17": 8112,
+      "18": 1606,
+      "19": 9662,
+      "2": 8851,
+      "20": 3286,
+      "21": 1509,
+      "22": 3556,
+      "3": 7040,
+      "4": 3997,
+      "5": 5608,
+      "6": 6772,
+      "7": 6655,
+      "8": 4377,
+      "9": 5165,
+      "GL000008.2": 5,
+      "GL000009.2": 10,
+      "GL000194.1": 7,
+      "GL000195.1": 9,
+      "GL000205.2": 12,
+      "GL000218.1": 9,
+      "GL000219.1": 20,
+      "GL000221.1": 3,
+      "KI270442.1": 6,
+      "KI270711.1": 6,
+      "KI270713.1": 1,
+      "KI270714.1": 5,
+      "KI270720.1": 4,
+      "KI270721.1": 7,
+      "KI270728.1": 4,
+      "KI270734.1": 5,
+      "KI270741.1": 2,
+      "KI270742.1": 7,
+      "KI270743.1": 2,
+      "KI270744.1": 12,
+      "KI270745.1": 3,
+      "KI270750.1": 2,
+      "KI270754.1": 5,
+      "MT": 197,
+      "X": 4297
+    },
+    "compute_time": 280.1
+  },
+  "wi38_fetal_fibroblast_base4": {
+    "tool": "STAFF_Binary_Transcripter_v2_Base4",
+    "source": "wi38_bam/wi38_Aligned.out.bam",
+    "n_reads": 158780246,
+    "n_spliced": 34060572,
+    "total_bases": 20023737052,
+    "base4": {
+      "A": 5266832068,
+      "T": 5186229671,
+      "C": 4812494597,
+      "G": 4758180716
+    },
+    "gc_content": 47.7966,
+    "junction_xor_base4": {
+      "00_IDENTITY": 17491980,
+      "01_COMPLEMENT": 5937755,
+      "10_TRANSVERSION": 4318216,
+      "11_TRANSITION": 8132563
+    },
+    "background_xor_base4": {
+      "00_IDENTITY": 906241855,
+      "01_COMPLEMENT": 597732896,
+      "10_TRANSVERSION": 846683318,
+      "11_TRANSITION": 824946648
+    },
+    "junction_pairs": {
+      "G|G": 8808102,
+      "C|C": 7161450,
+      "G|C": 3736740,
+      "G|A": 3577684,
+      "T|C": 2923598,
+      "A|C": 1911546,
+      "G|T": 1145935,
+      "A|G": 1045561,
+      "C|G": 948548,
+      "T|G": 891986,
+      "T|T": 791646,
+      "T|A": 785667,
+      "A|A": 730699,
+      "C|T": 585565,
+      "A|T": 466667,
+      "C|A": 368586
+    },
+    "compute_time": 11942.4
+  },
+  "wi38_fetal_fibroblast_frame": {
+    "tool": "STAFF_Reading_Frame",
+    "source": "wi38_bam/wi38_Aligned.out.bam",
+    "n_reads": 158780246,
+    "n_spliced": 34060572,
+    "n_junctions": 35880514,
+    "intron_mod3": {
+      "0": 11793405,
+      "1": 11930504,
+      "2": 12156605
+    },
+    "junction_frame_pos": {
+      "0": 12117814,
+      "1": 12049366,
+      "2": 11713334
+    },
+    "junction_xor_base4": {
+      "00": 17491980,
+      "01": 5937755,
+      "10": 4318216,
+      "11": 8132563
+    },
+    "pre_aa_top10": {
+      "K": 5122171,
+      "Q": 4053642,
+      "E": 2579576,
+      "L": 2337636,
+      "S": 2219471,
+      "H": 2101164,
+      "R": 1770840,
+      "G": 1549915,
+      "N": 1527640,
+      "T": 1460067
+    },
+    "post_aa_top10": {
+      "L": 10250098,
+      "V": 5315465,
+      "A": 2326242,
+      "P": 2156170,
+      "R": 2080620,
+      "I": 1978121,
+      "G": 1792728,
+      "Q": 1265184,
+      "D": 1189309,
+      "E": 1070371
+    },
+    "split_aa_top10": {
+      "G": 3870384,
+      "R": 3448140,
+      "S": 2938791,
+      "P": 2921058,
+      "T": 1848483,
+      "A": 1676192,
+      "D": 886761,
+      "L": 875443,
+      "I": 717047,
+      "V": 627887
+    },
+    "starts_near_junction": 8776876,
+    "stops_near_junction": 17181260,
+    "compute_time": 5455.0
+  },
+  "wi38_fetal_fibroblast_staff": {
+    "tool": "STAFF_Binary_Transcripter",
+    "version": "1.0",
+    "source": "wi38_bam/wi38_Aligned.out.bam",
+    "n_reads": 158780246,
+    "n_spliced": 34060572,
+    "n_unspliced": 124719674,
+    "total_bases": 20023737052,
+    "base_composition": {
+      "A_00": 5266832068,
+      "T_01": 5186229671,
+      "C_10": 4812494597,
+      "G_11": 4758180716
+    },
+    "gc_content": 47.7966,
+    "bit_high_pct": 47.7966,
+    "bit_low_pct": 49.6631,
+    "unique_splice_sigs": 376029,
+    "unique_junctions": 357811,
+    "junction_dinucs": {
+      "AG|GT": 2837517,
+      "AC|CT": 1916152,
+      "TC|CT": 1386434,
+      "AG|GA": 1274158,
+      "AG|AT": 1155903,
+      "CC|CT": 1124208,
+      "AT|CT": 940638,
+      "AG|GC": 917506,
+      "AG|GG": 871870,
+      "AG|CT": 776964,
+      "GC|CT": 732930,
+      "TG|GT": 705481,
+      "GG|CG": 581063,
+      "AG|CC": 525622,
+      "GG|GT": 521380,
+      "TC|CA": 479380,
+      "CT|CT": 444371,
+      "TT|CT": 410860,
+      "AG|AA": 387758,
+      "AC|GT": 374810,
+      "AG|AG": 330044,
+      "AC|CA": 329833,
+      "AG|CA": 315186,
+      "CA|CT": 314933,
+      "TG|GC": 311831,
+      "GG|AT": 307659,
+      "GG|CC": 301146,
+      "GT|CT": 293650,
+      "CT|GC": 279189,
+      "CG|GC": 273157,
+      "AA|CT": 270419,
+      "GA|CT": 268610,
+      "AG|TG": 267113,
+      "TG|CT": 265602,
+      "AG|TT": 248309,
+      "AG|CG": 243949,
+      "TC|CC": 234970,
+      "AT|TG": 234403,
+      "TG|AA": 230681,
+      "AC|CG": 230475,
+      "AA|GC": 217242,
+      "AT|TT": 212733,
+      "GG|AG": 208857,
+      "CG|CT": 208523,
+      "TG|GA": 206446,
+      "AA|GT": 204645,
+      "GG|AA": 203410,
+      "AC|GA": 203335,
+      "GC|TG": 197998,
+      "AG|AC": 192539
+    },
+    "xor_distribution": {
+      "0000": 1475048,
+      "0001": 1122699,
+      "0010": 2509299,
+      "0011": 1967061,
+      "0100": 2042576,
+      "0101": 1479126,
+      "0110": 1661024,
+      "0111": 1901446,
+      "1000": 1894314,
+      "1001": 2118711,
+      "1010": 2306922,
+      "1011": 2884260,
+      "1100": 2169943,
+      "1101": 1818197,
+      "1110": 4755817,
+      "1111": 3774071
+    },
+    "junction_size_median": 630,
+    "n_active_loci": 222346,
+    "per_chrom_junctions": {
+      "1": 33386,
+      "10": 14179,
+      "11": 20789,
+      "12": 23325,
+      "13": 7513,
+      "14": 11102,
+      "15": 12665,
+      "16": 14159,
+      "17": 20314,
+      "18": 5412,
+      "19": 20904,
+      "2": 26091,
+      "20": 8434,
+      "21": 3590,
+      "22": 7482,
+      "3": 20557,
+      "4": 14113,
+      "5": 17854,
+      "6": 17456,
+      "7": 18550,
+      "8": 12092,
+      "9": 14421,
+      "GL000009.2": 1,
+      "GL000194.1": 4,
+      "GL000195.1": 29,
+      "GL000205.2": 6,
+      "GL000208.1": 1,
+      "GL000216.2": 5,
+      "GL000218.1": 1,
+      "GL000219.1": 27,
+      "GL000220.1": 2,
+      "GL000224.1": 1,
+      "GL000225.1": 40,
+      "KI270435.1": 1,
+      "KI270438.1": 1,
+      "KI270442.1": 1,
+      "KI270519.1": 1,
+      "KI270706.1": 8,
+      "KI270711.1": 7,
+      "KI270713.1": 1,
+      "KI270714.1": 1,
+      "KI270725.1": 2,
+      "KI270728.1": 20,
+      "KI270729.1": 7,
+      "KI270733.1": 6,
+      "KI270736.1": 1,
+      "KI270743.1": 2,
+      "KI270755.1": 1,
+      "MT": 1687,
+      "X": 11329,
+      "Y": 230
+    },
+    "compute_time": 13399.0
+  },
+  "wi38_fused_tensor": {
+    "description": "WI-38 (fetal lung fibroblast) + GSE250041 fused analysis",
+    "n_shared_genes": 36601,
+    "total_cells": 70416,
+    "groups": {
+      "G250_Proliferating": {
+        "n": 8664,
+        "det": 0.002709457215674655,
+        "RIBO_indep": 0.15358019984235993,
+        "K_RM": 0.6498757822322965,
+        "K_RN": 0.9586785321301551,
+        "K_RG": 0.9307050861104689,
+        "K_MN": 0.6978216317095648,
+        "K_MG": 0.6789999805625485,
+        "K_NG": 0.9663761199598259
+      },
+      "G250_Senescent": {
+        "n": 4949,
+        "det": 0.014682420834983442,
+        "RIBO_indep": 0.2752801012352065,
+        "K_RM": 0.44459066881154385,
+        "K_RN": 0.893128769347908,
+        "K_RG": 0.8364402581349285,
+        "K_MN": 0.4525826848412604,
+        "K_MG": 0.41135875932932275,
+        "K_NG": 0.9520972949287241
+      },
+      "WI38_CTRL_2": {
+        "n": 5608,
+        "det": 0.05012933029737872,
+        "RIBO_indep": 0.3449022070449814,
+        "K_RM": 0.40624654014551725,
+        "K_RN": 0.7977630067825832,
+        "K_RG": 0.7612838319369554,
+        "K_MN": 0.6033261213386775,
+        "K_MG": 0.533995980524435,
+        "K_NG": 0.8754046245465406
+      },
+      "WI38_ETO_1": {
+        "n": 3928,
+        "det": 0.010472300979432,
+        "RIBO_indep": 0.3858143918020758,
+        "K_RM": -0.02608601117442678,
+        "K_RN": 0.9411600003878594,
+        "K_RG": 0.8753108130314865,
+        "K_MN": 0.05542792417050972,
+        "K_MG": 0.09293398671575823,
+        "K_NG": 0.948335682615961
+      },
+      "WI38_ETO_2": {
+        "n": 3804,
+        "det": 0.017797486131600173,
+        "RIBO_indep": 0.40487958186447814,
+        "K_RM": -0.02977747699218383,
+        "K_RN": 0.9213066556076482,
+        "K_RG": 0.8342771218067336,
+        "K_MN": 0.08453650767602745,
+        "K_MG": 0.13244845404682212,
+        "K_NG": 0.930818261085521
+      },
+      "WI38_ETO_ETO_day_0": {
+        "n": 6518,
+        "det": 0.020219800873393066,
+        "RIBO_indep": 0.24169238748695376,
+        "K_RM": 0.608965604088268,
+        "K_RN": 0.8444741095631589,
+        "K_RG": 0.8214831238877114,
+        "K_MN": 0.6952564065330619,
+        "K_MG": 0.677319826048204,
+        "K_NG": 0.9249615609608803
+      },
+      "WI38_ETO_ETO_day_1": {
+        "n": 4221,
+        "det": 0.04799539577453388,
+        "RIBO_indep": 0.40678875449171814,
+        "K_RM": 0.2921869035337584,
+        "K_RN": 0.7707208502069867,
+        "K_RG": 0.7167259827841007,
+        "K_MN": 0.3651193010174772,
+        "K_MG": 0.2667848410938035,
+        "K_NG": 0.926089734698159
+      },
+      "WI38_ETO_ETO_day_10": {
+        "n": 3858,
+        "det": 0.01594492993189154,
+        "RIBO_indep": 0.3993014823982116,
+        "K_RM": 0.17704309122740625,
+        "K_RN": 0.8058312454513545,
+        "K_RG": 0.8192212161266045,
+        "K_MN": 0.43871926692065283,
+        "K_MG": 0.34529380890338524,
+        "K_NG": 0.9628684785361065
+      },
+      "WI38_ETO_ETO_day_2": {
+        "n": 5135,
+        "det": 0.024244813478795542,
+        "RIBO_indep": 0.3622120584746408,
+        "K_RM": -0.18069895547894302,
+        "K_RN": 0.8688385087168958,
+        "K_RG": 0.8638263603802389,
+        "K_MN": -0.06160882469658739,
+        "K_MG": -0.19225958270608096,
+        "K_NG": 0.9325476968061408
+      },
+      "WI38_ETO_ETO_day_4": {
+        "n": 4700,
+        "det": 0.0105500537486489,
+        "RIBO_indep": 0.4169693950665193,
+        "K_RM": -0.034899996185903004,
+        "K_RN": 0.8521864891083399,
+        "K_RG": 0.8620053295061993,
+        "K_MN": 0.1465949898285448,
+        "K_MG": 0.11584644448238358,
+        "K_NG": 0.9762482251600553
+      },
+      "WI38_ETO_ETO_day_7": {
+        "n": 4749,
+        "det": 0.017600347069118897,
+        "RIBO_indep": 0.4352382330536141,
+        "K_RM": 0.027842738884330483,
+        "K_RN": 0.8314490976213332,
+        "K_RG": 0.8349934643334939,
+        "K_MN": 0.3037954787584289,
+        "K_MG": 0.2109293283414136,
+        "K_NG": 0.9564522397180664
+      },
+      "WI38_IR_1": {
+        "n": 5173,
+        "det": 0.01918436070643706,
+        "RIBO_indep": 0.3937462865344925,
+        "K_RM": 0.031123394399461844,
+        "K_RN": 0.9292240212234856,
+        "K_RG": 0.858413724773575,
+        "K_MN": 0.09511079932122943,
+        "K_MG": 0.11760303452205584,
+        "K_NG": 0.92400620421331
+      },
+      "WI38_IR_2": {
+        "n": 3519,
+        "det": 0.00628528948306254,
+        "RIBO_indep": 0.3511491823766585,
+        "K_RM": 0.0670074500807456,
+        "K_RN": 0.958674110189969,
+        "K_RG": 0.9208708925993101,
+        "K_MN": 0.12893551293508035,
+        "K_MG": 0.10867722547218811,
+        "K_NG": 0.9578428674692705
+      },
+      "WI38_RS_1": {
+        "n": 2920,
+        "det": 0.025483371413589983,
+        "RIBO_indep": 0.3976234134458513,
+        "K_RM": -0.05572252835849244,
+        "K_RN": 0.8746246697319414,
+        "K_RG": 0.8767825615720124,
+        "K_MN": 0.11875084280747814,
+        "K_MG": 0.04586446717879,
+        "K_NG": 0.9256666726270059
+      },
+      "WI38_RS_2": {
+        "n": 2670,
+        "det": 0.008800663125435778,
+        "RIBO_indep": 0.28246330808865505,
+        "K_RM": 0.3383431771895859,
+        "K_RN": 0.9021883908256411,
+        "K_RG": 0.9120785077188079,
+        "K_MN": 0.4621488498513677,
+        "K_MG": 0.43804671087786345,
+        "K_NG": 0.9627291724656996
+      }
+    }
+  }
+}

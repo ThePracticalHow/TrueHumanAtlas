@@ -1,0 +1,549 @@
+{
+  "atlas_version": "0.2",
+  "date": "2026-04-13",
+  "species": [
+    "S. cerevisiae",
+    "C. neoformans",
+    "A. fumigatus",
+    "C. albicans"
+  ],
+  "conditions": {
+    "candida_GSE132030_all": {
+      "n_samples": 10,
+      "n_genes": 18463,
+      "op_genes": {
+        "RIBO": 298,
+        "MITO": 113,
+        "GOLGI": 95
+      },
+      "ribo_indep": 0.1495,
+      "det_k": 0.0079,
+      "K_RM": 0.9515,
+      "K_RG": -0.8182,
+      "K_MN": -0.6848
+    },
+    "crypto_atlas_1772067084": {
+      "n_samples": 60,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.38,
+      "det_k": 0.0465,
+      "K_RM": 0.8725,
+      "K_RG": 0.5856,
+      "K_MN": 0.3938
+    },
+    "crypto_atlas_1772067055": {
+      "n_samples": 59,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.3351,
+      "det_k": 0.0313,
+      "K_RM": 0.8831,
+      "K_RG": 0.7254,
+      "K_MN": 0.5366
+    },
+    "crypto_atlas_1772067090": {
+      "n_samples": 56,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.3372,
+      "det_k": 0.0329,
+      "K_RM": 0.8839,
+      "K_RG": 0.792,
+      "K_MN": 0.5103
+    },
+    "crypto_atlas_1772071037": {
+      "n_samples": 55,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2805,
+      "det_k": 0.0143,
+      "K_RM": 0.9323,
+      "K_RG": 0.7534,
+      "K_MN": 0.5649
+    },
+    "crypto_atlas_1772071068": {
+      "n_samples": 54,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2726,
+      "det_k": 0.0251,
+      "K_RM": 0.9064,
+      "K_RG": 0.7428,
+      "K_MN": 0.6332
+    },
+    "crypto_atlas_1772067087": {
+      "n_samples": 53,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2905,
+      "det_k": 0.0138,
+      "K_RM": 0.943,
+      "K_RG": 0.812,
+      "K_MN": 0.4409
+    },
+    "crypto_atlas_1772067075": {
+      "n_samples": 51,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4054,
+      "det_k": 0.0487,
+      "K_RM": 0.8703,
+      "K_RG": 0.6385,
+      "K_MN": 0.4523
+    },
+    "crypto_atlas_1772067078": {
+      "n_samples": 50,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.484,
+      "det_k": 0.0532,
+      "K_RM": 0.8663,
+      "K_RG": 0.3848,
+      "K_MN": 0.4696
+    },
+    "crypto_atlas_1772071063": {
+      "n_samples": 50,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5112,
+      "det_k": 0.0885,
+      "K_RM": 0.7509,
+      "K_RG": 0.5752,
+      "K_MN": 0.3092
+    },
+    "crypto_atlas_1772071032": {
+      "n_samples": 49,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4716,
+      "det_k": 0.0837,
+      "K_RM": 0.8048,
+      "K_RG": 0.6402,
+      "K_MN": 0.2303
+    },
+    "crypto_atlas_1772067086": {
+      "n_samples": 48,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4025,
+      "det_k": 0.0221,
+      "K_RM": 0.905,
+      "K_RG": 0.7516,
+      "K_MN": 0.223
+    },
+    "crypto_atlas_1772071034": {
+      "n_samples": 41,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.3446,
+      "det_k": 0.0324,
+      "K_RM": 0.8503,
+      "K_RG": 0.6672,
+      "K_MN": 0.6504
+    },
+    "crypto_atlas_1772072283": {
+      "n_samples": 41,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5258,
+      "det_k": 0.0848,
+      "K_RM": 0.75,
+      "K_RG": 0.451,
+      "K_MN": 0.4846
+    },
+    "crypto_atlas_1772067056": {
+      "n_samples": 40,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.3203,
+      "det_k": 0.0251,
+      "K_RM": 0.8862,
+      "K_RG": 0.8116,
+      "K_MN": 0.4543
+    },
+    "crypto_atlas_1772071051": {
+      "n_samples": 40,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2237,
+      "det_k": 0.0059,
+      "K_RM": 0.89,
+      "K_RG": 0.7841,
+      "K_MN": 0.7793
+    },
+    "crypto_atlas_1772071066": {
+      "n_samples": 40,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4506,
+      "det_k": 0.0587,
+      "K_RM": 0.7963,
+      "K_RG": 0.6935,
+      "K_MN": 0.4013
+    },
+    "crypto_atlas_1772072263": {
+      "n_samples": 39,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5673,
+      "det_k": 0.1313,
+      "K_RM": 0.6839,
+      "K_RG": 0.3461,
+      "K_MN": 0.5127
+    },
+    "crypto_atlas_1772072256": {
+      "n_samples": 38,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4908,
+      "det_k": 0.1146,
+      "K_RM": 0.8265,
+      "K_RG": 0.6264,
+      "K_MN": 0.1345
+    },
+    "crypto_atlas_1772072275": {
+      "n_samples": 38,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.557,
+      "det_k": 0.2632,
+      "K_RM": 0.7049,
+      "K_RG": 0.4666,
+      "K_MN": 0.2268
+    },
+    "crypto_atlas_1772072276": {
+      "n_samples": 38,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5289,
+      "det_k": 0.0777,
+      "K_RM": 0.79,
+      "K_RG": 0.5455,
+      "K_MN": -0.0783
+    },
+    "crypto_atlas_1772072282": {
+      "n_samples": 38,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5301,
+      "det_k": 0.1449,
+      "K_RM": 0.7569,
+      "K_RG": 0.6162,
+      "K_MN": 0.1922
+    },
+    "crypto_atlas_1772071026": {
+      "n_samples": 37,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4224,
+      "det_k": 0.0431,
+      "K_RM": 0.8209,
+      "K_RG": 0.6467,
+      "K_MN": 0.3567
+    },
+    "crypto_atlas_1772067072": {
+      "n_samples": 36,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2884,
+      "det_k": 0.0193,
+      "K_RM": 0.8544,
+      "K_RG": 0.7023,
+      "K_MN": 0.7296
+    },
+    "crypto_atlas_1772071025": {
+      "n_samples": 36,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2951,
+      "det_k": 0.017,
+      "K_RM": 0.9115,
+      "K_RG": 0.801,
+      "K_MN": 0.3835
+    },
+    "crypto_atlas_1772072261": {
+      "n_samples": 36,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.3961,
+      "det_k": 0.044,
+      "K_RM": 0.8094,
+      "K_RG": 0.5447,
+      "K_MN": 0.633
+    },
+    "crypto_atlas_1772072284": {
+      "n_samples": 36,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4423,
+      "det_k": 0.0542,
+      "K_RM": 0.8701,
+      "K_RG": 0.4693,
+      "K_MN": -0.2164
+    },
+    "crypto_atlas_1772067095": {
+      "n_samples": 35,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4285,
+      "det_k": 0.0507,
+      "K_RM": 0.8874,
+      "K_RG": 0.7132,
+      "K_MN": 0.2042
+    },
+    "crypto_atlas_1772071039": {
+      "n_samples": 35,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2557,
+      "det_k": 0.0104,
+      "K_RM": 0.8419,
+      "K_RG": 0.7427,
+      "K_MN": 0.7565
+    },
+    "crypto_atlas_1772072259": {
+      "n_samples": 35,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.2363,
+      "det_k": 0.0085,
+      "K_RM": 0.892,
+      "K_RG": 0.7982,
+      "K_MN": 0.7647
+    },
+    "crypto_atlas_1772071061": {
+      "n_samples": 34,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.3927,
+      "det_k": 0.0386,
+      "K_RM": 0.8489,
+      "K_RG": 0.7119,
+      "K_MN": 0.2868
+    },
+    "crypto_atlas_1772067071": {
+      "n_samples": 33,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5175,
+      "det_k": 0.153,
+      "K_RM": 0.866,
+      "K_RG": 0.441,
+      "K_MN": 0.2259
+    },
+    "crypto_atlas_1772067085": {
+      "n_samples": 33,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.5183,
+      "det_k": 0.0878,
+      "K_RM": 0.8425,
+      "K_RG": 0.4261,
+      "K_MN": 0.3061
+    },
+    "crypto_atlas_1772072285": {
+      "n_samples": 32,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4291,
+      "det_k": 0.0816,
+      "K_RM": 0.8602,
+      "K_RG": 0.5066,
+      "K_MN": 0.5369
+    },
+    "crypto_atlas_1772067080": {
+      "n_samples": 26,
+      "n_genes": 26024,
+      "op_genes": {
+        "RIBO": 201,
+        "MITO": 137,
+        "GOLGI": 104
+      },
+      "ribo_indep": 0.4839,
+      "det_k": 0.053,
+      "K_RM": 0.8706,
+      "K_RG": 0.5837,
+      "K_MN": 0.3238
+    },
+    "yeast_glu_6h": {
+      "n_cells": 1695,
+      "ribo_indep": 0.1048,
+      "K_RM": 0.8627,
+      "K_RG": 0.8806,
+      "det_k": 0.0018,
+      "note": "Active growth 6h, MAXIMUM COUPLING"
+    },
+    "yeast_glu_12h": {
+      "n_cells": 1096,
+      "ribo_indep": 0.1155,
+      "K_RM": 0.8596,
+      "K_RG": 0.8618,
+      "det_k": 0.0043,
+      "note": "Active growth 12h, high coupling"
+    },
+    "yeast_mix_glu_mal": {
+      "n_cells": 686,
+      "ribo_indep": 0.1653,
+      "K_RM": 0.7627,
+      "K_RG": 0.8259,
+      "det_k": 0.0067,
+      "note": "Carbon source transition"
+    },
+    "yeast_inlag_1h": {
+      "n_cells": 1172,
+      "ribo_indep": 0.334,
+      "K_RM": 0.6023,
+      "K_RG": 0.6522,
+      "det_k": 0.0595,
+      "note": "Lag phase entry, DECOUPLING"
+    },
+    "yeast_inlag_3h": {
+      "n_cells": 1469,
+      "ribo_indep": 0.7135,
+      "K_RM": 0.2334,
+      "K_RG": 0.3187,
+      "det_k": 0.0267,
+      "note": "Deep lag, MAXIMUM DECOUPLING"
+    }
+  },
+  "human_reference": {
+    "healthy": 0.206,
+    "primary_cancer": 0.31,
+    "fetal": 0.345,
+    "metastatic": 0.508,
+    "GBM": 0.89
+  }
+}

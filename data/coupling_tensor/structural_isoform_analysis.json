@@ -1,0 +1,343 @@
+{
+  "K562_blood_cancer_HBB_intron1_122bp": {
+    "name": "HBB_intron1_122bp",
+    "gene": "HBB",
+    "chrom": "11",
+    "start": 5254514,
+    "end": 5254636,
+    "size": 122,
+    "count": 5005,
+    "left_flank": "AACCAGGAGC",
+    "right_flank": "CTTCCCAGGG",
+    "junction_seq": "AACCAGGAGCCTTCCCAGGG",
+    "gc_content": 65.0,
+    "xor_chain": "TVWCTIIDTVWCTITIIDWC",
+    "binary": "0000101000111100111010010110101000111111",
+    "structure_20bp": "..((.(((....)))..)).",
+    "mfe_20bp": -3.2,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 50.0,
+      "unpaired_pct": 50.0,
+      "n_stems": 2
+    },
+    "structure_60bp": "............((.(((((.....((((((((...)))))))).....)))))...)).",
+    "mfe_60bp": -17.6,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 50.0,
+      "unpaired_pct": 50.0,
+      "n_stems": 3
+    }
+  },
+  "K562_blood_cancer_HBB_intron2_886bp": {
+    "name": "HBB_intron2_886bp",
+    "gene": "HBB",
+    "chrom": "11",
+    "start": 5253405,
+    "end": 5254291,
+    "size": 886,
+    "count": 4823,
+    "left_flank": "TTCCCAGGAG",
+    "right_flank": "CTTGAAGTTC",
+    "junction_seq": "TTCCCAGGAGCTTGAAGTTC",
+    "gc_content": 50.0,
+    "xor_chain": "TIIDTIWCTVIDIDTVWCWC",
+    "binary": "0101101010001111001110010111000011010110",
+    "structure_20bp": ".......(((((...)))))",
+    "mfe_20bp": -1.7,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 50.0,
+      "unpaired_pct": 50.0,
+      "n_stems": 1
+    },
+    "structure_60bp": "......(((((((....))))))).((((((((.(((...))).))))))))........",
+    "mfe_60bp": -17.9,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 60.0,
+      "unpaired_pct": 40.0,
+      "n_stems": 3
+    }
+  },
+  "K562_blood_cancer_HBB_intron3_880bp": {
+    "name": "HBB_intron3_880bp",
+    "gene": "HBB",
+    "chrom": "11",
+    "start": 5248487,
+    "end": 5249367,
+    "size": 880,
+    "count": 2688,
+    "left_flank": "TTCCCAGGAG",
+    "right_flank": "CTTGAAGTTC",
+    "junction_seq": "TTCCCAGGAGCTTGAAGTTC",
+    "gc_content": 50.0,
+    "xor_chain": "TIIDTIWCTVIDIDTVWCWC",
+    "binary": "0101101010001111001110010111000011010110",
+    "structure_20bp": ".......(((((...)))))",
+    "mfe_20bp": -1.7,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 50.0,
+      "unpaired_pct": 50.0,
+      "n_stems": 1
+    },
+    "structure_60bp": "......(((((((....))))))).((((((((.(((...))).))))))))........",
+    "mfe_60bp": -17.9,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 60.0,
+      "unpaired_pct": 40.0,
+      "n_stems": 3
+    }
+  },
+  "K562_blood_cancer_HBA_149bp": {
+    "name": "HBA_149bp",
+    "gene": "HBA",
+    "chrom": "16",
+    "start": 177133,
+    "end": 177282,
+    "size": 149,
+    "count": 1254,
+    "left_flank": "CAACTTCAAG",
+    "right_flank": "CTCCTAAGCC",
+    "junction_seq": "CAACTTCAAGCTCCTAAGCC",
+    "gc_content": 50.0,
+    "xor_chain": "IDWCTVIDIDWCTVTITVWC",
+    "binary": "1000001001011000001110011010010000111010",
+    "structure_20bp": ".........(((....))).",
+    "mfe_20bp": -1.1,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 30.0,
+      "unpaired_pct": 70.0,
+      "n_stems": 1
+    },
+    "structure_60bp": ".........((........))........(((....))).....................",
+    "mfe_60bp": -2.0,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 16.7,
+      "unpaired_pct": 83.3,
+      "n_stems": 2
+    }
+  },
+  "HepG2_liver_cancer_ALB_770bp": {
+    "name": "ALB_770bp",
+    "gene": "ALB",
+    "chrom": "4",
+    "start": 73420321,
+    "end": 73421091,
+    "size": 770,
+    "count": 8734,
+    "left_flank": "AGCATCTCAG",
+    "right_flank": "CCTACCATGA",
+    "junction_seq": "AGCATCTCAGCCTACCATGA",
+    "gc_content": 50.0,
+    "xor_chain": "TVWCTIIDTIIDWCTITITI",
+    "binary": "0011100001100110001110100100101000011100",
+    "structure_20bp": ".((......)).........",
+    "mfe_20bp": -0.5,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 20.0,
+      "unpaired_pct": 80.0,
+      "n_stems": 1
+    },
+    "structure_60bp": ".((.(((.(((...))).)))))...(((........))).....((((......)))).",
+    "mfe_60bp": -7.7,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 50.0,
+      "unpaired_pct": 50.0,
+      "n_stems": 5
+    }
+  },
+  "HepG2_liver_cancer_ALB_614bp": {
+    "name": "ALB_614bp",
+    "gene": "ALB",
+    "chrom": "4",
+    "start": 73419639,
+    "end": 73420253,
+    "size": 614,
+    "count": 8723,
+    "left_flank": "TGCCGAGGAG",
+    "right_flank": "GGTAAAAAAC",
+    "junction_seq": "TGCCGAGGAGGGTAAAAAAC",
+    "gc_content": 50.0,
+    "xor_chain": "TVIDTITVTIIDTITIIDWC",
+    "binary": "0111101011001111001111110100000000000010",
+    "structure_20bp": "((((......))))......",
+    "mfe_20bp": -4.1,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 40.0,
+      "unpaired_pct": 60.0,
+      "n_stems": 1
+    },
+    "structure_60bp": "(((((.....(((((.....((((......)))).....))))).....)))))......",
+    "mfe_60bp": -17.7,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 46.7,
+      "unpaired_pct": 53.3,
+      "n_stems": 3
+    }
+  },
+  "HepG2_liver_cancer_ALB_1195bp": {
+    "name": "ALB_1195bp",
+    "gene": "ALB",
+    "chrom": "4",
+    "start": 73418311,
+    "end": 73419506,
+    "size": 1195,
+    "count": 8541,
+    "left_flank": "AGAAACAAAC",
+    "right_flank": "TGCACTTGTT",
+    "junction_seq": "AGAAACAAACTGCACTTGTT",
+    "gc_content": 35.0,
+    "xor_chain": "WCIDTVIDTVTIWCTIWCTI",
+    "binary": "0011000000100000001001111000100101110101",
+    "structure_20bp": "...(((((.......)))))",
+    "mfe_20bp": -0.4,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 50.0,
+      "unpaired_pct": 50.0,
+      "n_stems": 1
+    },
+    "structure_60bp": ".......(((((...(((((((...(((((.......)))))...)))))))...)))))",
+    "mfe_60bp": -11.2,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 56.7,
+      "unpaired_pct": 43.3,
+      "n_stems": 3
+    }
+  },
+  "HepG2_liver_cancer_SERPINA1_823bp": {
+    "name": "SERPINA1_823bp",
+    "gene": "SERPINA1",
+    "chrom": "14",
+    "start": 94378640,
+    "end": 94379463,
+    "size": 823,
+    "count": 8060,
+    "left_flank": "TATGCACGGC",
+    "right_flank": "CTTGGAGCTT",
+    "junction_seq": "TATGCACGGCCTTGGAGCTT",
+    "gc_content": 55.0,
+    "xor_chain": "TIWCIDIDWCIDWCWCTVTI",
+    "binary": "0100011110001011111010010111110011100101",
+    "structure_20bp": ".......(((......))).",
+    "mfe_20bp": -1.2,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 30.0,
+      "unpaired_pct": 70.0,
+      "n_stems": 1
+    },
+    "structure_60bp": "....((.((((.((((......)))).)))).))(((((((..((....))..)))))))",
+    "mfe_60bp": -19.9,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 63.3,
+      "unpaired_pct": 36.7,
+      "n_stems": 5
+    }
+  },
+  "H9_fetal_only_fetal_chr2_1941bp": {
+    "name": "fetal_chr2_1941bp",
+    "gene": "unknown",
+    "chrom": "2",
+    "start": 216661998,
+    "end": 216663939,
+    "size": 1941,
+    "count": 590,
+    "left_flank": "CCTCAAACAG",
+    "right_flank": "TGCAAGATGT",
+    "junction_seq": "CCTCAAACAGTGCAAGATGT",
+    "gc_content": 45.0,
+    "xor_chain": "TIWCTITVIDTIIDTITITV",
+    "binary": "1010011000000010001101111000001100011101",
+    "structure_20bp": "....................",
+    "mfe_20bp": 0.0,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 0.0,
+      "unpaired_pct": 100.0,
+      "n_stems": 0
+    },
+    "structure_60bp": "...................((((.....)).))...((.((((((....)))))).))..",
+    "mfe_60bp": -8.3,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 40.0,
+      "unpaired_pct": 60.0,
+      "n_stems": 3
+    }
+  },
+  "H9_fetal_only_fetal_chr15_748bp": {
+    "name": "fetal_chr15_748bp",
+    "gene": "unknown",
+    "chrom": "15",
+    "start": 24977029,
+    "end": 24977777,
+    "size": 748,
+    "count": 417,
+    "left_flank": "ATCCCAGCAG",
+    "right_flank": "GTAATGACTC",
+    "junction_seq": "ATCCCAGCAGGTAATGACTC",
+    "gc_content": 50.0,
+    "xor_chain": "TIIDTVTVTITITIIDWCWC",
+    "binary": "0001101010001110001111010000011100100110",
+    "structure_20bp": "...((....)).........",
+    "mfe_20bp": -0.2,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 20.0,
+      "unpaired_pct": 80.0,
+      "n_stems": 1
+    },
+    "structure_60bp": "...((.((.((((......))))...)).))..((((.((.....)).))))........",
+    "mfe_60bp": -8.0,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 46.7,
+      "unpaired_pct": 53.3,
+      "n_stems": 5
+    }
+  },
+  "H9_fetal_only_fetal_chr12_1809bp": {
+    "name": "fetal_chr12_1809bp",
+    "gene": "unknown",
+    "chrom": "12",
+    "start": 21642125,
+    "end": 21643934,
+    "size": 1809,
+    "count": 538,
+    "left_flank": "AGAATGTCCA",
+    "right_flank": "CTGGGTTGGA",
+    "junction_seq": "AGAATGTCCACTGGGTTGGA",
+    "gc_content": 50.0,
+    "xor_chain": "TVTVTITITVTVIDWCWCID",
+    "binary": "0011000001110110100010011111110101111100",
+    "structure_20bp": "......((((......))))",
+    "mfe_20bp": -2.3,
+    "struct_stats_20bp": {
+      "length": 20,
+      "paired_pct": 40.0,
+      "unpaired_pct": 60.0,
+      "n_stems": 1
+    },
+    "structure_60bp": "......(((((....((((((....(((((......)))))....))))))....)))))",
+    "mfe_60bp": -21.3,
+    "struct_stats_60bp": {
+      "length": 60,
+      "paired_pct": 53.3,
+      "unpaired_pct": 46.7,
+      "n_stems": 3
+    }
+  }
+}

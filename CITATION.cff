@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "The Spliceosome as Quantum Router: Operator Coupling Determines Splice Outcome"
+authors:
+  - family-names: "Leng"
+    given-names: "Jixiang"
+type: dataset
+date-released: "2026-04-13"
+license: "MIT"
+repository-code: "https://github.com/ThePracticalHow/TheLab"
+keywords:
+  - spliceosome
+  - alternative splicing
+  - quantum biology
+  - operator coupling tensor
+  - single-cell transcriptomics
+abstract: >
+  Binary transcriptome analysis of splice decisions across 500,000+ cells
+  and 500M+ reads from 10 public datasets. The STAFF tool suite measures
+  base-4 XOR at splice junctions, per-molecule decision chains, and
+  operator coupling tensors. Shows fetal cells explore (99.98% unique chains)
+  while cancer converges (98.4%). Meditation measurably recouples operators.

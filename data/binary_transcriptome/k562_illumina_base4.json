@@ -1,0 +1,45 @@
+{
+  "tool": "STAFF_Binary_Transcripter_v2_Base4",
+  "source": "marathon_lament/bams/SGNex_K562_Illumina_replicate5_run1.bam",
+  "n_reads": 76727254,
+  "n_spliced": 31938186,
+  "total_bases": 11585815354,
+  "base4": {
+    "A": 3056981931,
+    "T": 3003556628,
+    "C": 2820897914,
+    "G": 2704378881
+  },
+  "gc_content": 47.69,
+  "junction_xor_base4": {
+    "00_IDENTITY": 18038175,
+    "01_COMPLEMENT": 5914972,
+    "10_TRANSVERSION": 5333232,
+    "11_TRANSITION": 10097057
+  },
+  "background_xor_base4": {
+    "00_IDENTITY": 426699152,
+    "01_COMPLEMENT": 296845284,
+    "10_TRANSVERSION": 384223481,
+    "11_TRANSITION": 426777163
+  },
+  "junction_pairs": {
+    "G|G": 7792207,
+    "C|C": 7470461,
+    "T|C": 4651206,
+    "G|C": 4092439,
+    "G|A": 3610948,
+    "A|C": 2048387,
+    "G|T": 1744437,
+    "T|T": 1545788,
+    "A|A": 1229466,
+    "A|G": 1106041,
+    "T|G": 794131,
+    "C|A": 745639,
+    "C|T": 728187,
+    "A|T": 671609,
+    "T|A": 666385,
+    "C|G": 484187
+  },
+  "compute_time": 6367.3
+}

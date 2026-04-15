@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spliceosome-atlas"
+version = "0.1.0"
+description = "Cross-kingdom coupling tensor atlas. BAM or h5ad in, atlas out."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [{name = "Jixiang Leng"}]
+dependencies = ["numpy>=1.22"]
+
+[project.optional-dependencies]
+expr = ["scanpy>=1.9", "scipy>=1.9", "anndata"]
+full = ["scanpy>=1.9", "scipy>=1.9", "anndata", "cellxgene-census"]
+
+[project.scripts]
+staff = "staff.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["staff*"]

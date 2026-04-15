@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Battlefield Map -- Spatio-Temporal Globe</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+html,body{margin:0;padding:0;overflow:hidden;background:#000;font-family:'Courier New',monospace;color:#0f0}
+canvas{display:block}
+#overlay{position:absolute;top:10px;left:10px;z-index:10;background:rgba(0,0,0,0.88);padding:15px;border-radius:8px;max-width:360px;font-size:12px;border:1px solid #0f0;pointer-events:auto}
+#overlay h2{margin:0 0 6px 0;font-size:16px}
+.subtitle{color:#0a0;font-size:10px;margin-bottom:8px}
+.ltog{margin:2px 0;cursor:pointer}.ltog:hover{color:#fff}.ltog input{margin-right:5px}
+#legend{position:absolute;bottom:10px;right:10px;z-index:10;background:rgba(0,0,0,0.88);padding:10px;border-radius:8px;font-size:11px;color:#ccc;border:1px solid #333}
+.li{margin:2px 0}.ld{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
+#info{position:absolute;bottom:10px;left:10px;z-index:10;color:#0a0;font-size:10px;background:rgba(0,0,0,0.7);padding:6px 10px;border-radius:4px}
+#tooltip{position:absolute;display:none;z-index:20;background:rgba(0,0,0,0.92);color:#0f0;padding:8px 12px;border-radius:4px;font-size:11px;border:1px solid #0f0;pointer-events:none;max-width:300px}
+</style>
+</head>
+<body>
+<div id="overlay">
+  <h2>THE BATTLEFIELD MAP</h2>
+  <div class="subtitle">Fungal Territories x Cancer Geography x Coupling Tensor<br>Jixiang Leng -- April 13, 2026</div>
+  <b>Layers:</b>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('fungal',this.checked)"> Endemic Fungi (territories)</div>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('cancer',this.checked)"> Cancer Hotspots (defense)</div>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('tensor',this.checked)"> Coupling Tensor Data (measured)</div>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('aflatoxin',this.checked)"> Aflatoxin Belt (chemical warfare)</div>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('expanding',this.checked)"> Range Expanding (climate change)</div>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('unmapped',this.checked)"> Unmapped Territories</div>
+  <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('oracle',this.checked)"> Oracle Sites (VADM anomalies)</div>
+  <br><b>WGS84 Oblate Spheroid</b><br>
+  <span style="color:#888">a = 6,378,137 m | b = 6,356,752 m<br>f = 1/298.257 | oblate by 21.4 km</span>
+</div>
+
+<div id="legend">
+  <b>Legend</b>
+  <div class="li"><span class="ld" style="background:#0f0"></span>Fungal Territory</div>
+  <div class="li"><span class="ld" style="background:#f00"></span>Cancer Hotspot</div>
+  <div class="li"><span class="ld" style="background:#ff0"></span>Aflatoxin Belt</div>
+  <div class="li"><span class="ld" style="background:#f0f"></span>Coupling Tensor</div>
+  <div class="li"><span class="ld" style="background:#0ff"></span>Oracle Site</div>
+  <div class="li"><span class="ld" style="background:#f80"></span>Range Expanding</div>
+  <div class="li"><span class="ld" style="background:#555"></span>Unmapped</div>
+</div>
+
+<div id="info">WGS84 | a=6378137m b=6356752m f=1/298.257</div>
+<div id="tooltip"></div>
+
+<script>
+// WGS84 ellipsoid parameters (real shape of Earth)
+const WGS84_A = 6378137.0;
+const WGS84_B = 6356752.314245;
+const SCALE = 1.0 / WGS84_A; // normalize so equatorial radius = 1
+const B_NORM = WGS84_B / WGS84_A; // ~0.99665 -- the REAL flattening
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 100);
+camera.position.set(0, 0, 3.5);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x000000);
+document.body.appendChild(renderer.domElement);
+
+// Oblate spheroid geometry -- NOT a sphere
+const oblateGeo = new THREE.SphereGeometry(1, 128, 128);
+const posAttr = oblateGeo.attributes.position;
+for (let i = 0; i < posAttr.count; i++) {
+  const y = posAttr.getY(i);
+  posAttr.setY(i, y * B_NORM); // squash poles by the real flattening ratio
+}
+posAttr.needsUpdate = true;
+oblateGeo.computeVertexNormals();
+
+// Earth texture
+const texLoader = new THREE.TextureLoader();
+const earthTex = texLoader.load('https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg');
+const earthMat = new THREE.MeshPhongMaterial({map:earthTex, specular:0x333333, shininess:5});
+const earth = new THREE.Mesh(oblateGeo, earthMat);
+scene.add(earth);
+
+// Atmosphere glow
+const atmosGeo = new THREE.SphereGeometry(1.015, 64, 64);
+for (let i = 0; i < atmosGeo.attributes.position.count; i++) {
+  atmosGeo.attributes.position.setY(i, atmosGeo.attributes.position.getY(i) * B_NORM);
+}
+atmosGeo.attributes.position.needsUpdate = true;
+const atmosMat = new THREE.ShaderMaterial({
+  vertexShader: `varying vec3 vNormal; void main(){vNormal=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader: `varying vec3 vNormal; void main(){float intensity=pow(0.65-dot(vNormal,vec3(0,0,1.0)),2.0);gl_FragColor=vec4(0.1,0.4,0.1,1.0)*intensity;}`,
+  side: THREE.BackSide, transparent: true, blending: THREE.AdditiveBlending,
+});
+scene.add(new THREE.Mesh(atmosGeo, atmosMat));
+
+// Lighting
+const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
+sunLight.position.set(5, 3, 5);
+scene.add(sunLight);
+scene.add(new THREE.AmbientLight(0x222222));
+
+// Convert lat/lon to 3D position on WGS84 oblate spheroid
+function latLonToVec3(lat, lon, alt) {
+  alt = alt || 0;
+  const phi = lat * Math.PI / 180;
+  const theta = -lon * Math.PI / 180;
+  const r = 1.0 + alt;
+  const x = r * Math.cos(phi) * Math.sin(theta);
+  const y = r * Math.sin(phi) * B_NORM; // oblate!
+  const z = r * Math.cos(phi) * Math.cos(theta);
+  return new THREE.Vector3(x, y, z);
+}
+
+// Data layers as Three.js groups
+const layerGroups = {};
+['fungal','cancer','tensor','aflatoxin','expanding','unmapped','oracle'].forEach(n => {
+  layerGroups[n] = new THREE.Group();
+  scene.add(layerGroups[n]);
+});
+
+function addPoint(layer, lat, lon, color, size, name, desc) {
+  const pos = latLonToVec3(lat, lon, 0.005);
+  const geo = new THREE.SphereGeometry(size, 8, 8);
+  const mat = new THREE.MeshBasicMaterial({color: color});
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.copy(pos);
+  mesh.userData = {name: name, desc: desc, layer: layer};
+  layerGroups[layer].add(mesh);
+  return mesh;
+}
+
+function addCircle(layer, lat, lon, radiusKm, color, name, desc) {
+  const angularRadius = radiusKm / 6371; // rough degrees
+  const segments = 48;
+  const points = [];
+  for (let i = 0; i <= segments; i++) {
+    const angle = (i / segments) * Math.PI * 2;
+    const dlat = angularRadius * Math.cos(angle) * (180/Math.PI);
+    const dlon = angularRadius * Math.sin(angle) * (180/Math.PI) / Math.cos(lat * Math.PI/180);
+    points.push(latLonToVec3(lat + dlat, lon + dlon, 0.002));
+  }
+  const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+  const lineMat = new THREE.LineBasicMaterial({color: color, transparent:true, opacity:0.6});
+  const line = new THREE.Line(lineGeo, lineMat);
+  line.userData = {name: name, desc: desc, layer: layer};
+  layerGroups[layer].add(line);
+
+  // Center point for picking
+  addPoint(layer, lat, lon, color, 0.008, name, desc);
+}
+
+// ── DATA ──────────────────────────────────────────────────────
+
+// Fungal territories
+const fungalData = [
+  ["Coccidioides immitis",35.5,-119.5,300,"San Joaquin Valley CA. Valley Fever."],
+  ["Coccidioides posadasii",33.4,-111.9,400,"Arizona. Most cases. Expanding north."],
+  ["Histoplasma capsulatum",39.0,-84.5,500,"Ohio River Valley. Bat/bird guano."],
+  ["Histoplasma (Mississippi)",34.0,-90.0,400,"Mississippi River Valley."],
+  ["Blastomyces dermatitidis",44.0,-85.0,350,"Great Lakes. ENRICHED in lung tumors (Cell 2022)."],
+  ["Paracoccidioides",-15.0,-47.0,800,"Brazil, Colombia. Oral cancer link."],
+  ["Malassezia (SE Asia)",13.0,100.0,600,"Tropical. 50% skin. Pancreatic + breast cancer."],
+  ["Malassezia (W Africa)",7.0,2.0,500,"Tropical Africa. Humid."],
+  ["Talaromyces marneffei",18.0,103.0,400,"Thailand/Vietnam/S.China. HIV+ patients."],
+  ["A. fumigatus (temperate)",45.0,10.0,500,"Mediterranean. 1.98B in suitable habitat."],
+  ["A. flavus (tropical)",10.0,30.0,800,"Aflatoxin producer. 846M exposed."],
+  ["Cryptococcus neoformans",-1.0,32.0,500,"Sub-Saharan Africa. Our tensor: 0.224-0.567."],
+  ["Candida (GLOBAL)",0,0,100,"In every human gut. C.auris in 27 US states."],
+];
+fungalData.forEach(d => addCircle('fungal', d[1], d[2], d[3], 0x00ff00, d[0], d[4]));
+
+// Cancer hotspots
+const cancerData = [
+  ["Esophageal belt",40.0,-80.0,"Ohio-Maine. Matches Histoplasma territory."],
+  ["Pancreatic cluster",31.0,-91.0,"ONLY US cluster. Humid = Malassezia."],
+  ["Liver cancer (Sub-Saharan)",5.0,20.0,"16-32x higher. Aflatoxin B1 + HBV."],
+  ["Liver cancer (SE Asia)",15.0,107.0,"Aflatoxin + HBV synergy."],
+  ["Gastric (East Asia)",36.0,128.0,"Japan/Korea/Mongolia. H.pylori HIDES in Candida."],
+  ["Gastric (China)",35.0,110.0,"Half of all gastric cancer worldwide."],
+  ["Oral cancer (India)",20.0,78.0,"Betel nut = ECM damage + Candida."],
+  ["Oral cancer (Brazil)",-10.0,-50.0,"Paracoccidioides territory."],
+  ["Mucormycosis wave (India)",22.0,77.0,"47K+ cases. COVID steroids collapsed ALL THREE WALLS."],
+];
+cancerData.forEach(d => addPoint('cancer', d[1], d[2], 0xff0000, 0.015, d[0], d[3]));
+
+// Coupling tensor measurement sites
+const tensorData = [
+  ["Korean NSCLC (208K)",37.5,127.0,"R_ind 0.206-0.508. GSE131907."],
+  ["GBM 28 tumors",42.0,-71.0,"R_ind 0.765-0.982. Maximum decoupling."],
+  ["Meditation (388 bulk)",30.3,-97.7,"K_RM +40% at 3mo. GSE174083. Austin TX."],
+  ["WI-38 Fetal",39.3,-76.6,"K_RM negative in senescence. Baltimore."],
+  ["CellxGene Census",37.8,-122.4,"168K cells. 13 tissues. 10 diseases."],
+  ["Yeast tensor (6K)",51.5,-0.1,"MAXIMUM COUPLING: 0.105. GSE144820."],
+  ["Crypto tensor (1.4K)",39.28,-76.62,"0.224-0.567. Overlaps human. Baltimore."],
+  ["Hongyan viral",38.9,-77.0,"SARS-CoV-2: 0.039. HCV: 0.743."],
+];
+tensorData.forEach(d => addPoint('tensor', d[1], d[2], 0xff00ff, 0.012, d[0], d[3]));
+
+// Aflatoxin belt
+const aflatoxinData = [
+  ["Aflatoxin (W Africa)",8.0,0.0,800,"A.flavus in stored maize. HCC 16-32x."],
+  ["Aflatoxin (E Africa)",0.0,35.0,600,"Kenya/Tanzania/Mozambique."],
+  ["Aflatoxin (S China)",25.0,110.0,400,"Stored grain. HBV synergy."],
+  ["Aflatoxin (SE Asia)",5.0,105.0,500,"Rice, peanuts. Humid."],
+  ["Aflatoxin (Guatemala)",15.0,-90.0,300,"Highest liver cancer in W. Hemisphere."],
+  ["Aflatoxin (India)",20.0,80.0,600,"Groundnuts, cereals."],
+];
+aflatoxinData.forEach(d => addCircle('aflatoxin', d[1], d[2], d[3], 0xffff00, d[0], d[4]));
+
+// Range expanding
+const expandingData = [
+  ["Cocci -> Washington",47.0,-120.0,"Valley Fever expanding north."],
+  ["C. auris spreading",40.7,-74.0,"27 US states. Drug-resistant. NYC."],
+  ["A.fumigatus thermotolerance",48.0,16.0,"Evolving higher temp growth. Nat Micro 2024."],
+  ["Histoplasma -> Montana",47.0,-110.0,"Beyond traditional range."],
+];
+expandingData.forEach(d => addPoint('expanding', d[1], d[2], 0xff8800, 0.01, d[0], d[3]));
+
+// Unmapped
+const unmappedData = [
+  ["Central Asia",42.0,65.0,600,"Poorly characterized. Registries incomplete."],
+  ["Siberia/Arctic",62.0,100.0,800,"Cold = strongest wall. Permafrost thaw = threat."],
+  ["Deep Amazon",-3.0,-60.0,500,"Max diversity expected. No registries."],
+  ["Congo Basin",0.0,22.0,400,"Tropical rainforest. No data."],
+];
+unmappedData.forEach(d => addCircle('unmapped', d[1], d[2], d[3], 0x555555, d[0], d[4]));
+
+// Oracle sites
+const oracleData = [
+  ["Yard 56, Baltimore",39.28,-76.62,"-125.9 nT anomaly. Modern oracle."],
+  ["Delphi",38.48,22.50,"Oracle of Apollo. Negative anomaly."],
+  ["Temple Mount",31.78,35.24,"Jerusalem. Negative anomaly."],
+  ["Varanasi",25.32,83.01,"Oldest living city. Ganges."],
+  ["Stonehenge",51.18,-1.83,"Positive anomaly."],
+];
+oracleData.forEach(d => addPoint('oracle', d[1], d[2], 0x00ffff, 0.01, d[0], d[3]));
+
+// ── INTERACTION ───────────────────────────────────────────────
+
+function toggleLayer(name, visible) {
+  layerGroups[name].visible = visible;
+}
+
+// Mouse rotation
+let isDragging = false, prevMouse = {x:0, y:0};
+let rotX = 0.3, rotY = 0;
+
+renderer.domElement.addEventListener('mousedown', e => {
+  if (e.target === renderer.domElement) { isDragging = true; prevMouse = {x:e.clientX, y:e.clientY}; }
+});
+window.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('mousemove', e => {
+  if (isDragging) {
+    rotY += (e.clientX - prevMouse.x) * 0.005;
+    rotX += (e.clientY - prevMouse.y) * 0.005;
+    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+    prevMouse = {x:e.clientX, y:e.clientY};
+  }
+});
+
+// Zoom
+renderer.domElement.addEventListener('wheel', e => {
+  camera.position.z *= (1 + e.deltaY * 0.001);
+  camera.position.z = Math.max(1.5, Math.min(10, camera.position.z));
+  e.preventDefault();
+}, {passive: false});
+
+// Raycaster for tooltip
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const tooltip = document.getElementById('tooltip');
+
+window.addEventListener('mousemove', e => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const meshes = [];
+  Object.values(layerGroups).forEach(g => {
+    if (g.visible) g.children.forEach(c => { if (c.isMesh && c.userData.name) meshes.push(c); });
+  });
+  const hits = raycaster.intersectObjects(meshes);
+  if (hits.length > 0) {
+    const d = hits[0].object.userData;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 15) + 'px';
+    tooltip.style.top = (e.clientY + 15) + 'px';
+    tooltip.innerHTML = `<b>${d.name}</b><br>${d.desc || ''}`;
+  } else {
+    tooltip.style.display = 'none';
+  }
+});
+
+// Animate
+function animate() {
+  requestAnimationFrame(animate);
+  earth.rotation.x = rotX;
+  earth.rotation.y = rotY;
+  Object.values(layerGroups).forEach(g => { g.rotation.x = rotX; g.rotation.y = rotY; });
+  renderer.render(scene, camera);
+}
+animate();
+
+// Slow auto-rotate
+setInterval(() => { if (!isDragging) rotY += 0.001; }, 16);
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+console.log("Battlefield Map loaded. Three.js. WGS84 oblate spheroid.");
+console.log("a=6378137m, b=6356752m. The planet is not a sphere. Neither is the war.");
+</script>
+</body>
+</html>

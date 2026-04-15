@@ -1,0 +1,19 @@
+{
+  "tool": "STAFF_Splice_History",
+  "source": "marathon_lament/bams/SGNex_K562_directRNA_replicate1_run1.bam",
+  "n_reads": 554250,
+  "n_spliced": 357597,
+  "unique_chains": 354011,
+  "unique_introns": 131558,
+  "total_excisions": 1677665,
+  "intron_size_median": 740,
+  "intron_flank_xor": {
+    "00_ID": 740917,
+    "01_WC": 265111,
+    "10_TV": 240066,
+    "11_TI": 431571
+  },
+  "loci_compared": 16472,
+  "pairwise_comparisons": 283911,
+  "compute_time": 162.4
+}

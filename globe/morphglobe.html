@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MorphGlobe — PCA on a Sphere</title>
+<style>
+  html, body { margin:0; padding:0; overflow:hidden; background:#000; }
+  canvas { display:block; }
+  #controls {
+    position:absolute; top:10px; left:10px; z-index:10;
+    background:rgba(0,0,0,0.9); color:#0f0; padding:15px; border-radius:8px;
+    font-family:'Courier New',monospace; font-size:12px; border:1px solid #0f0;
+    max-width:360px;
+  }
+  #controls h2 { margin:0 0 6px; font-size:15px; }
+  #controls .sub { color:#0a0; font-size:10px; margin-bottom:10px; }
+  .slider-row { margin:6px 0; }
+  .slider-row label { display:inline-block; width:160px; }
+  .slider-row input[type=range] { width:140px; vertical-align:middle; accent-color:#0f0; }
+  .slider-row .val { color:#fff; font-size:11px; margin-left:4px; }
+  #info {
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    z-index:10; color:#0f0; background:rgba(0,0,0,0.8); padding:8px 16px;
+    border-radius:4px; font-family:'Courier New',monospace; font-size:12px; border:1px solid #0f0;
+  }
+  #legend {
+    position:absolute; top:10px; right:10px; z-index:10;
+    background:rgba(0,0,0,0.9); color:#ccc; padding:10px; border-radius:8px;
+    font-family:'Courier New',monospace; font-size:11px; border:1px solid #333;
+  }
+  .leg-item { margin:2px 0; }
+  .leg-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+</style>
+</head>
+<body>
+<div id="controls">
+  <h2>MORPHGLOBE</h2>
+  <div class="sub">PCA on a Sphere — Spatio-Temporal Coupling Atlas<br>Toggle dimensions. Watch the globe warp.</div>
+
+  <div class="slider-row">
+    <label>Geography ↔ Coupling:</label>
+    <input type="range" id="dimMorph" min="0" max="100" value="0" oninput="updateMorph()">
+    <span class="val" id="dimMorphVal">0%</span>
+  </div>
+  <div class="slider-row">
+    <label>Time (Mya → Present):</label>
+    <input type="range" id="timeSlider" min="-1300" max="2026" value="2026" oninput="updateTime()">
+    <span class="val" id="timeVal">2026</span>
+  </div>
+  <div class="slider-row">
+    <label>Fungal Load Warp:</label>
+    <input type="range" id="fungalWarp" min="0" max="100" value="0" oninput="updateMorph()">
+    <span class="val" id="fungalWarpVal">0%</span>
+  </div>
+  <div class="slider-row">
+    <label>Thermal Wall (°C):</label>
+    <input type="range" id="thermalSlider" min="340" max="380" value="370" step="1" oninput="updateThermal()">
+    <span class="val" id="thermalVal">37.0°C</span>
+  </div>
+  <div class="slider-row">
+    <label>Globe Rotation:</label>
+    <input type="range" id="rotSpeed" min="0" max="100" value="20" oninput="updateRot()">
+    <span class="val" id="rotSpeedVal">20</span>
+  </div>
+  <br>
+  <div style="color:#888;font-size:10px;">
+    WGS84: a=6378137m f=1/298.257<br>
+    Oblate spheroid. Not a perfect sphere.<br>
+    Drag to rotate. Scroll to zoom.<br>
+    Points morph between geographic position<br>
+    and coupling-tensor embedding.
+  </div>
+</div>
+
+<div id="legend">
+  <b>Points</b>
+  <div class="leg-item"><span class="leg-dot" style="background:#0f0"></span>Fungal territory</div>
+  <div class="leg-item"><span class="leg-dot" style="background:#f00"></span>Cancer defense</div>
+  <div class="leg-item"><span class="leg-dot" style="background:#f0f"></span>Tensor measured</div>
+  <div class="leg-item"><span class="leg-dot" style="background:#ff0"></span>Aflatoxin zone</div>
+  <div class="leg-item"><span class="leg-dot" style="background:#f80"></span>Range expanding</div>
+  <div class="leg-item"><span class="leg-dot" style="background:#0ff"></span>Oracle site</div>
+  <div class="leg-item"><span class="leg-dot" style="background:#888"></span>Unmapped</div>
+</div>
+
+<div id="info">MORPHGLOBE v0.1 — Geography ↔ Coupling Tensor ↔ Time ↔ Fungal Load</div>
+
+<canvas id="c"></canvas>
+
+<script>
+// ── THREE.js inline (minimal, no import needed) ─────────────────────
+// Using raw WebGL + math for zero dependencies
+
+const canvas = document.getElementById('c');
+const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+if (!gl) { document.body.innerHTML = '<h1 style="color:red">WebGL not supported</h1>'; }
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+gl.viewport(0, 0, canvas.width, canvas.height);
+gl.clearColor(0, 0, 0, 1);
+gl.enable(gl.DEPTH_TEST);
+
+// ── WGS84 Ellipsoid ────────────────────────────────────────────────
+const WGS84_A = 6378137.0;           // equatorial radius (m)
+const WGS84_B = 6356752.314245;      // polar radius (m)
+const WGS84_F = 1 / 298.257223563;   // flattening
+const SCALE = 1.0 / WGS84_A;        // normalize to unit sphere-ish
+
+function latLonToXYZ(lat, lon, radius_scale) {
+  const phi = lat * Math.PI / 180;
+  const theta = lon * Math.PI / 180;
+  // WGS84 ellipsoid
+  const a = 1.0 * radius_scale;
+  const b = (WGS84_B / WGS84_A) * radius_scale;  // ~0.9966
+  const cp = Math.cos(phi), sp = Math.sin(phi);
+  const ct = Math.cos(theta), st = Math.sin(theta);
+  return [a * cp * ct, b * sp, a * cp * st];
+}
+
+// Coupling tensor → spherical embedding
+// Map RIBO_indep (0→1) to latitude (-90→+90) on the coupling sphere
+// Map K_RG (0→1) to longitude (0→360)
+function tensorToXYZ(ribo_indep, k_rg, radius_scale) {
+  const lat = (ribo_indep - 0.5) * 180;  // 0→-90, 0.5→0, 1→+90
+  const lon = (k_rg || 0.5) * 360 - 180;  // 0→-180, 1→+180
+  return latLonToXYZ(lat, lon, radius_scale);
+}
+
+// ── DATA POINTS ─────────────────────────────────────────────────────
+
+const DATA = [
+  // Fungal territories (green)
+  {name:"Coccidioides (AZ)", lat:33.4, lon:-111.9, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.8},
+  {name:"Coccidioides (CA)", lat:35.5, lon:-119.5, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.7},
+  {name:"Histoplasma (Ohio)", lat:39.0, lon:-84.5, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.6},
+  {name:"Histoplasma (Mississippi)", lat:34.0, lon:-90.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.6},
+  {name:"Blastomyces (Great Lakes)", lat:44.0, lon:-85.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.5},
+  {name:"Paracoccidioides (Brazil)", lat:-15.0, lon:-47.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.7},
+  {name:"Malassezia (SE Asia)", lat:13.0, lon:100.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.9},
+  {name:"Malassezia (Gulf Coast)", lat:30.0, lon:-90.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.8},
+  {name:"Talaromyces (SE Asia)", lat:18.0, lon:103.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.6},
+  {name:"Aspergillus flavus (tropics)", lat:10.0, lon:30.0, ri:null, krg:null, type:"fungal", time:2026, fungal_load:0.9},
+  {name:"Crypto (Sub-Saharan)", lat:-1.0, lon:32.0, ri:0.4, krg:0.6, type:"fungal", time:2026, fungal_load:0.7},
+  {name:"Candida (global)", lat:0, lon:0, ri:0.15, krg:-0.82, type:"fungal", time:2026, fungal_load:1.0},
+
+  // Cancer hotspots (red)
+  {name:"Esophageal belt (Ohio)", lat:40.0, lon:-80.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.6},
+  {name:"Pancreatic cluster (LA/MS)", lat:31.0, lon:-91.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.8},
+  {name:"Liver ca (Sub-Saharan)", lat:5.0, lon:20.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.9},
+  {name:"Liver ca (SE Asia)", lat:15.0, lon:107.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.8},
+  {name:"Gastric ca (Japan)", lat:36.0, lon:138.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.5},
+  {name:"Gastric ca (Korea)", lat:36.0, lon:128.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.5},
+  {name:"Oral ca (India)", lat:20.0, lon:78.0, ri:null, krg:null, type:"cancer", time:2026, fungal_load:0.7},
+  {name:"Mucormycosis (India 2021)", lat:22.0, lon:77.0, ri:null, krg:null, type:"cancer", time:2021, fungal_load:1.0},
+
+  // Coupling tensor measured (magenta)
+  {name:"Korean NSCLC", lat:37.5, lon:127.0, ri:0.31, krg:0.642, type:"tensor", time:2026, fungal_load:0.3},
+  {name:"NSCLC metastatic", lat:37.5, lon:127.5, ri:0.508, krg:0.331, type:"tensor", time:2026, fungal_load:0.5},
+  {name:"GBM", lat:42.0, lon:-71.0, ri:0.89, krg:0.139, type:"tensor", time:2026, fungal_load:0.8},
+  {name:"Normal lung", lat:37.6, lon:126.5, ri:0.22, krg:0.73, type:"tensor", time:2026, fungal_load:0.1},
+  {name:"Proliferative", lat:52.5, lon:13.4, ri:0.154, krg:0.931, type:"tensor", time:2026, fungal_load:0.05},
+  {name:"Meditation T4", lat:30.3, lon:-97.7, ri:0.675, krg:0.163, type:"tensor", time:2026, fungal_load:0.2},
+  {name:"Yeast active", lat:51.5, lon:-0.1, ri:0.105, krg:0.881, type:"tensor", time:2026, fungal_load:1.0},
+  {name:"Yeast lag", lat:51.5, lon:-0.5, ri:0.714, krg:0.319, type:"tensor", time:2026, fungal_load:1.0},
+  {name:"Crypto coupled", lat:39.3, lon:-76.5, ri:0.224, krg:0.812, type:"tensor", time:2026, fungal_load:1.0},
+  {name:"Crypto decoupled", lat:39.3, lon:-76.7, ri:0.567, krg:0.346, type:"tensor", time:2026, fungal_load:1.0},
+  {name:"Pancreas", lat:37.8, lon:-122.4, ri:0.45, krg:0.793, type:"tensor", time:2026, fungal_load:0.4},
+  {name:"COVID female", lat:37.8, lon:-122.3, ri:0.249, krg:0.789, type:"tensor", time:2026, fungal_load:0.05},
+  {name:"Senescent", lat:52.5, lon:13.5, ri:0.276, krg:0.836, type:"tensor", time:2026, fungal_load:0.3},
+  {name:"Fetal WI-38", lat:39.3, lon:-76.6, ri:0.345, krg:0.761, type:"tensor", time:2026, fungal_load:0.1},
+  {name:"Bone marrow AML", lat:37.8, lon:-122.2, ri:0.746, krg:0.0, type:"tensor", time:2026, fungal_load:0.7},
+  {name:"MS brain", lat:37.8, lon:-122.1, ri:0.817, krg:0.25, type:"tensor", time:2026, fungal_load:0.5},
+
+  // Aflatoxin (yellow)
+  {name:"Aflatoxin W.Africa", lat:8.0, lon:0.0, ri:null, krg:null, type:"aflatoxin", time:2026, fungal_load:0.95},
+  {name:"Aflatoxin E.Africa", lat:0.0, lon:35.0, ri:null, krg:null, type:"aflatoxin", time:2026, fungal_load:0.9},
+  {name:"Aflatoxin S.China", lat:25.0, lon:110.0, ri:null, krg:null, type:"aflatoxin", time:2026, fungal_load:0.8},
+  {name:"Aflatoxin India", lat:20.0, lon:80.0, ri:null, krg:null, type:"aflatoxin", time:2026, fungal_load:0.85},
+  {name:"Aflatoxin Guatemala", lat:15.0, lon:-90.0, ri:null, krg:null, type:"aflatoxin", time:2026, fungal_load:0.7},
+
+  // Expanding (orange)
+  {name:"Cocci→Washington", lat:47.0, lon:-120.0, ri:null, krg:null, type:"expanding", time:2026, fungal_load:0.3},
+  {name:"C.auris NYC", lat:40.7, lon:-74.0, ri:null, krg:null, type:"expanding", time:2026, fungal_load:0.5},
+  {name:"A.fumig thermotolerance", lat:48.0, lon:16.0, ri:null, krg:null, type:"expanding", time:2026, fungal_load:0.4},
+
+  // Oracle sites (cyan)
+  {name:"Yard 56 Baltimore", lat:39.28, lon:-76.62, ri:null, krg:null, type:"oracle", time:2026, fungal_load:0.1},
+  {name:"Delphi", lat:38.48, lon:22.50, ri:null, krg:null, type:"oracle", time:-800, fungal_load:0.1},
+  {name:"Temple Mount", lat:31.78, lon:35.24, ri:null, krg:null, type:"oracle", time:-1000, fungal_load:0.1},
+
+  // Temporal deep events
+  {name:"K-T fungal bloom", lat:0, lon:-90, ri:null, krg:null, type:"fungal", time:-66, fungal_load:1.0},
+  {name:"Permian fungal spike", lat:0, lon:0, ri:null, krg:null, type:"fungal", time:-252, fungal_load:1.0},
+  {name:"Land colonization", lat:0, lon:45, ri:null, krg:null, type:"fungal", time:-450, fungal_load:0.5},
+  {name:"Fungi evolve", lat:0, lon:90, ri:null, krg:null, type:"fungal", time:-1300, fungal_load:0.3},
+];
+
+const TYPE_COLORS = {
+  fungal:    [0.0, 1.0, 0.0],
+  cancer:    [1.0, 0.0, 0.0],
+  tensor:    [1.0, 0.0, 1.0],
+  aflatoxin: [1.0, 1.0, 0.0],
+  expanding: [1.0, 0.5, 0.0],
+  oracle:    [0.0, 1.0, 1.0],
+  unmapped:  [0.5, 0.5, 0.5],
+};
+
+// ── SHADERS ─────────────────────────────────────────────────────────
+
+const vsGlobe = `
+  attribute vec3 aPos;
+  attribute vec3 aColor;
+  uniform mat4 uMVP;
+  uniform float uPointSize;
+  varying vec3 vColor;
+  void main() {
+    gl_Position = uMVP * vec4(aPos, 1.0);
+    gl_PointSize = uPointSize;
+    vColor = aColor;
+  }
+`;
+
+const fsGlobe = `
+  precision mediump float;
+  varying vec3 vColor;
+  void main() {
+    float d = distance(gl_PointCoord, vec2(0.5));
+    if (d > 0.5) discard;
+    float alpha = 1.0 - smoothstep(0.3, 0.5, d);
+    gl_FragColor = vec4(vColor, alpha);
+  }
+`;
+
+const vsWire = `
+  attribute vec3 aPos;
+  uniform mat4 uMVP;
+  void main() {
+    gl_Position = uMVP * vec4(aPos, 1.0);
+  }
+`;
+
+const fsWire = `
+  precision mediump float;
+  uniform vec4 uColor;
+  void main() {
+    gl_FragColor = uColor;
+  }
+`;
+
+function createShader(src, type) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+  return s;
+}
+
+function createProgram(vs, fs) {
+  const p = gl.createProgram();
+  gl.attachShader(p, createShader(vs, gl.VERTEX_SHADER));
+  gl.attachShader(p, createShader(fs, gl.FRAGMENT_SHADER));
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) console.error(gl.getProgramInfoLog(p));
+  return p;
+}
+
+const progPoints = createProgram(vsGlobe, fsGlobe);
+const progWire = createProgram(vsWire, fsWire);
+
+// ── MATRIX MATH ─────────────────────────────────────────────────────
+
+function mat4Perspective(fov, aspect, near, far) {
+  const f = 1.0 / Math.tan(fov/2), nf = 1/(near-far);
+  return new Float32Array([f/aspect,0,0,0, 0,f,0,0, 0,0,(far+near)*nf,-1, 0,0,2*far*near*nf,0]);
+}
+
+function mat4Identity() { return new Float32Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]); }
+
+function mat4Multiply(a, b) {
+  const r = new Float32Array(16);
+  for (let i=0;i<4;i++) for (let j=0;j<4;j++) {
+    r[j*4+i] = a[i]*b[j*4]+a[4+i]*b[j*4+1]+a[8+i]*b[j*4+2]+a[12+i]*b[j*4+3];
+  }
+  return r;
+}
+
+function mat4RotateY(m, a) {
+  const c=Math.cos(a), s=Math.sin(a);
+  const r = mat4Identity();
+  r[0]=c; r[8]=s; r[2]=-s; r[10]=c;
+  return mat4Multiply(m, r);
+}
+
+function mat4RotateX(m, a) {
+  const c=Math.cos(a), s=Math.sin(a);
+  const r = mat4Identity();
+  r[5]=c; r[9]=-s; r[6]=s; r[10]=c;
+  return mat4Multiply(m, r);
+}
+
+function mat4Translate(m, x, y, z) {
+  const r = mat4Identity();
+  r[12]=x; r[13]=y; r[14]=z;
+  return mat4Multiply(m, r);
+}
+
+// ── GLOBE WIREFRAME ─────────────────────────────────────────────────
+
+function buildGlobeWire() {
+  const verts = [];
+  const R = 1.0;
+  const Rb = WGS84_B / WGS84_A;
+  // Latitude lines
+  for (let lat=-80; lat<=80; lat+=20) {
+    for (let lon=0; lon<=360; lon+=3) {
+      const p = latLonToXYZ(lat, lon, R);
+      verts.push(...p);
+    }
+  }
+  // Longitude lines
+  for (let lon=0; lon<360; lon+=20) {
+    for (let lat=-90; lat<=90; lat+=3) {
+      const p = latLonToXYZ(lat, lon, R);
+      verts.push(...p);
+    }
+  }
+  return new Float32Array(verts);
+}
+
+const wireVerts = buildGlobeWire();
+const wireBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, wireBuf);
+gl.bufferData(gl.ARRAY_BUFFER, wireVerts, gl.STATIC_DRAW);
+
+// ── STATE ───────────────────────────────────────────────────────────
+
+let morphT = 0;      // 0 = geography, 1 = coupling tensor space
+let fungalWarpT = 0;
+let timeFilter = 2026;
+let thermalC = 37.0;
+let rotAngleY = 0;
+let rotAngleX = -0.3;
+let zoom = 3.5;
+let autoRot = 0.002;
+
+// Mouse drag
+let dragging = false, lastMX = 0, lastMY = 0;
+canvas.addEventListener('mousedown', e => { dragging=true; lastMX=e.clientX; lastMY=e.clientY; });
+canvas.addEventListener('mouseup', () => dragging=false);
+canvas.addEventListener('mouseleave', () => dragging=false);
+canvas.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  rotAngleY += (e.clientX - lastMX) * 0.005;
+  rotAngleX += (e.clientY - lastMY) * 0.005;
+  rotAngleX = Math.max(-1.5, Math.min(1.5, rotAngleX));
+  lastMX = e.clientX; lastMY = e.clientY;
+});
+canvas.addEventListener('wheel', e => {
+  zoom += e.deltaY * 0.002;
+  zoom = Math.max(1.5, Math.min(10, zoom));
+  e.preventDefault();
+}, {passive:false});
+
+// ── SLIDERS ─────────────────────────────────────────────────────────
+
+function updateMorph() {
+  morphT = document.getElementById('dimMorph').value / 100;
+  document.getElementById('dimMorphVal').textContent = Math.round(morphT*100) + '%';
+  fungalWarpT = document.getElementById('fungalWarp').value / 100;
+  document.getElementById('fungalWarpVal').textContent = Math.round(fungalWarpT*100) + '%';
+}
+
+function updateTime() {
+  timeFilter = parseInt(document.getElementById('timeSlider').value);
+  document.getElementById('timeVal').textContent = timeFilter < 0 ? Math.abs(timeFilter) + ' Mya' : timeFilter + ' CE';
+}
+
+function updateThermal() {
+  thermalC = parseInt(document.getElementById('thermalSlider').value) / 10;
+  document.getElementById('thermalVal').textContent = thermalC.toFixed(1) + '°C';
+}
+
+function updateRot() {
+  autoRot = document.getElementById('rotSpeed').value / 10000;
+  document.getElementById('rotSpeedVal').textContent = document.getElementById('rotSpeed').value;
+}
+
+// ── RENDER ──────────────────────────────────────────────────────────
+
+function buildPointData() {
+  const positions = [];
+  const colors = [];
+
+  DATA.forEach(d => {
+    // Time filter: show if event time <= current time slider
+    if (d.time > timeFilter) return;
+
+    // Geographic position
+    const geoXYZ = latLonToXYZ(d.lat, d.lon, 1.01);
+
+    // Coupling tensor position (if we have data)
+    let tensorXYZ;
+    if (d.ri !== null && d.krg !== null) {
+      tensorXYZ = tensorToXYZ(d.ri, (d.krg + 1) / 2, 1.01); // normalize krg to 0-1
+    } else {
+      // No tensor data — place on equator of coupling sphere based on fungal_load
+      tensorXYZ = tensorToXYZ(d.fungal_load * 0.8, 0.5, 1.01);
+    }
+
+    // Fungal load warp: inflate/deflate the globe at this point
+    const fWarp = 1.0 + fungalWarpT * d.fungal_load * 0.3;
+
+    // Thermal wall: dim points where thermal wall would suppress
+    // Below thermalC → fungi suppressed → dim the point
+    const thermalFactor = thermalC >= 37.0 ? 0.5 : 1.0; // simplified
+
+    // Interpolate between geographic and tensor positions
+    const x = geoXYZ[0] * (1-morphT) * fWarp + tensorXYZ[0] * morphT;
+    const y = geoXYZ[1] * (1-morphT) * fWarp + tensorXYZ[1] * morphT;
+    const z = geoXYZ[2] * (1-morphT) * fWarp + tensorXYZ[2] * morphT;
+
+    positions.push(x, y, z);
+
+    const c = TYPE_COLORS[d.type] || [1,1,1];
+    colors.push(c[0], c[1], c[2]);
+  });
+
+  return { positions: new Float32Array(positions), colors: new Float32Array(colors), count: positions.length / 3 };
+}
+
+function render() {
+  rotAngleY += autoRot;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  const aspect = canvas.width / canvas.height;
+  const proj = mat4Perspective(Math.PI/4, aspect, 0.1, 100);
+  let view = mat4Identity();
+  view = mat4Translate(view, 0, 0, -zoom);
+  view = mat4RotateX(view, rotAngleX);
+  view = mat4RotateY(view, rotAngleY);
+  const mvp = mat4Multiply(proj, view);
+
+  // Draw wireframe globe
+  gl.useProgram(progWire);
+  gl.uniformMatrix4fv(gl.getUniformLocation(progWire, 'uMVP'), false, mvp);
+  gl.uniform4f(gl.getUniformLocation(progWire, 'uColor'), 0.1, 0.2, 0.1, 1.0);
+  gl.bindBuffer(gl.ARRAY_BUFFER, wireBuf);
+  const aposW = gl.getAttribLocation(progWire, 'aPos');
+  gl.enableVertexAttribArray(aposW);
+  gl.vertexAttribPointer(aposW, 3, gl.FLOAT, false, 0, 0);
+
+  // Draw lat lines
+  const latCount = 9; // -80 to +80 by 20
+  const lonSteps = 121; // 0 to 360 by 3
+  for (let i=0; i<latCount; i++) {
+    gl.drawArrays(gl.LINE_STRIP, i * lonSteps, lonSteps);
+  }
+  // Draw lon lines
+  const lonCount = 18; // 0 to 360 by 20
+  const latSteps = 61;  // -90 to 90 by 3
+  const lonOffset = latCount * lonSteps;
+  for (let i=0; i<lonCount; i++) {
+    gl.drawArrays(gl.LINE_STRIP, lonOffset + i * latSteps, latSteps);
+  }
+
+  // Draw data points
+  const pd = buildPointData();
+  if (pd.count === 0) { requestAnimationFrame(render); return; }
+
+  const posBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, pd.positions, gl.DYNAMIC_DRAW);
+
+  const colBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, pd.colors, gl.DYNAMIC_DRAW);
+
+  gl.useProgram(progPoints);
+  gl.uniformMatrix4fv(gl.getUniformLocation(progPoints, 'uMVP'), false, mvp);
+  gl.uniform1f(gl.getUniformLocation(progPoints, 'uPointSize'), 8.0 + (1-morphT)*4);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+  const apos = gl.getAttribLocation(progPoints, 'aPos');
+  gl.enableVertexAttribArray(apos);
+  gl.vertexAttribPointer(apos, 3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+  const acol = gl.getAttribLocation(progPoints, 'aColor');
+  gl.enableVertexAttribArray(acol);
+  gl.vertexAttribPointer(acol, 3, gl.FLOAT, false, 0, 0);
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  gl.drawArrays(gl.POINTS, 0, pd.count);
+  gl.disable(gl.BLEND);
+
+  gl.deleteBuffer(posBuf);
+  gl.deleteBuffer(colBuf);
+
+  requestAnimationFrame(render);
+}
+
+render();
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+console.log("MorphGlobe loaded. " + DATA.length + " data points.");
+console.log("Drag Geography↔Coupling slider to watch the globe warp between physical space and tensor space.");
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "title": "The Spliceosome as Quantum Router: Operator Coupling Determines Splice Outcome",
+  "upload_type": "dataset",
+  "description": "Binary transcriptome analysis of splice decisions across 500,000+ cells and 500M+ reads from 10 public datasets (7+ countries, 10+ labs). Includes the STAFF tool suite for base-4 XOR analysis at splice junctions, per-molecule splice decision chain reconstruction, operator coupling tensor computation, ViennaRNA structural folding of excised introns, and IP-clean OpenMM molecular dynamics of Mg/Li at GNRA tetraloops. Shows that fetal cells explore the splice landscape (99.98% unique chains) while cancer converges (98.4%), with reproducible shifts in the binary signature at junction boundaries. Meditation measurably recouples operators (GSE174083, PNAS 2021: K_RM +40% at 3 months post-retreat).",
+  "creators": [
+    {
+      "name": "Leng, Jixiang",
+      "affiliation": "Independent researcher"
+    }
+  ],
+  "keywords": [
+    "spliceosome",
+    "alternative splicing",
+    "RNA structure",
+    "cancer biology",
+    "quantum biology",
+    "operator coupling tensor",
+    "single-cell transcriptomics",
+    "Nanopore direct RNA",
+    "photobiomodulation",
+    "meditation",
+    "molecular dynamics"
+  ],
+  "license": {
+    "id": "CC-BY-4.0"
+  },
+  "access_right": "open",
+  "related_identifiers": [
+    {"identifier": "10.1038/s41467-020-16164-1", "relation": "cites", "scheme": "doi"},
+    {"identifier": "10.1016/j.cell.2019.06.024", "relation": "cites", "scheme": "doi"},
+    {"identifier": "10.1073/pnas.2106950118", "relation": "cites", "scheme": "doi"},
+    {"identifier": "10.1089/pho.2019.4867", "relation": "cites", "scheme": "doi"},
+    {"identifier": "10.1038/s41557-024-01446-y", "relation": "cites", "scheme": "doi"}
+  ]
+}

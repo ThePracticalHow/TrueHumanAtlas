@@ -1,0 +1,45 @@
+{
+  "tool": "STAFF_Binary_Transcripter_v2_Base4",
+  "source": "wi38_bam/wi38_Aligned.out.bam",
+  "n_reads": 158780246,
+  "n_spliced": 34060572,
+  "total_bases": 20023737052,
+  "base4": {
+    "A": 5266832068,
+    "T": 5186229671,
+    "C": 4812494597,
+    "G": 4758180716
+  },
+  "gc_content": 47.7966,
+  "junction_xor_base4": {
+    "00_IDENTITY": 17491980,
+    "01_COMPLEMENT": 5937755,
+    "10_TRANSVERSION": 4318216,
+    "11_TRANSITION": 8132563
+  },
+  "background_xor_base4": {
+    "00_IDENTITY": 906241855,
+    "01_COMPLEMENT": 597732896,
+    "10_TRANSVERSION": 846683318,
+    "11_TRANSITION": 824946648
+  },
+  "junction_pairs": {
+    "G|G": 8808102,
+    "C|C": 7161450,
+    "G|C": 3736740,
+    "G|A": 3577684,
+    "T|C": 2923598,
+    "A|C": 1911546,
+    "G|T": 1145935,
+    "A|G": 1045561,
+    "C|G": 948548,
+    "T|G": 891986,
+    "T|T": 791646,
+    "T|A": 785667,
+    "A|A": 730699,
+    "C|T": 585565,
+    "A|T": 466667,
+    "C|A": 368586
+  },
+  "compute_time": 11942.4
+}

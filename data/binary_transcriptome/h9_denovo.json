@@ -1,0 +1,390 @@
+{
+  "total_junctions": 241159,
+  "total_junction_usage": 1287041,
+  "median_junction_count": 1,
+  "mean_junction_count": 5.3,
+  "rare_junctions_le2": 168047,
+  "common_junctions_ge100": 1131,
+  "pct_rare": 69.7,
+  "median_intron_size": 2027,
+  "mean_intron_size": 5959,
+  "size_dist": {
+    "micro": 9437,
+    "small": 70153,
+    "medium": 128178,
+    "large": 32167,
+    "huge": 1224
+  },
+  "median_junctions_per_molecule": 4,
+  "max_junctions_per_molecule": 86,
+  "top_patterns": [
+    {
+      "chrom": "17",
+      "start": 81510833,
+      "end": 81512231,
+      "n_junctions": 4,
+      "count": 684,
+      "intron_sizes": [
+        93,
+        79,
+        276,
+        89
+      ]
+    },
+    {
+      "chrom": "7",
+      "start": 5527891,
+      "end": 5529160,
+      "n_junctions": 3,
+      "count": 561,
+      "intron_sizes": [
+        112,
+        95,
+        441
+      ]
+    },
+    {
+      "chrom": "8",
+      "start": 144789962,
+      "end": 144791991,
+      "n_junctions": 4,
+      "count": 541,
+      "intron_sizes": [
+        392,
+        806,
+        277,
+        77
+      ]
+    },
+    {
+      "chrom": "15",
+      "start": 69453020,
+      "end": 69455427,
+      "n_junctions": 3,
+      "count": 500,
+      "intron_sizes": [
+        626,
+        1448,
+        140
+      ]
+    },
+    {
+      "chrom": "5",
+      "start": 82276255,
+      "end": 82277692,
+      "n_junctions": 2,
+      "count": 490,
+      "intron_sizes": [
+        142,
+        1174
+      ]
+    },
+    {
+      "chrom": "22",
+      "start": 39312984,
+      "end": 39318399,
+      "n_junctions": 8,
+      "count": 481,
+      "intron_sizes": [
+        206,
+        323,
+        377,
+        477,
+        522,
+        1150,
+        619,
+        770
+      ]
+    },
+    {
+      "chrom": "6",
+      "start": 30720563,
+      "end": 30723339,
+      "n_junctions": 3,
+      "count": 434,
+      "intron_sizes": [
+        1973,
+        272,
+        311
+      ]
+    },
+    {
+      "chrom": "7",
+      "start": 5527891,
+      "end": 5528280,
+      "n_junctions": 2,
+      "count": 423,
+      "intron_sizes": [
+        112,
+        95
+      ]
+    },
+    {
+      "chrom": "19",
+      "start": 55386438,
+      "end": 55388242,
+      "n_junctions": 3,
+      "count": 415,
+      "intron_sizes": [
+        131,
+        1236,
+        194
+      ]
+    },
+    {
+      "chrom": "17",
+      "start": 81510833,
+      "end": 81511902,
+      "n_junctions": 3,
+      "count": 374,
+      "intron_sizes": [
+        93,
+        79,
+        276
+      ]
+    },
+    {
+      "chrom": "17",
+      "start": 38850214,
+      "end": 38853021,
+      "n_junctions": 3,
+      "count": 370,
+      "intron_sizes": [
+        147,
+        2128,
+        289
+      ]
+    },
+    {
+      "chrom": "16",
+      "start": 89561063,
+      "end": 89562883,
+      "n_junctions": 4,
+      "count": 367,
+      "intron_sizes": [
+        163,
+        209,
+        583,
+        492
+      ]
+    },
+    {
+      "chrom": "12",
+      "start": 6536593,
+      "end": 6538100,
+      "n_junctions": 6,
+      "count": 348,
+      "intron_sizes": [
+        90,
+        129,
+        90,
+        92,
+        193,
+        104
+      ]
+    },
+    {
+      "chrom": "1",
+      "start": 44776140,
+      "end": 44778575,
+      "n_junctions": 4,
+      "count": 339,
+      "intron_sizes": [
+        534,
+        839,
+        210,
+        446
+      ]
+    },
+    {
+      "chrom": "22",
+      "start": 23894582,
+      "end": 23895039,
+      "n_junctions": 2,
+      "count": 339,
+      "intron_sizes": [
+        189,
+        95
+      ]
+    },
+    {
+      "chrom": "12",
+      "start": 49128938,
+      "end": 49129499,
+      "n_junctions": 2,
+      "count": 337,
+      "intron_sizes": [
+        303,
+        109
+      ]
+    },
+    {
+      "chrom": "19",
+      "start": 48965609,
+      "end": 48966582,
+      "n_junctions": 3,
+      "count": 329,
+      "intron_sizes": [
+        160,
+        364,
+        176
+      ]
+    },
+    {
+      "chrom": "2",
+      "start": 216499398,
+      "end": 216501340,
+      "n_junctions": 2,
+      "count": 329,
+      "intron_sizes": [
+        550,
+        1309
+      ]
+    },
+    {
+      "chrom": "3",
+      "start": 23918031,
+      "end": 23919195,
+      "n_junctions": 2,
+      "count": 327,
+      "intron_sizes": [
+        408,
+        619
+      ]
+    },
+    {
+      "chrom": "1",
+      "start": 92833458,
+      "end": 92841765,
+      "n_junctions": 6,
+      "count": 317,
+      "intron_sizes": [
+        86,
+        1118,
+        1276,
+        1063,
+        2917,
+        1126
+      ]
+    }
+  ],
+  "per_chrom": {
+    "19": {
+      "unique_junctions": 19444,
+      "total_usage": 130955
+    },
+    "1": {
+      "unique_junctions": 23190,
+      "total_usage": 124385
+    },
+    "17": {
+      "unique_junctions": 15637,
+      "total_usage": 86640
+    },
+    "2": {
+      "unique_junctions": 16531,
+      "total_usage": 86346
+    },
+    "12": {
+      "unique_junctions": 13780,
+      "total_usage": 84468
+    },
+    "11": {
+      "unique_junctions": 14243,
+      "total_usage": 77591
+    },
+    "6": {
+      "unique_junctions": 11259,
+      "total_usage": 63573
+    },
+    "3": {
+      "unique_junctions": 13173,
+      "total_usage": 62584
+    },
+    "5": {
+      "unique_junctions": 11116,
+      "total_usage": 58627
+    },
+    "16": {
+      "unique_junctions": 11418,
+      "total_usage": 56767
+    },
+    "7": {
+      "unique_junctions": 11159,
+      "total_usage": 56124
+    },
+    "X": {
+      "unique_junctions": 8117,
+      "total_usage": 47665
+    },
+    "8": {
+      "unique_junctions": 7930,
+      "total_usage": 45849
+    },
+    "9": {
+      "unique_junctions": 9616,
+      "total_usage": 44109
+    },
+    "15": {
+      "unique_junctions": 7625,
+      "total_usage": 41798
+    },
+    "22": {
+      "unique_junctions": 5908,
+      "total_usage": 38838
+    },
+    "10": {
+      "unique_junctions": 8707,
+      "total_usage": 36912
+    },
+    "14": {
+      "unique_junctions": 7675,
+      "total_usage": 34702
+    },
+    "20": {
+      "unique_junctions": 7083,
+      "total_usage": 34387
+    },
+    "4": {
+      "unique_junctions": 7647,
+      "total_usage": 33207
+    },
+    "13": {
+      "unique_junctions": 3931,
+      "total_usage": 16859
+    },
+    "18": {
+      "unique_junctions": 3185,
+      "total_usage": 13646
+    },
+    "21": {
+      "unique_junctions": 2606,
+      "total_usage": 10671
+    },
+    "KI270734.1": {
+      "unique_junctions": 40,
+      "total_usage": 191
+    },
+    "MT": {
+      "unique_junctions": 122,
+      "total_usage": 129
+    },
+    "GL000195.1": {
+      "unique_junctions": 8,
+      "total_usage": 9
+    },
+    "KI270713.1": {
+      "unique_junctions": 4,
+      "total_usage": 4
+    },
+    "Y": {
+      "unique_junctions": 3,
+      "total_usage": 3
+    },
+    "GL000205.2": {
+      "unique_junctions": 2,
+      "total_usage": 2
+    }
+  },
+  "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam"
+}

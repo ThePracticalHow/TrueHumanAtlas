@@ -1,0 +1,19 @@
+{
+  "tool": "STAFF_Splice_History",
+  "source": "marathon_lament/bams/SGNex_H9_directRNA_replicate1_run1.bam",
+  "n_reads": 337364,
+  "n_spliced": 233258,
+  "unique_chains": 233207,
+  "unique_introns": 241159,
+  "total_excisions": 1287041,
+  "intron_size_median": 972,
+  "intron_flank_xor": {
+    "00_ID": 472871,
+    "01_WC": 197597,
+    "10_TV": 236095,
+    "11_TI": 380478
+  },
+  "loci_compared": 18082,
+  "pairwise_comparisons": 288076,
+  "compute_time": 180.0
+}
