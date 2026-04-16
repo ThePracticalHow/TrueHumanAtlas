@@ -1,35 +1,41 @@
 #!/usr/bin/env python3
 """
-compute_umap.py — Unified Atlas UMAP Embedding Generator
-=========================================================
+compute_umap.py — WORD protocol enrichment
+============================================
 
-Reads true_human_atlas.json, joins cell_states with coupling_tensor records,
-computes UMAP from the tensor feature vector, and writes a unified
-atlas_umap.json ready for the browser viewer.
+Enriches true_human_atlas.json IN-PLACE.
+No derived files. The working object IS the published object.
 
-Feature vector (8D):
-  k_rm, k_rn, k_rg, k_mn, k_mg, k_ng, det_k, ribo_indep
-
-Every field from both cell_states and coupling_tensor is preserved.
-New fields added to either source automatically flow through.
+Steps:
+  1. Read true_human_atlas.json
+  2. Fuse cell_states + coupling_tensor into flat records[]
+  3. Compute eigenvalue spectrum per record
+  4. Compute UMAP embedding (8D tensor → 2D)
+  5. Write back to true_human_atlas.json
 
 Usage:
-  python compute_umap.py                     # default paths
-  python compute_umap.py --input data/true_human_atlas.json --output data/atlas_umap.json
+  python compute_umap.py                          # default
+  python compute_umap.py --file data/true_human_atlas.json
 """
 import json
 import argparse
 import numpy as np
+from datetime import date
 
 FEATURE_COLS = ['k_rm', 'k_rn', 'k_rg', 'k_mn', 'k_mg', 'k_ng', 'det_k', 'ribo_indep']
 
 
-def load_atlas(path):
+def load(path):
     with open(path, encoding='utf-8') as f:
         return json.load(f)
 
 
-def join_states_and_tensors(atlas):
+def fuse(atlas):
+    """Merge cell_states + coupling_tensor into flat records.
+    If records[] already exists, return as-is (already fused)."""
+    if 'records' in atlas and isinstance(atlas['records'], list):
+        return atlas['records']
+
     states_by_id = {}
     for s in atlas.get('cell_states', []):
         sid = s.get('id', '')
@@ -46,15 +52,15 @@ def join_states_and_tensors(atlas):
         if key in seen:
             continue
         seen.add(key)
-
         rec = {}
         if sid in states_by_id:
             rec.update(states_by_id[sid])
         rec.update(t)
         records.append(rec)
 
+    matched_ids = set(r.get('cell_state_id') or r.get('id') for r in records)
     for sid, s in states_by_id.items():
-        if not any(r.get('cell_state_id') == sid or r.get('id') == sid for r in records):
+        if sid not in matched_ids:
             rec = dict(s)
             rec.setdefault('cell_state_id', sid)
             records.append(rec)
@@ -82,131 +88,125 @@ def compute_eigenvalues(rec):
         'eigenvalue_2': round(float(evals[1]), 6),
         'eigenvalue_3': round(float(evals[2]), 6),
         'eigenvalue_4': round(float(evals[3]), 6),
-        'eigenvalue_min': round(float(evals[-1]), 6),
-        'eigenvalue_max': round(float(evals[0]), 6),
         'has_confinement': bool(evals[-1] < 0),
         'confinement_ratio': round(float(evals[0] / abs(evals[-1])), 3) if abs(evals[-1]) > 1e-10 else None,
     }
 
 
-def build_feature_matrix(records):
+def build_features(records):
     X = []
-    valid_mask = []
+    valid = []
     for rec in records:
         row = []
-        valid = True
+        ok = True
         for col in FEATURE_COLS:
             val = rec.get(col, 0)
             if val is None:
                 val = 0
             row.append(float(val))
             if val == 0 and col in ('k_rm', 'k_rg'):
-                valid = False
+                ok = False
         X.append(row)
-        valid_mask.append(valid)
-    return np.array(X), valid_mask
+        valid.append(ok)
+    return np.array(X), valid
 
 
-def run_umap(X, valid_mask, n_neighbors=15, min_dist=0.3, random_state=42):
+def run_umap(X, valid, n_neighbors=15, min_dist=0.3, seed=42):
     import umap
-    valid_idx = [i for i, v in enumerate(valid_mask) if v]
-    X_valid = X[valid_idx]
+    idx = [i for i, v in enumerate(valid) if v]
+    Xv = X[idx]
+    if len(Xv) < 5:
+        return np.full((len(X), 2), np.nan)
 
-    if len(X_valid) < 5:
-        print(f"  Only {len(X_valid)} valid records, skipping UMAP")
-        return np.zeros((len(X), 2))
+    nn = min(n_neighbors, len(Xv) - 1)
+    emb_v = umap.UMAP(
+        n_neighbors=nn, min_dist=min_dist,
+        n_components=2, metric='euclidean', random_state=seed,
+    ).fit_transform(Xv)
 
-    n_neighbors_actual = min(n_neighbors, len(X_valid) - 1)
-    reducer = umap.UMAP(
-        n_neighbors=n_neighbors_actual,
-        min_dist=min_dist,
-        n_components=2,
-        metric='euclidean',
-        random_state=random_state,
-    )
-    embedding_valid = reducer.fit_transform(X_valid)
+    emb = np.full((len(X), 2), np.nan)
+    for i, ix in enumerate(idx):
+        emb[ix] = emb_v[i]
+    return emb
 
-    embedding = np.full((len(X), 2), np.nan)
-    for i, idx in enumerate(valid_idx):
-        embedding[idx] = embedding_valid[i]
 
-    return embedding
+def catalog_fields(records):
+    all_keys = set()
+    for r in records:
+        all_keys.update(r.keys())
+
+    numeric, categorical = [], []
+    for key in sorted(all_keys):
+        vals = [r.get(key) for r in records if r.get(key) is not None]
+        if not vals:
+            continue
+        if all(isinstance(v, (int, float, bool)) for v in vals[:20]):
+            numeric.append(key)
+        elif all(isinstance(v, str) for v in vals[:20]):
+            categorical.append(key)
+    return numeric, categorical
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Compute UMAP for True Human Atlas')
-    parser.add_argument('--input', default='data/true_human_atlas.json')
-    parser.add_argument('--output', default='data/atlas_umap.json')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', default='data/true_human_atlas.json')
     args = parser.parse_args()
 
-    print(f"Loading {args.input}...")
-    atlas = load_atlas(args.input)
+    print(f'WORD: enriching {args.file} in-place')
+    atlas = load(args.file)
 
-    print("Joining cell_states + coupling_tensor...")
-    records = join_states_and_tensors(atlas)
-    print(f"  {len(records)} unified records")
+    print('  fusing cell_states + coupling_tensor -> records[]...')
+    records = fuse(atlas)
+    print(f'  {len(records)} records')
 
-    print("Computing eigenvalues...")
+    print('  computing eigenvalues...')
     for rec in records:
         has_tensor = any(rec.get(c) for c in FEATURE_COLS[:6])
         if has_tensor:
-            eig = compute_eigenvalues(rec)
-            rec.update(eig)
+            rec.update(compute_eigenvalues(rec))
 
-    print("Building feature matrix...")
-    X, valid_mask = build_feature_matrix(records)
-    n_valid = sum(valid_mask)
-    print(f"  {n_valid} records with valid tensor data, {len(records) - n_valid} without")
+    print('  building features...')
+    X, valid = build_features(records)
+    n_valid = sum(valid)
+    print(f'  {n_valid} with tensor, {len(records) - n_valid} without')
 
-    print("Running UMAP...")
-    embedding = run_umap(X, valid_mask)
-
+    print('  running UMAP...')
+    emb = run_umap(X, valid)
     for i, rec in enumerate(records):
-        if not np.isnan(embedding[i, 0]):
-            rec['umap_x'] = round(float(embedding[i, 0]), 4)
-            rec['umap_y'] = round(float(embedding[i, 1]), 4)
+        if not np.isnan(emb[i, 0]):
+            rec['umap_x'] = round(float(emb[i, 0]), 4)
+            rec['umap_y'] = round(float(emb[i, 1]), 4)
         else:
             rec['umap_x'] = None
             rec['umap_y'] = None
 
-    all_keys = set()
-    for rec in records:
-        all_keys.update(rec.keys())
-
-    numeric_keys = []
-    categorical_keys = []
-    for key in sorted(all_keys):
-        vals = [rec.get(key) for rec in records if rec.get(key) is not None]
-        if not vals:
-            continue
-        if all(isinstance(v, (int, float)) for v in vals[:20]):
-            numeric_keys.append(key)
-        elif all(isinstance(v, str) for v in vals[:20]):
-            categorical_keys.append(key)
+    numeric, categorical = catalog_fields(records)
 
     output = {
-        'version': '4.0',
+        'version': atlas.get('version', '4.0'),
+        'protocol': 'WORD',
         'created': atlas.get('created', ''),
+        'updated': str(date.today()),
         'description': atlas.get('description', ''),
         'thesis': atlas.get('thesis', ''),
         'license_code': atlas.get('license_code', 'MIT'),
         'license_data': atlas.get('license_data', 'CC-BY-4.0'),
         'species': atlas.get('species', []),
         'n_records': len(records),
-        'n_with_umap': sum(1 for r in records if r.get('umap_x') is not None),
+        'n_embedded': sum(1 for r in records if r.get('umap_x') is not None),
         'feature_cols': FEATURE_COLS,
-        'numeric_fields': numeric_keys,
-        'categorical_fields': categorical_keys,
+        'numeric_fields': numeric,
+        'categorical_fields': categorical,
         'records': records,
     }
 
-    print(f"Writing {args.output}...")
-    with open(args.output, 'w', encoding='utf-8') as f:
+    print(f'  writing {args.file}...')
+    with open(args.file, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=2, ensure_ascii=False, default=str)
 
-    size_kb = len(json.dumps(output, default=str)) / 1024
-    print(f"  {len(records)} records, {size_kb:.0f} KB")
-    print("Done.")
+    kb = len(json.dumps(output, default=str)) / 1024
+    print(f'  {len(records)} records, {n_valid} embedded, {kb:.0f} KB')
+    print('  WORD: working object = published object. Push to deploy.')
 
 
 if __name__ == '__main__':

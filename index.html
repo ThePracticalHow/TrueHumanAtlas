@@ -240,7 +240,7 @@ canvas {
 <script>
 (async function() {
   /* ── Load data ──────────────────────────────────────────── */
-  const resp = await fetch('data/atlas_umap.json');
+  const resp = await fetch('data/true_human_atlas.json');
   const atlas = await resp.json();
   const records = atlas.records.filter(r => r.umap_x != null && r.umap_y != null);
   const allRecords = atlas.records;
