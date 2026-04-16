@@ -2,316 +2,560 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The True Human Atlas</title>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>True Human Atlas — UMAP</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#e0e0e0;font-family:'Courier New',monospace}
-header{background:#111;border-bottom:2px solid #0f0;padding:20px;text-align:center}
-header h1{color:#0f0;font-size:28px}
-header .sub{color:#0a0;font-size:12px;margin-top:4px}
-.c{max-width:1200px;margin:0 auto;padding:15px}
-.stats{display:flex;gap:30px;justify-content:center;margin:15px 0}
-.stat .num{color:#0f0;font-size:24px;font-weight:bold;text-align:center}
-.stat .label{color:#666;font-size:10px;text-align:center}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
-.card{background:#151515;border:1px solid #333;border-radius:8px;padding:15px}
-.card h2{color:#0f0;font-size:15px;margin-bottom:8px}
-.card p{color:#888;font-size:11px;line-height:1.5}
-.card a{color:#0ff;text-decoration:none}
-input[type=text]{width:100%;background:#0a0a0a;border:1px solid #0f0;color:#0f0;padding:10px;font-family:'Courier New',monospace;font-size:13px;border-radius:4px}
-input:focus{outline:none;border-color:#fff}
-.btn{background:#0f0;color:#000;border:none;padding:6px 16px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;border-radius:4px;margin:4px}
-.btn:hover{background:#fff}
-#output{background:#0a0a0a;border:1px solid #333;border-radius:4px;padding:12px;font-size:11px;color:#0f0;white-space:pre-wrap;min-height:150px;max-height:400px;overflow-y:auto;margin-top:8px}
-#status{color:#555;font-size:10px;margin-top:4px}
-#axis-display{font-size:11px;color:#0f0;white-space:pre;overflow-x:auto;max-height:500px;overflow-y:auto}
-.full{grid-column:1/-1}
-table{width:100%;border-collapse:collapse;font-size:11px}
-th{color:#0f0;text-align:left;padding:4px 8px;border-bottom:1px solid #333}
-td{padding:4px 8px;border-bottom:1px solid #1a1a1a;color:#ccc}
-td.num{text-align:right;font-variant-numeric:tabular-nums}
-tr:hover td{background:#1a1a1a}
-.bar{display:inline-block;height:10px;background:#0f0;border-radius:2px;vertical-align:middle}
-.bar-red{background:#f00}
-.bar-yellow{background:#ff0}
-.bar-cyan{background:#0ff}
-.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;margin-right:4px}
-.tag-green{background:#0a2a0a;color:#0f0;border:1px solid #0f0}
-.tag-red{background:#2a0a0a;color:#f44;border:1px solid #f44}
-.tag-viral{background:#0a0a2a;color:#44f;border:1px solid #44f}
-.tag-fungal{background:#0a2a0a;color:#0f0;border:1px solid #0f0}
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-dim: #8b949e;
+  --accent: #58a6ff;
+  --accent-dim: #1f6feb;
+  --danger: #f85149;
+  --warn: #d29922;
+  --ok: #3fb950;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 10;
+}
+header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+header .stats {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  min-width: 200px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar section {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar section:last-child { border-bottom: none; }
+.sidebar label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.sidebar select, .sidebar input[type="text"] {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: var(--font);
+  outline: none;
+}
+.sidebar select:focus, .sidebar input[type="text"]:focus {
+  border-color: var(--accent);
+}
+
+/* Legend */
+.legend {
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  cursor: pointer;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.legend-item.dimmed { opacity: 0.25; }
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Canvas area */
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 11px;
+  max-width: 320px;
+  z-index: 100;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.tooltip .tt-title {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+.tooltip .tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tooltip .tt-key { color: var(--text-dim); }
+.tooltip .tt-val { font-family: var(--mono); font-size: 11px; text-align: right; }
+
+/* Info panel (bottom) */
+.info-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+.info-bar .tag {
+  background: var(--accent-dim);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 </style>
 </head>
 <body>
+
 <header>
-<h1>THE TRUE HUMAN ATLAS</h1>
-<div class="sub">Cross-Kingdom Coupling Tensor | <span id="total-cells">...</span> cells | <span id="total-states">...</span> states | <span id="total-species">...</span> species</div>
-<div class="sub">Jixiang Leng | MIT (code) | CC-BY 4.0 (data) | 2026 | <a href="https://github.com/ThePracticalHow/TrueHumanAtlas" style="color:#0ff">GitHub</a></div>
+  <h1>True Human Atlas</h1>
+  <span class="stats" id="stats">loading…</span>
 </header>
 
-<div class="c">
-<div class="grid">
+<div class="layout">
+  <aside class="sidebar">
+    <section>
+      <label>Color by</label>
+      <select id="colorBy"></select>
+      <div class="legend" id="legend"></div>
+    </section>
+    <section>
+      <label>Filter by</label>
+      <select id="filterField"></select>
+      <select id="filterValue" style="margin-top:4px"></select>
+    </section>
+    <section>
+      <label>Search</label>
+      <input type="text" id="search" placeholder="name, tissue, disease…">
+    </section>
+    <section>
+      <label>Point size</label>
+      <input type="range" id="pointSize" min="2" max="20" value="6" style="width:100%">
+    </section>
+  </aside>
 
-<!-- AXIS TABLE -->
-<div class="card full">
-<h2>THE INDEPENDENCE AXIS — All States, All Kingdoms</h2>
-<div id="axis-loading" style="color:#555">Loading atlas data...</div>
-<div id="axis-display" style="display:none"></div>
+  <div class="canvas-wrap" id="canvasWrap">
+    <canvas id="atlas"></canvas>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
 </div>
 
-<!-- QUERY -->
-<div class="card full">
-<h2>QUERY THE ATLAS</h2>
-<input type="text" id="q" placeholder="Try: score garlic | compare garlic vs sugar | war report" onkeypress="if(event.key==='Enter')runQ()">
-<button class="btn" onclick="runQ()">ASK</button>
-<button class="btn" onclick="showFood('garlic')">Garlic</button>
-<button class="btn" onclick="showFood('white sugar')">Sugar</button>
-<button class="btn" onclick="showFood('oregano')">Oregano</button>
-<button class="btn" onclick="showFood('coconut oil')">Coconut Oil</button>
-<button class="btn" onclick="showFood('beer')">Beer</button>
-<button class="btn" onclick="warReport()">WAR REPORT</button>
-<div id="status">Loading Python engine...</div>
-<div id="output">Initializing...</div>
+<div class="info-bar">
+  <span id="infoVisible">–</span>
+  <span id="infoHover">hover a point</span>
+  <span style="margin-left:auto">
+    <span class="tag">D3 + Canvas</span>
+    v4.0
+  </span>
 </div>
 
-<!-- GLOBE -->
-<div class="card">
-<h2>3D BATTLEFIELD MAP</h2>
-<p>Fungal territories × cancer geography × coupling tensor. WGS84 oblate spheroid. 7 toggleable layers.</p>
-<a href="globe/index.html"><button class="btn">OPEN GLOBE</button></a>
-</div>
-
-<!-- MORPHGLOBE -->
-<div class="card">
-<h2>MORPHGLOBE</h2>
-<p>PCA on a sphere. Morph between geographic space and coupling tensor space.</p>
-<a href="globe/morphglobe.html"><button class="btn">OPEN MORPHGLOBE</button></a>
-</div>
-
-<!-- POPULATION -->
-<div class="card">
-<h2>POPULATION TENSOR (1.58M cells)</h2>
-<table>
-<tr><th>Population</th><th>Tissue</th><th>Cells</th><th>K_GL</th><th>K_ML</th><th>GLB1%</th></tr>
-<tr><td>Korean</td><td>blood</td><td class="num">734,006</td><td class="num">0.312</td><td class="num">0.316</td><td class="num">11.6%</td></tr>
-<tr><td>Japanese</td><td>blood</td><td class="num">573,687</td><td class="num">0.323</td><td class="num">0.260</td><td class="num">13.8%</td></tr>
-<tr><td>African American</td><td>blood</td><td class="num">216,331</td><td class="num">0.451</td><td class="num">0.427</td><td class="num">9.6%</td></tr>
-<tr><td>African American</td><td>lung</td><td class="num">59,125</td><td class="num">0.745</td><td class="num">0.706</td><td class="num">29.5%</td></tr>
-</table>
-</div>
-
-<!-- INSTALL -->
-<div class="card">
-<h2>INSTALL</h2>
-<pre style="color:#0f0;font-size:12px">
-git clone https://github.com/ThePracticalHow/TrueHumanAtlas
-cd TrueHumanAtlas
-pip install -e ".[expr]"
-
-staff tensor your_data.h5ad
-staff ask "cancer vs virus"
-staff detect your_data.h5ad
-</pre>
-</div>
-
-</div>
-</div>
-
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
-// Load atlas data and build the axis table
-let atlasData = null;
-let pyodide = null;
+(async function() {
+  /* ── Load data ──────────────────────────────────────────── */
+  const resp = await fetch('data/atlas_umap.json');
+  const atlas = await resp.json();
+  const records = atlas.records.filter(r => r.umap_x != null && r.umap_y != null);
+  const allRecords = atlas.records;
 
-async function loadAtlas() {
-  try {
-    const [atlas, xk, pop, hongyan] = await Promise.all([
-      fetch('data/true_human_atlas.json').then(r=>r.json()),
-      fetch('data/cross_kingdom/cross_kingdom_tensor.json').then(r=>r.json()),
-      fetch('data/cross_kingdom/population_tensor.json').then(r=>r.json()),
-      fetch('data/cross_kingdom/hongyan_atlas_v02.json').then(r=>r.json()),
-    ]);
+  document.getElementById('stats').textContent =
+    `${records.length} embedded / ${allRecords.length} total · v${atlas.version}`;
 
-    atlasData = atlas;
+  /* ── Scales ─────────────────────────────────────────────── */
+  const catFields = atlas.categorical_fields.filter(f => f !== 'k_json' && f !== 'timestamp');
+  const numFields = atlas.numeric_fields.filter(f => !f.startsWith('umap_'));
+  const colorFields = [...catFields, '──numeric──', ...numFields];
 
-    // Merge tensor entries with cell state info
-    let rows = [];
-    const stateMap = {};
-    (atlas.cell_states||[]).forEach(s => stateMap[s.id] = s);
+  const xExtent = d3.extent(records, d => d.umap_x);
+  const yExtent = d3.extent(records, d => d.umap_y);
+  const pad = 0.08;
+  const xRange = xExtent[1] - xExtent[0];
+  const yRange = yExtent[1] - yExtent[0];
 
-    (atlas.coupling_tensor||[]).forEach(t => {
-      if (t.ribo_indep == null) return;
-      const cs = stateMap[t.cell_state_id] || {};
-      rows.push({
-        ri: t.ribo_indep,
-        krm: t.k_rm || 0,
-        krg: t.k_rg || 0,
-        n: t.n_cells || 0,
-        name: cs.name || t.condition || '?',
-        species: cs.species || '?',
-        disease: cs.disease || 'normal',
-        source: cs.source || '?',
-        tissue: cs.tissue || '?',
-      });
-    });
+  /* ── Canvas setup ───────────────────────────────────────── */
+  const wrap = document.getElementById('canvasWrap');
+  const canvas = document.getElementById('atlas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
 
-    // Add cross-kingdom data
-    const xkConds = xk.conditions || {};
-    Object.entries(xkConds).forEach(([k,v]) => {
-      if (v.ribo_indep == null) return;
-      let species = '?';
-      if (k.includes('yeast')) species = 'S. cerevisiae';
-      else if (k.includes('crypto')) species = 'C. neoformans';
-      else if (k.includes('candida')) species = 'C. albicans';
-      rows.push({ri:v.ribo_indep, krm:v.K_RM||0, krg:v.K_RG||0, n:v.n_cells||v.n_samples||0,
-                 name:k, species, disease:'active_growth', source:'mycelium_atlas', tissue:'fungal'});
-    });
-
-    // Add hongyan
-    const hConds = hongyan.conditions || {};
-    Object.entries(hConds).forEach(([k,v]) => {
-      if (v.ribo_indep == null) return;
-      rows.push({ri:v.ribo_indep, krm:v.K_RM||0, krg:v.K_RG||0, n:v.n_samples||0,
-                 name:k, species:'Viral host', disease:v.virus||'viral', source:'hongyan_atlas', tissue:'infected'});
-    });
-
-    // Add population
-    const pConds = pop.conditions || {};
-    Object.entries(pConds).forEach(([k,v]) => {
-      rows.push({ri:v.ri, krm:v.K_RM||0, krg:v.K_RG||0, n:v.n||0,
-                 name:k, species:'H. sapiens', disease:'normal', source:'population', tissue:v.tissue||'blood'});
-    });
-
-    // Sort by ribo_indep
-    rows.sort((a,b) => a.ri - b.ri);
-
-    // Deduplicate
-    const seen = new Set();
-    rows = rows.filter(r => {
-      const key = r.name + r.ri.toFixed(3);
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-
-    // Stats
-    const totalCells = rows.reduce((s,r) => s + (r.n||0), 0);
-    const species = new Set(rows.map(r=>r.species));
-    document.getElementById('total-cells').textContent = totalCells > 1000000 ?
-      (totalCells/1000000).toFixed(1)+'M' : totalCells.toLocaleString();
-    document.getElementById('total-states').textContent = rows.length;
-    document.getElementById('total-species').textContent = species.size;
-
-    // Build table
-    let html = '<table><tr><th>R_ind</th><th></th><th>K_RM</th><th>K_RG</th><th>Cells</th><th>Species</th><th>Front</th><th>Condition</th></tr>';
-    rows.forEach(r => {
-      const barW = Math.max(1, Math.round(r.ri * 150));
-      let barClass = 'bar';
-      let tag = '';
-      if (r.source === 'mycelium_atlas') { barClass = 'bar'; tag = '<span class="tag tag-fungal">GREEN</span>'; }
-      else if (r.source === 'hongyan_atlas') { barClass = 'bar-cyan'; tag = '<span class="tag tag-viral">RED</span>'; }
-      else if (r.source === 'population') { tag = '<span class="tag tag-green">POP</span>'; }
-      else { tag = '<span class="tag tag-green">OURS</span>'; }
-
-      const nStr = r.n > 1000000 ? (r.n/1000000).toFixed(1)+'M' :
-                   r.n > 1000 ? (r.n/1000).toFixed(0)+'K' :
-                   r.n > 0 ? r.n.toString() : '-';
-
-      html += `<tr>
-        <td class="num">${r.ri.toFixed(3)}</td>
-        <td><div class="${barClass}" style="width:${barW}px"></div></td>
-        <td class="num">${r.krm >= 0 ? '+' : ''}${r.krm.toFixed(3)}</td>
-        <td class="num">${r.krg >= 0 ? '+' : ''}${r.krg.toFixed(3)}</td>
-        <td class="num">${nStr}</td>
-        <td style="font-size:10px">${r.species.substring(0,15)}</td>
-        <td>${tag}</td>
-        <td style="font-size:10px;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.name}</td>
-      </tr>`;
-    });
-    html += '</table>';
-
-    document.getElementById('axis-loading').style.display = 'none';
-    document.getElementById('axis-display').style.display = 'block';
-    document.getElementById('axis-display').innerHTML = html;
-
-  } catch(e) {
-    document.getElementById('axis-loading').textContent = 'Error loading atlas: ' + e.message;
+  let W, H;
+  function resize() {
+    W = wrap.clientWidth;
+    H = wrap.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-}
+  resize();
+  window.addEventListener('resize', () => { resize(); draw(); });
 
-// Pyodide for food scoring
-async function initPyodide() {
-  try {
-    document.getElementById('status').textContent = 'Loading Python (Pyodide)...';
-    pyodide = await loadPyodide();
-    document.getElementById('status').textContent = 'Loading food atlas...';
-    const resp = await fetch('staff/food.py');
-    const code = await resp.text();
-    await pyodide.runPythonAsync(code);
-    document.getElementById('status').textContent = 'Ready. Type a query or click a food button.';
-    document.getElementById('output').textContent = 'Food Atlas loaded. Try scoring any food.\n\nExamples:\n  garlic → +17 (fights her)\n  white sugar → -8 (feeds her)\n  oregano → +15 (fights her)\n  beer → -7 (feeds her)';
-  } catch(e) {
-    document.getElementById('status').textContent = 'Pyodide: ' + e.message;
-    document.getElementById('output').textContent = 'Python engine failed to load. Static atlas data still works above.';
+  function xScale(v) {
+    return ((v - xExtent[0]) / xRange) * (W * 0.88) + W * 0.06;
   }
-}
+  function yScale(v) {
+    return ((yExtent[1] - v) / yRange) * (H * 0.88) + H * 0.06;
+  }
 
-async function showFood(food) {
-  if (!pyodide) return;
-  try {
-    const result = await pyodide.runPythonAsync(`
-import io,sys
-atlas = FoodAtlas()
-r = atlas.score_food("${food}")
-score = r['score']
-lines = [f"FOOD: ${food}", f"SCORE: {score:+d}"]
-if score > 0: lines.append("VERDICT: FIGHTS HER (antifungal)")
-elif score < 0: lines.append("VERDICT: FEEDS HER (profungal)")
-else: lines.append("VERDICT: NEUTRAL / UNKNOWN")
-if r.get('antifungal'): lines.append("Antifungal: " + ", ".join(f"{n} ({p:+d})" for n,p in r['antifungal']))
-if r.get('profungal'): lines.append("Profungal: " + ", ".join(f"{n} ({p:+d})" for n,p in r['profungal']))
-"\\n".join(lines)
-`);
-    document.getElementById('output').textContent = result;
-  } catch(e) { document.getElementById('output').textContent = 'Error: '+e.message; }
-}
+  /* ── Color palettes ────────────────────────────────────── */
+  const catPalette = [
+    '#58a6ff','#f85149','#3fb950','#d29922','#bc8cff',
+    '#f778ba','#79c0ff','#ff7b72','#56d364','#e3b341',
+    '#d2a8ff','#ffa198','#7ee787','#f0883e','#a5d6ff',
+    '#ffc680','#b392f0','#ff9bce','#9ecbff','#ffdf5d',
+  ];
+  const seqPalette = d3.interpolateViridis;
 
-async function warReport() {
-  if (!pyodide) return;
-  try {
-    const result = await pyodide.runPythonAsync(`
-import io,sys
-buf=io.StringIO(); sys.stdout=buf
-FoodAtlas().war_report()
-sys.stdout=sys.__stdout__
-buf.getvalue()
-`);
-    document.getElementById('output').textContent = result;
-  } catch(e) { document.getElementById('output').textContent = 'Error: '+e.message; }
-}
+  let colorMode = 'category'; // 'categorical' or 'numeric'
+  let colorField = catFields[0] || 'category';
+  let colorMap = {};
+  let colorScaleNum = null;
+  let activeGroups = new Set(); // for legend toggling
+  let filterField = '';
+  let filterValue = '';
+  let searchTerm = '';
+  let pointRadius = 6;
 
-async function runQ() {
-  const q = document.getElementById('q').value.trim();
-  if (!q) return;
-  if (q.toLowerCase().includes('war report')) return warReport();
-  if (q.toLowerCase().startsWith('score ')) return showFood(q.substring(6));
-  if (q.toLowerCase().startsWith('compare ')) {
-    const parts = q.substring(8).split(' vs ');
-    if (parts.length >= 2 && pyodide) {
-      try {
-        const r = await pyodide.runPythonAsync(`FoodAtlas().compare("${parts[0].trim()}","${parts[1].trim()}")`);
-        document.getElementById('output').textContent = r;
-      } catch(e) { document.getElementById('output').textContent = 'Error: '+e.message; }
+  /* ── Build UI ───────────────────────────────────────────── */
+  const selColorBy = document.getElementById('colorBy');
+  colorFields.forEach(f => {
+    const opt = document.createElement('option');
+    opt.value = f;
+    opt.textContent = f;
+    if (f === '──numeric──') { opt.disabled = true; }
+    selColorBy.appendChild(opt);
+  });
+  selColorBy.value = colorField;
+  selColorBy.addEventListener('change', () => {
+    colorField = selColorBy.value;
+    buildColorMap();
+    draw();
+  });
+
+  const selFilterField = document.getElementById('filterField');
+  const selFilterValue = document.getElementById('filterValue');
+  const optNone = document.createElement('option');
+  optNone.value = '';
+  optNone.textContent = '(none)';
+  selFilterField.appendChild(optNone);
+  catFields.forEach(f => {
+    const opt = document.createElement('option');
+    opt.value = f;
+    opt.textContent = f;
+    selFilterField.appendChild(opt);
+  });
+  selFilterField.addEventListener('change', () => {
+    filterField = selFilterField.value;
+    populateFilterValues();
+    draw();
+  });
+  selFilterValue.addEventListener('change', () => {
+    filterValue = selFilterValue.value;
+    draw();
+  });
+
+  function populateFilterValues() {
+    selFilterValue.innerHTML = '';
+    const optAll = document.createElement('option');
+    optAll.value = '';
+    optAll.textContent = '(all)';
+    selFilterValue.appendChild(optAll);
+    if (!filterField) return;
+    const vals = [...new Set(records.map(r => r[filterField] || ''))].sort();
+    vals.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v || '(empty)';
+      selFilterValue.appendChild(opt);
+    });
+    filterValue = '';
+  }
+
+  document.getElementById('search').addEventListener('input', e => {
+    searchTerm = e.target.value.toLowerCase();
+    draw();
+  });
+
+  document.getElementById('pointSize').addEventListener('input', e => {
+    pointRadius = +e.target.value;
+    draw();
+  });
+
+  /* ── Color computation ─────────────────────────────────── */
+  function buildColorMap() {
+    const legend = document.getElementById('legend');
+    legend.innerHTML = '';
+
+    if (numFields.includes(colorField)) {
+      colorMode = 'numeric';
+      const vals = records.map(r => r[colorField]).filter(v => v != null);
+      const ext = d3.extent(vals);
+      colorScaleNum = d3.scaleSequential(seqPalette).domain(ext);
+      activeGroups = new Set(['__all__']);
+
+      const steps = 5;
+      for (let i = 0; i <= steps; i++) {
+        const v = ext[0] + (ext[1] - ext[0]) * (i / steps);
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `<span class="legend-swatch" style="background:${colorScaleNum(v)}"></span>
+          <span>${v.toFixed(3)}</span>`;
+        legend.appendChild(item);
+      }
       return;
     }
-  }
-  // Default: try as food score
-  showFood(q);
-}
 
-// Start
-loadAtlas();
-initPyodide();
+    colorMode = 'categorical';
+    const groups = {};
+    records.forEach(r => {
+      const g = String(r[colorField] || '');
+      if (!groups[g]) groups[g] = 0;
+      groups[g]++;
+    });
+    const sorted = Object.keys(groups).sort((a, b) => groups[b] - groups[a]);
+    colorMap = {};
+    sorted.forEach((g, i) => {
+      colorMap[g] = catPalette[i % catPalette.length];
+    });
+    activeGroups = new Set(sorted);
+
+    sorted.forEach(g => {
+      const item = document.createElement('div');
+      item.className = 'legend-item';
+      item.innerHTML = `<span class="legend-swatch" style="background:${colorMap[g]}"></span>
+        <span>${g || '(empty)'} (${groups[g]})</span>`;
+      item.addEventListener('click', () => {
+        if (activeGroups.has(g)) {
+          activeGroups.delete(g);
+          item.classList.add('dimmed');
+        } else {
+          activeGroups.add(g);
+          item.classList.remove('dimmed');
+        }
+        draw();
+      });
+      legend.appendChild(item);
+    });
+  }
+
+  function getColor(rec) {
+    if (colorMode === 'numeric') {
+      const v = rec[colorField];
+      return v != null ? colorScaleNum(v) : '#30363d';
+    }
+    const g = String(rec[colorField] || '');
+    return colorMap[g] || '#30363d';
+  }
+
+  function isVisible(rec) {
+    if (colorMode === 'categorical') {
+      const g = String(rec[colorField] || '');
+      if (!activeGroups.has(g)) return false;
+    }
+    if (filterField && filterValue) {
+      if (String(rec[filterField] || '') !== filterValue) return false;
+    }
+    if (searchTerm) {
+      const blob = JSON.stringify(rec).toLowerCase();
+      if (!blob.includes(searchTerm)) return false;
+    }
+    return true;
+  }
+
+  /* ── Draw ───────────────────────────────────────────────── */
+  let visiblePoints = [];
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Background dim pass
+    visiblePoints = [];
+    const dimmed = [];
+    records.forEach(r => {
+      if (isVisible(r)) {
+        visiblePoints.push(r);
+      } else {
+        dimmed.push(r);
+      }
+    });
+
+    // Draw dimmed first
+    ctx.globalAlpha = 0.07;
+    dimmed.forEach(r => {
+      ctx.beginPath();
+      ctx.arc(xScale(r.umap_x), yScale(r.umap_y), pointRadius * 0.6, 0, Math.PI * 2);
+      ctx.fillStyle = '#484f58';
+      ctx.fill();
+    });
+
+    // Draw visible
+    ctx.globalAlpha = 0.85;
+    visiblePoints.forEach(r => {
+      const cx = xScale(r.umap_x);
+      const cy = yScale(r.umap_y);
+      ctx.beginPath();
+      ctx.arc(cx, cy, pointRadius, 0, Math.PI * 2);
+      ctx.fillStyle = getColor(r);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    document.getElementById('infoVisible').textContent =
+      `${visiblePoints.length} / ${records.length} visible`;
+  }
+
+  /* ── Tooltip ────────────────────────────────────────────── */
+  const tooltip = document.getElementById('tooltip');
+  const infoHover = document.getElementById('infoHover');
+
+  const SHOW_FIELDS = [
+    'name','tissue','disease','category','species','sex','age_range',
+    'dataset','condition','platform',
+    'k_rm','k_rg','k_rn','k_mg','k_mn','k_ng',
+    'det_k','ribo_indep',
+    'eigenvalue_1','eigenvalue_4','confinement_ratio','has_confinement',
+  ];
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    let closest = null;
+    let minDist = Infinity;
+    visiblePoints.forEach(r => {
+      const cx = xScale(r.umap_x);
+      const cy = yScale(r.umap_y);
+      const d = Math.hypot(cx - mx, cy - my);
+      if (d < minDist && d < pointRadius + 8) {
+        minDist = d;
+        closest = r;
+      }
+    });
+
+    if (closest) {
+      const name = closest.name || closest.cell_state_id || '?';
+      let html = `<div class="tt-title">${name}</div>`;
+      SHOW_FIELDS.forEach(f => {
+        const v = closest[f];
+        if (v == null || v === '' || f === 'name') return;
+        const disp = typeof v === 'number' ? v.toFixed(4) : v;
+        html += `<div class="tt-row"><span class="tt-key">${f}</span><span class="tt-val">${disp}</span></div>`;
+      });
+      tooltip.innerHTML = html;
+      tooltip.style.display = 'block';
+
+      let tx = e.clientX - rect.left + 14;
+      let ty = e.clientY - rect.top - 10;
+      if (tx + 330 > W) tx = mx - 330;
+      if (ty + 200 > H) ty = my - 200;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+
+      infoHover.textContent = `${name} · ${closest.tissue || ''} · ${closest.disease || ''}`;
+    } else {
+      tooltip.style.display = 'none';
+      infoHover.textContent = 'hover a point';
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    tooltip.style.display = 'none';
+  });
+
+  /* ── Init ───────────────────────────────────────────────── */
+  buildColorMap();
+  draw();
+
+})();
 </script>
 </body>
 </html>
