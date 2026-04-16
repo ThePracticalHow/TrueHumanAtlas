@@ -1,0 +1,14 @@
+{
+  "atlas": "population_v1",
+  "description": "Coupling tensor stratified by self-reported ethnicity. CellxGene Census. First ever population-stratified measurement.",
+  "date": "2026-04-15",
+  "source": "CellxGene Census (public)",
+  "conditions": {
+    "Korean_blood": {"n": 734006, "ri": 0.619, "K_RM": 0.395, "K_RG": 0.317, "K_RL": -0.168, "K_GL": 0.312, "K_ML": 0.316, "GLB1_pct": 11.6, "ethnicity": "Korean", "tissue": "blood"},
+    "Japanese_blood": {"n": 573687, "ri": 0.600, "K_RM": 0.448, "K_RG": 0.305, "K_RL": -0.268, "K_GL": 0.323, "K_ML": 0.260, "GLB1_pct": 13.8, "ethnicity": "Japanese", "tissue": "blood"},
+    "African_American_blood": {"n": 216331, "ri": 0.736, "K_RM": 0.168, "K_RG": 0.242, "K_RL": -0.149, "K_GL": 0.451, "K_ML": 0.427, "GLB1_pct": 9.6, "ethnicity": "African American", "tissue": "blood"},
+    "African_American_lung": {"n": 59125, "ri": 0.269, "K_RM": 0.787, "K_RG": 0.670, "K_RL": 0.814, "K_GL": 0.745, "K_ML": 0.706, "GLB1_pct": 29.5, "ethnicity": "African American", "tissue": "lung"}
+  },
+  "total_cells": 1583149,
+  "note": "K_RL is NEGATIVE in all blood populations — RIBO and LYSO in opposition. The war is active in immune cells."
+}
