@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coherence Calculator — True Human Atlas</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-dim: #8b949e;
+  --accent: #58a6ff; --accent-dim: #1f6feb;
+  --danger: #f85149; --warn: #d29922; --ok: #3fb950;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); font-size:13px; min-height:100vh; }
+
+header { display:flex; align-items:center; gap:12px; padding:8px 16px; background:var(--surface); border-bottom:1px solid var(--border); }
+header h1 { font-size:15px; font-weight:600; }
+header .sub { font-size:11px; color:var(--text-dim); }
+header a { color:var(--accent); text-decoration:none; font-size:11px; margin-left:auto; }
+
+.main { display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:16px; max-width:1400px; margin:0 auto; }
+@media (max-width:900px) { .main { grid-template-columns:1fr; } }
+
+.panel { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.panel h2 { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text-dim); margin-bottom:8px; }
+
+textarea { width:100%; height:180px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px; font-family:var(--mono); font-size:11px; resize:vertical; }
+textarea:focus { border-color:var(--accent); outline:none; }
+textarea::placeholder { color:var(--text-dim); }
+
+.btn { padding:6px 16px; border:1px solid var(--accent); background:var(--accent-dim); color:#fff; border-radius:4px; cursor:pointer; font-size:12px; font-family:var(--font); }
+.btn:hover { background:var(--accent); }
+.btn-row { display:flex; gap:8px; margin-top:8px; align-items:center; }
+
+.upload-label { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border:1px dashed var(--border); border-radius:4px; cursor:pointer; font-size:11px; color:var(--text-dim); }
+.upload-label:hover { border-color:var(--accent); color:var(--accent); }
+.upload-label input { display:none; }
+
+.sample-link { font-size:11px; color:var(--accent); cursor:pointer; text-decoration:underline; }
+
+.readouts { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:12px; }
+.readout { background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:8px; }
+.readout .label { font-size:10px; text-transform:uppercase; color:var(--text-dim); }
+.readout .value { font-size:18px; font-family:var(--mono); font-weight:600; margin-top:2px; }
+.readout .value.good { color:var(--ok); }
+.readout .value.warn { color:var(--warn); }
+.readout .value.bad { color:var(--danger); }
+
+.matrix-grid { display:grid; gap:1px; margin-top:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+.matrix-cell { padding:4px 2px; text-align:center; font-family:var(--mono); font-size:11px; }
+.matrix-header { background:var(--surface); font-weight:600; font-size:10px; color:var(--text-dim); }
+
+.scatter-wrap { position:relative; width:100%; aspect-ratio:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; overflow:hidden; margin-top:8px; }
+.scatter-wrap canvas { width:100%; height:100%; }
+
+.gene-info { margin-top:8px; font-size:11px; color:var(--text-dim); font-family:var(--mono); }
+.gene-info span { color:var(--text); }
+
+.status { font-size:11px; color:var(--text-dim); margin-top:8px; font-family:var(--mono); }
+.status.error { color:var(--danger); }
+.status.ok { color:var(--ok); }
+
+.instructions { font-size:11px; color:var(--text-dim); line-height:1.6; margin-top:8px; }
+.instructions code { background:var(--bg); padding:1px 4px; border-radius:2px; font-family:var(--mono); font-size:10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Coherence Calculator</h1>
+  <span class="sub">Compute your coupling tensor. See where you are.</span>
+  <a href="../">Back to Atlas</a>
+</header>
+
+<div class="main">
+  <div class="panel">
+    <h2>Input</h2>
+    <p class="instructions">
+      Paste a count matrix: <strong>genes as columns</strong>, cells as rows. First row = gene names.
+      CSV or tab-separated. Minimum ~100 cells for stable Spearman correlations.
+    </p>
+    <textarea id="dataInput" placeholder="gene1,gene2,RPS3,RPL5,MT-CO1,...
+12,45,230,180,95,...
+8,32,195,162,78,...
+..."></textarea>
+    <div class="btn-row">
+      <button class="btn" id="computeBtn">Compute tensor</button>
+      <label class="upload-label">
+        Upload CSV/TSV <input type="file" id="fileInput" accept=".csv,.tsv,.txt">
+      </label>
+      <span class="sample-link" id="loadSample">load sample data</span>
+    </div>
+    <div class="status" id="status"></div>
+    <div class="gene-info" id="geneInfo"></div>
+  </div>
+
+  <div class="panel" id="resultsPanel" style="display:none">
+    <h2>Your coupling tensor</h2>
+    <div class="readouts" id="readouts"></div>
+    <div id="matrixWrap"></div>
+  </div>
+
+  <div class="panel" style="grid-column:1/-1" id="scatterPanel">
+    <h2>Where you are — ribo_independence vs det(K)</h2>
+    <p class="instructions">
+      Each grey dot is one of <span id="atlasCount">276</span> atlas records.
+      <strong style="color:var(--danger)">Red star = your data.</strong>
+      Higher det(K) = more independent operators. Higher RIBO_independence = more autonomous translation.
+    </p>
+    <div class="scatter-wrap">
+      <canvas id="scatter"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+
+const OPERATORS = [
+  { name:'RIBO', label:'R', prefixes:['RPS','RPL'], desc:'ribosomal' },
+  { name:'MITO', label:'M', prefixes:['MT-','mt-'], desc:'mitochondrial' },
+  { name:'GOLGI', label:'G', prefixes:['GOLGA','GOLGB','SEC61','COPA','COPB','MAN1','MGAT','GORASP'], desc:'Golgi' },
+  { name:'LYSO', label:'L', prefixes:[
+    'LAMP1','LAMP2','LAMP3','CTSA','CTSB','CTSC','CTSD','CTSE','CTSF',
+    'CTSG','CTSH','CTSK','CTSL','CTSS','CTSZ','ATP6V0','ATP6V1',
+    'HEXA','HEXB','GBA','GAA','GLB1','NPC1','NPC2','TFEB'
+  ], desc:'lysosomal' },
+];
+
+function classifyGenes(geneNames) {
+  const masks = [];
+  const anyAssigned = new Array(geneNames.length).fill(false);
+  const activeOps = [];
+
+  for (const op of OPERATORS) {
+    const mask = geneNames.map(g => op.prefixes.some(p => g.startsWith(p)));
+    const count = mask.filter(Boolean).length;
+    if (count >= 3) {
+      masks.push(mask);
+      mask.forEach((v, i) => { if (v) anyAssigned[i] = true; });
+      activeOps.push(op);
+    }
+  }
+  return { masks, anyAssigned, activeOps };
+}
+
+function rankArray(arr) {
+  const indexed = arr.map((v, i) => ({ v, i }));
+  indexed.sort((a, b) => a.v - b.v);
+  const ranks = new Array(arr.length);
+  let i = 0;
+  while (i < indexed.length) {
+    let j = i;
+    while (j < indexed.length && indexed[j].v === indexed[i].v) j++;
+    const avgRank = (i + j - 1) / 2;
+    for (let k = i; k < j; k++) ranks[indexed[k].i] = avgRank;
+    i = j;
+  }
+  return ranks;
+}
+
+function spearman(a, b) {
+  const ra = rankArray(a), rb = rankArray(b);
+  const n = ra.length;
+  let sumA = 0, sumB = 0, sumAB = 0, sumA2 = 0, sumB2 = 0;
+  for (let i = 0; i < n; i++) {
+    sumA += ra[i]; sumB += rb[i];
+    sumAB += ra[i] * rb[i];
+    sumA2 += ra[i] * ra[i]; sumB2 += rb[i] * rb[i];
+  }
+  const num = n * sumAB - sumA * sumB;
+  const den = Math.sqrt((n * sumA2 - sumA * sumA) * (n * sumB2 - sumB * sumB));
+  return den === 0 ? 0 : num / den;
+}
+
+function det(M) {
+  const n = M.length;
+  if (n === 1) return M[0][0];
+  if (n === 2) return M[0][0] * M[1][1] - M[0][1] * M[1][0];
+  if (n === 3) return (
+    M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])
+    - M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])
+    + M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0])
+  );
+  // Gaussian elimination for larger
+  const A = M.map(r => [...r]);
+  let sign = 1, d = 1;
+  for (let col = 0; col < n; col++) {
+    let pivot = col;
+    for (let row = col + 1; row < n; row++) {
+      if (Math.abs(A[row][col]) > Math.abs(A[pivot][col])) pivot = row;
+    }
+    if (pivot !== col) { [A[col], A[pivot]] = [A[pivot], A[col]]; sign *= -1; }
+    if (Math.abs(A[col][col]) < 1e-12) return 0;
+    d *= A[col][col];
+    for (let row = col + 1; row < n; row++) {
+      const factor = A[row][col] / A[col][col];
+      for (let j = col; j < n; j++) A[row][j] -= factor * A[col][j];
+    }
+  }
+  return sign * d;
+}
+
+function computeTensor(X, geneNames) {
+  const nCells = X.length;
+  const { masks, anyAssigned, activeOps } = classifyGenes(geneNames);
+  const opNames = [...activeOps.map(o => o.name), 'NUC'];
+  const opLabels = [...activeOps.map(o => o.label), 'N'];
+  const nOps = opNames.length;
+
+  const geneCounts = {};
+  activeOps.forEach((op, idx) => { geneCounts[op.name] = masks[idx].filter(Boolean).length; });
+  geneCounts.NUC = anyAssigned.filter(v => !v).length;
+
+  const opVectors = masks.map(mask =>
+    X.map(row => row.reduce((s, v, j) => mask[j] ? s + v : s, 0))
+  );
+  const total = X.map(row => row.reduce((s, v) => s + v, 0));
+  const nucVector = total.map((t, i) => t - opVectors.reduce((s, ov) => s + ov[i], 0));
+  opVectors.push(nucVector);
+
+  const K = Array.from({length: nOps}, () => new Array(nOps).fill(0));
+  for (let i = 0; i < nOps; i++) {
+    for (let j = 0; j < nOps; j++) {
+      if (i === j) K[i][j] = 1;
+      else {
+        const stdI = Math.sqrt(opVectors[i].reduce((s, v) => s + v * v, 0) / nCells - (opVectors[i].reduce((s, v) => s + v, 0) / nCells) ** 2);
+        const stdJ = Math.sqrt(opVectors[j].reduce((s, v) => s + v * v, 0) / nCells - (opVectors[j].reduce((s, v) => s + v, 0) / nCells) ** 2);
+        K[i][j] = (stdI > 0 && stdJ > 0) ? spearman(opVectors[i], opVectors[j]) : 0;
+      }
+    }
+  }
+
+  const riboIdx = opNames.indexOf('RIBO');
+  const riboOthers = [];
+  for (let j = 0; j < nOps; j++) if (j !== riboIdx) riboOthers.push(Math.abs(K[riboIdx][j]));
+  const riboIndep = riboOthers.length ? 1 - riboOthers.reduce((s, v) => s + v, 0) / riboOthers.length : 0;
+  const detK = det(K);
+
+  const pairwise = {};
+  for (let i = 0; i < nOps; i++) for (let j = i + 1; j < nOps; j++) {
+    pairwise[`K_${opLabels[i]}${opLabels[j]}`] = K[i][j];
+  }
+
+  return { K, opNames, opLabels, nOps, geneCounts, nCells, detK, riboIndep, pairwise };
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) throw new Error('Need at least a header row and one data row');
+
+  const sep = lines[0].includes('\t') ? '\t' : ',';
+  const header = lines[0].split(sep).map(s => s.trim().replace(/^["']|["']$/g, ''));
+  const data = [];
+  for (let i = 1; i < lines.length; i++) {
+    const parts = lines[i].split(sep);
+    const row = parts.map(s => {
+      const v = parseFloat(s.trim());
+      return isNaN(v) ? 0 : v;
+    });
+    if (row.length >= header.length - 1) data.push(row.slice(0, header.length));
+  }
+
+  let geneNames = header;
+  let X = data;
+  if (data.length > 0 && data[0].length === header.length - 1) {
+    geneNames = header.slice(1);
+    X = data;
+  } else if (data.length > 0 && data[0].length === header.length) {
+    if (isNaN(parseFloat(header[0]))) {
+      geneNames = header;
+    }
+  }
+
+  return { geneNames, X };
+}
+
+// ---- Atlas data for scatter ----
+let atlasRecords = [];
+let userResult = null;
+
+async function loadAtlas() {
+  try {
+    const resp = await fetch('../data/true_human_atlas.json');
+    const atlas = await resp.json();
+    atlasRecords = (atlas.records || []).filter(r => r.ribo_indep != null && r.det_k != null);
+    document.getElementById('atlasCount').textContent = atlasRecords.length;
+    drawScatter();
+  } catch(e) {
+    console.error('Atlas load failed:', e);
+  }
+}
+
+function drawScatter() {
+  const canvas = document.getElementById('scatter');
+  const wrap = canvas.parentElement;
+  const W = wrap.clientWidth, H = wrap.clientHeight || W;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const pad = 50;
+
+  const allRI = atlasRecords.map(r => r.ribo_indep);
+  const allDK = atlasRecords.map(r => r.det_k);
+  if (userResult) { allRI.push(userResult.riboIndep); allDK.push(userResult.detK); }
+
+  const riMin = Math.min(...allRI) - 0.02, riMax = Math.max(...allRI) + 0.02;
+  const dkMin = Math.min(...allDK) - 0.02, dkMax = Math.max(...allDK) + 0.02;
+
+  const xScale = v => pad + (v - riMin) / (riMax - riMin) * (W - 2 * pad);
+  const yScale = v => H - pad - (v - dkMin) / (dkMax - dkMin) * (H - 2 * pad);
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Axes
+  ctx.strokeStyle = '#30363d'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad, H - pad); ctx.lineTo(W - pad, H - pad); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad, H - pad); ctx.stroke();
+
+  ctx.fillStyle = '#8b949e'; ctx.font = '11px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('RIBO_independence', W / 2, H - 8);
+  ctx.save(); ctx.translate(14, H / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('det(K)', 0, 0); ctx.restore();
+
+  // Tick marks
+  ctx.font = '9px JetBrains Mono, monospace'; ctx.fillStyle = '#8b949e';
+  for (let v = Math.ceil(riMin * 10) / 10; v <= riMax; v += 0.1) {
+    const x = xScale(v);
+    ctx.beginPath(); ctx.moveTo(x, H - pad); ctx.lineTo(x, H - pad + 4); ctx.stroke();
+    ctx.fillText(v.toFixed(1), x, H - pad + 14);
+  }
+  ctx.textAlign = 'right';
+  for (let v = Math.ceil(dkMin * 10) / 10; v <= dkMax; v += 0.1) {
+    const y = yScale(v);
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(pad - 4, y); ctx.stroke();
+    ctx.fillText(v.toFixed(1), pad - 8, y + 3);
+  }
+
+  // Atlas points
+  ctx.globalAlpha = 0.4;
+  atlasRecords.forEach(r => {
+    ctx.beginPath();
+    ctx.arc(xScale(r.ribo_indep), yScale(r.det_k), 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#484f58';
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+
+  // Species labels for atlas
+  const speciesColors = {
+    'Homo sapiens': '#58a6ff', 'Homo sapiens (viral infection)': '#a5d6ff',
+    'Cryptococcus neoformans': '#3fb950', 'Saccharomyces cerevisiae': '#d29922',
+    'Candida albicans': '#f85149', 'Mus musculus': '#bc8cff',
+  };
+  ctx.globalAlpha = 0.6;
+  atlasRecords.forEach(r => {
+    const col = speciesColors[r.species];
+    if (col) {
+      ctx.beginPath();
+      ctx.arc(xScale(r.ribo_indep), yScale(r.det_k), 4, 0, Math.PI * 2);
+      ctx.fillStyle = col;
+      ctx.fill();
+    }
+  });
+  ctx.globalAlpha = 1;
+
+  // User point
+  if (userResult) {
+    const ux = xScale(userResult.riboIndep), uy = yScale(userResult.detK);
+    ctx.fillStyle = '#f85149'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    const s = 10;
+    ctx.moveTo(ux, uy - s);
+    ctx.lineTo(ux + s * 0.58, uy + s * 0.4);
+    ctx.lineTo(ux + s * 0.95, uy + s * 0.4);
+    ctx.lineTo(ux + s * 0.68, uy + s * 0.75);
+    ctx.lineTo(ux + s * 0.8, uy + s * 1.15);
+    ctx.lineTo(ux, uy + s * 0.9);
+    ctx.lineTo(ux - s * 0.8, uy + s * 1.15);
+    ctx.lineTo(ux - s * 0.68, uy + s * 0.75);
+    ctx.lineTo(ux - s * 0.95, uy + s * 0.4);
+    ctx.lineTo(ux - s * 0.58, uy + s * 0.4);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('YOUR DATA', ux + 14, uy + 4);
+    ctx.font = '10px JetBrains Mono, monospace'; ctx.fillStyle = '#c9d1d9';
+    ctx.fillText(`R_ind=${userResult.riboIndep.toFixed(3)}  det=${userResult.detK.toFixed(4)}`, ux + 14, uy + 18);
+  }
+
+  // Legend
+  const abbrev = { 'Homo sapiens':'H. sapiens', 'Homo sapiens (viral infection)':'H. sapiens (viral)',
+    'Cryptococcus neoformans':'C. neoformans', 'Saccharomyces cerevisiae':'S. cerevisiae',
+    'Candida albicans':'C. albicans', 'Mus musculus':'M. musculus' };
+  ctx.font = '10px Inter, system-ui, sans-serif'; ctx.textAlign = 'left';
+  let ly = pad + 10;
+  for (const [species, col] of Object.entries(speciesColors)) {
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(W - 180, ly, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#8b949e'; ctx.fillText(abbrev[species] || species, W - 170, ly + 3);
+    ly += 16;
+  }
+}
+
+// ---- UI ----
+const statusEl = document.getElementById('status');
+const geneInfoEl = document.getElementById('geneInfo');
+
+function showResults(result) {
+  userResult = result;
+  const panel = document.getElementById('resultsPanel');
+  panel.style.display = 'block';
+
+  const readouts = document.getElementById('readouts');
+  readouts.innerHTML = '';
+
+  const metrics = [
+    { label: 'det(K)', value: result.detK, fmt: v => v.toFixed(6), cls: v => v > 0.5 ? 'good' : v > 0.1 ? 'warn' : 'bad' },
+    { label: 'RIBO independence', value: result.riboIndep, fmt: v => v.toFixed(3), cls: v => v > 0.8 ? 'good' : v > 0.5 ? 'warn' : 'bad' },
+    { label: 'Cells', value: result.nCells, fmt: v => v.toLocaleString(), cls: () => '' },
+    { label: 'Operators', value: result.nOps, fmt: v => `${v}x${v}`, cls: () => '' },
+  ];
+  for (const [key, val] of Object.entries(result.pairwise)) {
+    metrics.push({ label: key, value: val, fmt: v => v.toFixed(3), cls: v => Math.abs(v) > 0.5 ? 'warn' : '' });
+  }
+
+  metrics.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'readout';
+    div.innerHTML = `<div class="label">${m.label}</div><div class="value ${m.cls(m.value)}">${m.fmt(m.value)}</div>`;
+    readouts.appendChild(div);
+  });
+
+  // K matrix heatmap
+  const matWrap = document.getElementById('matrixWrap');
+  matWrap.innerHTML = '<h2 style="margin-top:12px;font-size:11px;color:var(--text-dim)">K Matrix</h2>';
+  const grid = document.createElement('div');
+  grid.className = 'matrix-grid';
+  grid.style.gridTemplateColumns = `repeat(${result.nOps + 1}, 1fr)`;
+
+  grid.innerHTML = '<div class="matrix-cell matrix-header"></div>';
+  result.opNames.forEach(n => { grid.innerHTML += `<div class="matrix-cell matrix-header">${n}</div>`; });
+
+  for (let i = 0; i < result.nOps; i++) {
+    grid.innerHTML += `<div class="matrix-cell matrix-header">${result.opNames[i]}</div>`;
+    for (let j = 0; j < result.nOps; j++) {
+      const v = result.K[i][j];
+      const abs = Math.abs(v);
+      const hue = v >= 0 ? 210 : 0;
+      const bg = i === j ? 'var(--surface)' : `hsla(${hue}, 70%, 50%, ${abs * 0.8})`;
+      grid.innerHTML += `<div class="matrix-cell" style="background:${bg}">${v.toFixed(3)}</div>`;
+    }
+  }
+  matWrap.appendChild(grid);
+
+  drawScatter();
+}
+
+document.getElementById('computeBtn').addEventListener('click', () => {
+  const text = document.getElementById('dataInput').value.trim();
+  if (!text) { statusEl.textContent = 'Paste or upload data first'; statusEl.className = 'status error'; return; }
+
+  try {
+    const { geneNames, X } = parseCSV(text);
+    statusEl.textContent = `Parsed ${X.length} cells x ${geneNames.length} genes`;
+    statusEl.className = 'status';
+
+    if (X.length < 10) throw new Error(`Only ${X.length} cells. Need at least ~100 for stable correlations.`);
+
+    const result = computeTensor(X, geneNames);
+
+    const opInfo = result.opNames.map(n => `${n}=${result.geneCounts[n]}`).join(', ');
+    geneInfoEl.innerHTML = `Operators (${result.nOps}): <span>${opInfo}</span>`;
+
+    if (result.opNames.length < 3) throw new Error('Found fewer than 3 operators. Check that gene names use standard prefixes (RPS*, RPL*, MT-*).');
+
+    statusEl.textContent = `Computed ${result.nOps}x${result.nOps} tensor on ${result.nCells} cells`;
+    statusEl.className = 'status ok';
+    showResults(result);
+
+  } catch(e) {
+    statusEl.textContent = e.message;
+    statusEl.className = 'status error';
+  }
+});
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => { document.getElementById('dataInput').value = reader.result; };
+  reader.readAsText(file);
+});
+
+document.getElementById('loadSample').addEventListener('click', () => {
+  const rng = (seed) => { let s = seed; return () => { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; }; };
+  const r = rng(42);
+
+  const ribo = Array.from({length:20}, (_,i) => `RPS${i+1}`).concat(Array.from({length:20}, (_,i) => `RPL${i+1}`));
+  const mito = ['MT-CO1','MT-CO2','MT-CO3','MT-ND1','MT-ND2','MT-ND3','MT-ATP6','MT-ATP8','MT-CYB'];
+  const golgi = ['GOLGA1','GOLGA2','GOLGA3','SEC61A1','SEC61B','COPA','COPB1','MAN1A1','MGAT1','GORASP1'];
+  const lyso = ['LAMP1','LAMP2','CTSA','CTSB','CTSC','CTSD','ATP6V0A1','ATP6V1A','HEXA','HEXB','GBA','NPC1','TFEB'];
+  const other = Array.from({length:100}, (_,i) => `GENE${i+1}`);
+  const genes = [...ribo, ...mito, ...golgi, ...lyso, ...other];
+
+  const lines = [genes.join(',')];
+  for (let c = 0; c < 300; c++) {
+    lines.push(genes.map(() => Math.floor(r() * 20)).join(','));
+  }
+  document.getElementById('dataInput').value = lines.join('\n');
+  statusEl.textContent = 'Sample data loaded (300 cells x 182 genes). Click Compute.';
+  statusEl.className = 'status ok';
+});
+
+loadAtlas();
+window.addEventListener('resize', drawScatter);
+
+})();
+</script>
+</body>
+</html>
