@@ -24,6 +24,179 @@ from datetime import date
 
 FEATURE_COLS = ['k_rm', 'k_rn', 'k_rg', 'k_mn', 'k_mg', 'k_ng', 'det_k', 'ribo_indep']
 
+# ── Geo-temporal provenance ──────────────────────────────────────────────
+# Keys: (dataset_prefix, source) or just dataset_prefix.
+# Values: (lat, lon, country, collection_year)
+# Sources: GEO metadata, CellxGene Census metadata, Stefano email S14,
+#          strain databases, publication dates.
+
+GEO_PROVENANCE = {
+    # Korean NSCLC cohort — Samsung Medical Center, Seoul
+    'GSE131907':    (37.57, 126.98, 'South Korea', 2019),
+    # GBM — MGH Boston + Weizmann Tel Aviv (primary site: Boston)
+    'GSE131928':    (42.36, -71.07, 'USA', 2019),
+    # SGNex — Nanopore, Genome Institute of Singapore
+    'SGNex':        (1.29, 103.85, 'Singapore', 2020),
+    # WI-38 senescence — NIA/NIH, Baltimore
+    'GSE226225':    (39.30, -76.59, 'USA', 2023),
+    'GSE226225_SRA':(39.30, -76.59, 'USA', 2023),
+    # Proliferative/Senescent — USA
+    'GSE250041':    (38.90, -77.04, 'USA', 2024),
+    # Normal adult lung — Stanford
+    'GSE150247':    (37.43, -122.17, 'USA', 2020),
+    # HCV host — GEO (Japan/international)
+    'GSE84346':     (35.68, 139.69, 'Japan', 2016),
+    # Influenza A host — Duke University
+    'GSE97672':     (35.99, -78.90, 'USA', 2017),
+    # SARS-CoV-2 — Icahn School of Medicine, NYC
+    'blanco_melo':  (40.79, -73.95, 'USA', 2020),
+    # Cryptococcus neoformans — GSE67602 — Duke University
+    'GSE67602':     (35.99, -78.90, 'USA', 2015),
+    # Cryptococcus neoformans — other strains (environmental, global)
+    'crypto_atlas': (35.99, -78.90, 'USA', 2015),
+    # Saccharomyces cerevisiae reference — GSE144820 — Stanford/UCSF
+    'GSE144820':    (37.43, -122.17, 'USA', 2020),
+    # Candida albicans — GSE132030 — Brown University
+    'GSE132030':    (41.83, -71.40, 'USA', 2019),
+    'GEO_various':  (41.83, -71.40, 'USA', 2019),
+    # Inner Engineering meditation — GSE174083 — University of Florida
+    'GSE174083':    (29.65, -82.34, 'USA', 2021),
+}
+
+# Source-level defaults (when dataset field is empty or UUID-only)
+SOURCE_PROVENANCE = {
+    'census':         (37.77, -122.42, 'USA (CZI Census)', 2023),
+    'mycelium_atlas': (35.99, -78.90, 'USA (multi-lab)', 2015),
+    'hongyan_atlas':  (40.79, -73.95, 'USA (multi-lab)', 2020),
+}
+
+# Staff ingest: derive from the dataset filename
+STAFF_PROVENANCE = {
+    'd01_celltype_tensor.json': (37.57, 126.98, 'South Korea', 2019),
+    'd01_tensor.json':          (37.57, 126.98, 'South Korea', 2019),
+    'd01_lyso_results.json':    (37.57, 126.98, 'South Korea', 2019),
+    'd04_tensor.json':          (37.77, -122.42, 'USA', 2023),
+    'korea_vs_us_results.json': (37.57, 126.98, 'South Korea / USA', 2023),
+    'gorospe_lyso_results.json':(39.30, -76.59, 'USA (NIA/NIH)', 2024),
+    'macrophage_mouse_results.json': (42.36, -71.07, 'USA', 2023),
+}
+
+# Per-record overrides for specific IDs (ethnic/geographic splits)
+ID_PROVENANCE = {
+    'tensor_korea_vs_us_results_african_american_blood': (33.75, -84.39, 'USA (Atlanta)', 2023),
+    'tensor_korea_vs_us_results_african_american_lung':  (33.75, -84.39, 'USA (Atlanta)', 2023),
+    'tensor_korea_vs_us_results_japanese_blood':         (35.68, 139.69, 'Japan (Tokyo)', 2023),
+    'tensor_korea_vs_us_results_korean_blood':           (37.57, 126.98, 'South Korea (Seoul)', 2023),
+}
+
+
+CATEGORY_FIXES = {
+    'd01_celltype_tensor.json': ('immune_celltype', 'Homo sapiens', 'blood'),
+    'd01_tensor.json':          (None, 'Homo sapiens', None),
+    'd01_lyso_results.json':    ('coculture', 'Homo sapiens', None),
+    'd04_tensor.json':          ('census_sweep', 'Homo sapiens', 'vasculature'),
+    'korea_vs_us_results.json': ('population_comparison', 'Homo sapiens', None),
+    'gorospe_lyso_results.json':('senolytic_experiment', 'Homo sapiens', 'fibroblast'),
+    'macrophage_mouse_results.json': ('aging', 'Mus musculus', 'macrophage'),
+}
+
+CONDITION_CATEGORY = {
+    'Proliferative': 'proliferative',
+    'Senescent': 'senescent',
+}
+
+
+def fix_unknowns(records):
+    """Fix records with category='unknown' using dataset filename heuristics."""
+    fixed = 0
+    for rec in records:
+        if rec.get('category') != 'unknown':
+            continue
+        ds = rec.get('dataset', '') or ''
+        cond = rec.get('condition', '') or ''
+        name = rec.get('name', '') or ''
+
+        if ds in CATEGORY_FIXES:
+            cat, sp, tissue = CATEGORY_FIXES[ds]
+            if cat:
+                rec['category'] = cat
+            elif cond in CONDITION_CATEGORY:
+                rec['category'] = CONDITION_CATEGORY[cond]
+            if sp:
+                rec['species'] = sp
+            if tissue:
+                rec['tissue'] = tissue
+            fixed += 1
+
+        rid_lower = (rec.get('id', '') or '').lower()
+        if 'korean' in rid_lower:
+            rec['tissue'] = 'blood'
+        elif 'japanese' in rid_lower:
+            rec['tissue'] = 'blood'
+        elif 'african_american' in rid_lower:
+            rec['tissue'] = 'blood'
+
+        if '_old' in name.lower() or '_Old' in cond:
+            rec['age_range'] = 'old'
+        elif '_young' in name.lower() or '_Young' in cond:
+            rec['age_range'] = 'young'
+
+    # Second pass: force-correct species and tissue for ALL records by dataset
+    for rec in records:
+        ds = rec.get('dataset', '') or ''
+        if ds in CATEGORY_FIXES:
+            cat, sp, tissue = CATEGORY_FIXES[ds]
+            if sp:
+                rec['species'] = sp
+            if tissue and not rec.get('tissue'):
+                rec['tissue'] = tissue
+
+    return fixed
+
+
+def stamp_geo_temporal(records):
+    """Stamp lat, lon, country, collection_year onto every record."""
+    tagged = 0
+    for rec in records:
+        rid = rec.get('id', rec.get('cell_state_id', ''))
+        ds = rec.get('dataset', '') or ''
+        src = rec.get('source', '') or ''
+
+        geo = None
+
+        # Priority 1: exact record ID override
+        if rid in ID_PROVENANCE:
+            geo = ID_PROVENANCE[rid]
+
+        # Priority 2: GEO accession match (check if dataset starts with known key)
+        if geo is None:
+            for prefix, prov in GEO_PROVENANCE.items():
+                if prefix in ds or prefix in rid:
+                    geo = prov
+                    break
+
+        # Priority 3: staff ingest dataset filename
+        if geo is None and ds in STAFF_PROVENANCE:
+            geo = STAFF_PROVENANCE[ds]
+
+        # Priority 4: source-level default
+        if geo is None and src in SOURCE_PROVENANCE:
+            geo = SOURCE_PROVENANCE[src]
+
+        if geo:
+            rec['lat'] = geo[0]
+            rec['lon'] = geo[1]
+            rec['country'] = geo[2]
+            rec['collection_year'] = geo[3]
+            tagged += 1
+        else:
+            rec.setdefault('lat', None)
+            rec.setdefault('lon', None)
+            rec.setdefault('country', None)
+            rec.setdefault('collection_year', None)
+
+    return tagged
+
 
 def load(path):
     with open(path, encoding='utf-8') as f:
@@ -158,6 +331,14 @@ def main():
     print('  fusing cell_states + coupling_tensor -> records[]...')
     records = fuse(atlas)
     print(f'  {len(records)} records')
+
+    print('  fixing unknown categories...')
+    n_fixed = fix_unknowns(records)
+    print(f'  {n_fixed} records re-categorized')
+
+    print('  stamping geo-temporal provenance...')
+    n_geo = stamp_geo_temporal(records)
+    print(f'  {n_geo}/{len(records)} records geo-tagged')
 
     print('  computing eigenvalues...')
     for rec in records:
