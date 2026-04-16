@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The True Human Atlas</title>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0a0a; color:#e0e0e0; font-family:'Courier New',monospace; }
+header { background:#111; border-bottom:2px solid #0f0; padding:20px; text-align:center; }
+header h1 { color:#0f0; font-size:28px; margin-bottom:5px; }
+header .sub { color:#0a0; font-size:12px; }
+.container { max-width:1200px; margin:0 auto; padding:20px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; }
+.card { background:#151515; border:1px solid #333; border-radius:8px; padding:20px; }
+.card h2 { color:#0f0; font-size:16px; margin-bottom:10px; }
+.card p { color:#888; font-size:12px; line-height:1.6; }
+.card a { color:#0ff; text-decoration:none; }
+.card a:hover { color:#fff; }
+#query-box { width:100%; background:#0a0a0a; border:1px solid #0f0; color:#0f0;
+  padding:12px; font-family:'Courier New',monospace; font-size:14px; border-radius:4px; }
+#query-box:focus { outline:none; border-color:#fff; }
+#output { background:#0a0a0a; border:1px solid #333; border-radius:4px; padding:15px;
+  font-size:12px; color:#0f0; white-space:pre-wrap; min-height:200px; margin-top:10px;
+  max-height:500px; overflow-y:auto; }
+#status { color:#555; font-size:11px; margin-top:5px; }
+.btn { background:#0f0; color:#000; border:none; padding:8px 20px; cursor:pointer;
+  font-family:'Courier New',monospace; font-weight:bold; border-radius:4px; margin:5px; }
+.btn:hover { background:#fff; }
+.btn-red { background:#f00; }
+.btn-cyan { background:#0ff; }
+.stats { display:flex; gap:30px; justify-content:center; margin:15px 0; }
+.stat { text-align:center; }
+.stat .num { color:#0f0; font-size:24px; font-weight:bold; }
+.stat .label { color:#666; font-size:10px; }
+.food-input { width:70%; background:#0a0a0a; border:1px solid #ff0; color:#ff0;
+  padding:8px; font-family:'Courier New',monospace; border-radius:4px; }
+#food-output { color:#ff0; white-space:pre-wrap; margin-top:10px; font-size:12px; }
+iframe { width:100%; height:500px; border:1px solid #333; border-radius:4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>THE TRUE HUMAN ATLAS</h1>
+  <div class="sub">Cross-Kingdom Coupling Tensor Atlas | 10M+ cells | 6 species | Zero parameters</div>
+  <div class="sub" style="margin-top:5px">Jixiang Leng | MIT License (code) | CC-BY 4.0 (data) | 2026</div>
+</header>
+
+<div class="container">
+  <div class="stats">
+    <div class="stat"><div class="num" id="n-cells">10M+</div><div class="label">cells measured</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">species</div></div>
+    <div class="stat"><div class="num">108</div><div class="label">conditions</div></div>
+    <div class="stat"><div class="num">0</div><div class="label">free parameters</div></div>
+  </div>
+
+  <div class="grid">
+    <!-- Query Engine -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>ASK THE ATLAS</h2>
+      <p>Type a question. The coupling tensor answers. Python runs in your browser via Pyodide.</p>
+      <input type="text" id="query-box" placeholder="Try: score garlic  |  score white sugar  |  compare garlic vs bread"
+             onkeypress="if(event.key==='Enter')runQuery()">
+      <button class="btn" onclick="runQuery()">ASK</button>
+      <button class="btn btn-cyan" onclick="runFood()">FOOD SCORE</button>
+      <div id="status">Loading Python engine...</div>
+      <div id="output">Initializing Pyodide (Python in WebAssembly)...</div>
+    </div>
+
+    <!-- 3D Globe -->
+    <div class="card">
+      <h2>BATTLEFIELD MAP</h2>
+      <p>Fungal territories × cancer geography × coupling tensor. WGS84 oblate spheroid.</p>
+      <a href="globe/index.html" target="_blank">
+        <button class="btn">OPEN GLOBE</button>
+      </a>
+      <p style="margin-top:10px">Three.js | 7 layers | Click any point for details</p>
+    </div>
+
+    <!-- Morphing View -->
+    <div class="card">
+      <h2>MORPHGLOBE</h2>
+      <p>PCA on a sphere. Drag the slider to morph between geographic space and coupling tensor space.</p>
+      <a href="globe/morphglobe.html" target="_blank">
+        <button class="btn">OPEN MORPHGLOBE</button>
+      </a>
+      <p style="margin-top:10px">WebGL | Dynamic dimensions | Binary XOR distance</p>
+    </div>
+
+    <!-- Food Atlas -->
+    <div class="card">
+      <h2>FOOD WAR REPORT</h2>
+      <p>Score any food: positive = fights the Lady, negative = feeds her.</p>
+      <input type="text" class="food-input" id="food-input" placeholder="Enter a food (garlic, sugar, oregano, beer...)"
+             onkeypress="if(event.key==='Enter')runFood()">
+      <button class="btn" style="background:#ff0;color:#000" onclick="runFood()">SCORE</button>
+      <div id="food-output"></div>
+    </div>
+
+    <!-- Independence Axis -->
+    <div class="card">
+      <h2>THE INDEPENDENCE AXIS</h2>
+      <pre style="color:#0f0; font-size:11px; line-height:1.5;">
+0.039  SARS-CoV-2 (virus hyper-couples)
+0.105  Yeast active growth (her at full power)
+0.154  Human proliferative (healthy)
+0.220  Normal lung tissue
+0.310  Primary cancer (defense activating)
+0.508  Metastatic (escaping)
+0.714  Yeast lag (her stressed = our cancer)
+0.743  Chronic HCV (virus exhausts host)
+0.890  Glioblastoma (maximum defense)
+      </pre>
+      <p>Same axis. Same physics. Human + fungal + viral.</p>
+    </div>
+
+    <!-- Population Data -->
+    <div class="card">
+      <h2>POPULATION TENSOR (1.58M cells)</h2>
+      <pre style="color:#0ff; font-size:11px; line-height:1.5;">
+BLOOD:
+  Korean:          K_GL=0.312  GLB1=11.6%  734K cells
+  Japanese:        K_GL=0.323  GLB1=13.8%  574K cells
+  African American: K_GL=0.451  GLB1=9.6%  216K cells
+
+LUNG:
+  African American: K_GL=0.745  GLB1=29.5%  59K cells
+      </pre>
+      <p>First ethnicity-stratified coupling tensor. Different populations, different three-way balances.</p>
+    </div>
+
+    <!-- Install -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>INSTALL & USE</h2>
+      <pre style="color:#0f0; font-size:13px;">
+git clone https://github.com/ThePracticalHow/TrueHumanAtlas.git
+cd TrueHumanAtlas
+pip install -e ".[expr]"
+
+staff tensor your_data.h5ad          # Compute coupling tensor
+staff ask "compare cancer vs virus"  # Query the atlas
+staff detect your_data.h5ad          # Detect fungal signatures
+      </pre>
+      <p><a href="https://github.com/ThePracticalHow/TrueHumanAtlas">GitHub Repository</a> |
+         <a href="https://github.com/ThePracticalHow/TrueHumanAtlas/blob/master/README.md">Documentation</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+let pyodide = null;
+let foodAtlasLoaded = false;
+
+async function initPyodide() {
+  try {
+    document.getElementById('status').textContent = 'Loading Python engine (Pyodide)...';
+    pyodide = await loadPyodide();
+    document.getElementById('status').textContent = 'Loading numpy + scipy...';
+    await pyodide.loadPackage(['numpy', 'scipy']);
+
+    // Load the food atlas code
+    const foodResp = await fetch('staff/food.py');
+    const foodCode = await foodResp.text();
+    await pyodide.runPythonAsync(foodCode);
+    foodAtlasLoaded = true;
+
+    document.getElementById('status').textContent = 'Ready. Python + numpy + scipy running in your browser.';
+    document.getElementById('output').textContent = 'Atlas loaded. Try:\n  "score garlic"\n  "score white sugar"\n  "compare garlic vs bread"\n  "war report"';
+  } catch (e) {
+    document.getElementById('status').textContent = 'Pyodide load failed: ' + e.message;
+    document.getElementById('output').textContent = 'Falling back to static mode. Food scoring and queries require Pyodide.';
+  }
+}
+
+async function runQuery() {
+  const q = document.getElementById('query-box').value.trim();
+  if (!q) return;
+  if (!pyodide) { document.getElementById('output').textContent = 'Python engine not loaded yet.'; return; }
+
+  document.getElementById('output').textContent = 'Computing...';
+  try {
+    if (q.toLowerCase().startsWith('score ')) {
+      const food = q.substring(6);
+      await runFoodScore(food);
+    } else if (q.toLowerCase().startsWith('compare ')) {
+      const parts = q.substring(8).split(' vs ');
+      if (parts.length >= 2) {
+        const result = await pyodide.runPythonAsync(`
+atlas = FoodAtlas()
+atlas.compare("${parts[0].trim()}", "${parts[1].trim()}")
+`);
+        document.getElementById('output').textContent = result;
+      }
+    } else if (q.toLowerCase().includes('war report')) {
+      const result = await pyodide.runPythonAsync(`
+import io, sys
+buf = io.StringIO()
+sys.stdout = buf
+atlas = FoodAtlas()
+atlas.war_report()
+sys.stdout = sys.__stdout__
+buf.getvalue()
+`);
+        document.getElementById('output').textContent = result;
+    } else {
+      document.getElementById('output').textContent = 'Try: "score garlic", "compare garlic vs sugar", or "war report"';
+    }
+  } catch(e) {
+    document.getElementById('output').textContent = 'Error: ' + e.message;
+  }
+}
+
+async function runFood() {
+  const food = document.getElementById('food-input')?.value?.trim() ||
+               document.getElementById('query-box').value.replace(/^score\s*/i,'').trim();
+  if (!food) return;
+  await runFoodScore(food);
+}
+
+async function runFoodScore(food) {
+  if (!pyodide || !foodAtlasLoaded) {
+    document.getElementById('output').textContent = 'Python engine loading...';
+    return;
+  }
+  try {
+    const result = await pyodide.runPythonAsync(`
+import json
+atlas = FoodAtlas()
+r = atlas.score_food("${food}")
+score = r['score']
+af = r.get('antifungal', [])
+pf = r.get('profungal', [])
+lines = []
+lines.append(f"FOOD: ${food}")
+lines.append(f"SCORE: {score:+d}")
+if score > 0:
+    lines.append("VERDICT: FIGHTS HER (antifungal)")
+elif score < 0:
+    lines.append("VERDICT: FEEDS HER (profungal)")
+else:
+    lines.append("VERDICT: NEUTRAL or UNKNOWN")
+if af:
+    lines.append(f"Antifungal compounds: {', '.join(n for n,p in af)}")
+if pf:
+    lines.append(f"Profungal compounds: {', '.join(n for n,p in pf)}")
+"\\n".join(lines)
+`);
+    document.getElementById('output').textContent = result;
+    if (document.getElementById('food-output'))
+      document.getElementById('food-output').textContent = result;
+  } catch(e) {
+    document.getElementById('output').textContent = 'Error scoring food: ' + e.message;
+  }
+}
+
+// Start loading
+initPyodide();
+</script>
+</body>
+</html>
