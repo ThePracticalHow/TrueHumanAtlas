@@ -278,12 +278,24 @@ canvas {
   resize();
   window.addEventListener('resize', () => { resize(); draw(); });
 
-  function xScale(v) {
+  let transform = d3.zoomIdentity;
+
+  function xScaleRaw(v) {
     return ((v - xExtent[0]) / xRange) * (W * 0.88) + W * 0.06;
   }
-  function yScale(v) {
+  function yScaleRaw(v) {
     return ((yExtent[1] - v) / yRange) * (H * 0.88) + H * 0.06;
   }
+  function xScale(v) { return transform.applyX(xScaleRaw(v)); }
+  function yScale(v) { return transform.applyY(yScaleRaw(v)); }
+
+  const zoom = d3.zoom()
+    .scaleExtent([0.3, 30])
+    .on('zoom', (event) => {
+      transform = event.transform;
+      draw();
+    });
+  d3.select(canvas).call(zoom);
 
   /* ── Color palettes ────────────────────────────────────── */
   const catPalette = [
@@ -295,7 +307,7 @@ canvas {
   const seqPalette = d3.interpolateViridis;
 
   let colorMode = 'category'; // 'categorical' or 'numeric'
-  let colorField = catFields[0] || 'category';
+  let colorField = catFields.includes('category') ? 'category' : catFields[0] || 'species';
   let colorMap = {};
   let colorScaleNum = null;
   let activeGroups = new Set(); // for legend toggling
@@ -314,6 +326,7 @@ canvas {
     selColorBy.appendChild(opt);
   });
   selColorBy.value = colorField;
+  if (selColorBy.value !== colorField) selColorBy.selectedIndex = 0;
   selColorBy.addEventListener('change', () => {
     colorField = selColorBy.value;
     buildColorMap();
