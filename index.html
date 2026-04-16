@@ -3,204 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>True Human Atlas — UMAP</title>
+<title>True Human Atlas — Deep Embedding</title>
 <style>
 :root {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --border: #30363d;
-  --text: #c9d1d9;
-  --text-dim: #8b949e;
-  --accent: #58a6ff;
-  --accent-dim: #1f6feb;
-  --danger: #f85149;
-  --warn: #d29922;
-  --ok: #3fb950;
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #c9d1d9; --text-dim: #8b949e;
+  --accent: #58a6ff; --accent-dim: #1f6feb;
+  --danger: #f85149; --warn: #d29922; --ok: #3fb950;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; overflow: hidden; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 13px;
-  display: flex;
-  flex-direction: column;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); font-size:13px; display:flex; flex-direction:column; }
 
-/* Header */
-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 8px 16px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  z-index: 10;
-}
-header h1 {
-  font-size: 15px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-header .stats {
-  font-size: 11px;
-  color: var(--text-dim);
-  font-family: var(--mono);
-}
+header { display:flex; align-items:center; gap:12px; padding:6px 16px; background:var(--surface); border-bottom:1px solid var(--border); flex-shrink:0; z-index:10; }
+header h1 { font-size:15px; font-weight:600; white-space:nowrap; }
+header .stats { font-size:11px; color:var(--text-dim); font-family:var(--mono); }
+header a { color:var(--accent); text-decoration:none; font-size:11px; margin-left:auto; }
+header a:hover { text-decoration:underline; }
 
-/* Layout */
-.layout {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
+.layout { display:flex; flex:1; overflow:hidden; }
 
-/* Sidebar */
-.sidebar {
-  width: 260px;
-  min-width: 200px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  flex-shrink: 0;
-}
-.sidebar section {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-}
-.sidebar section:last-child { border-bottom: none; }
-.sidebar label {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-dim);
-  margin-bottom: 4px;
-}
-.sidebar select, .sidebar input[type="text"] {
-  width: 100%;
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 5px 8px;
-  font-size: 12px;
-  font-family: var(--font);
-  outline: none;
-}
-.sidebar select:focus, .sidebar input[type="text"]:focus {
-  border-color: var(--accent);
-}
+.sidebar { width:270px; min-width:200px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow-y:auto; flex-shrink:0; }
+.sidebar section { padding:8px 12px; border-bottom:1px solid var(--border); }
+.sidebar section:last-child { border-bottom:none; }
+.sidebar label { display:block; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); margin-bottom:3px; }
+.sidebar select, .sidebar input[type="text"] { width:100%; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:4px; padding:4px 8px; font-size:12px; font-family:var(--font); outline:none; }
+.sidebar select:focus, .sidebar input[type="text"]:focus { border-color:var(--accent); }
 
-/* Legend */
-.legend {
-  max-height: 280px;
-  overflow-y: auto;
-  margin-top: 4px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 0;
-  cursor: pointer;
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.legend-item.dimmed { opacity: 0.25; }
-.legend-swatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
+.dim-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px 8px; margin-top:4px; }
+.dim-grid label { font-size:11px; font-weight:400; text-transform:none; letter-spacing:0; cursor:pointer; display:flex; align-items:center; gap:4px; color:var(--text); margin-bottom:0; }
+.dim-grid input[type="checkbox"] { accent-color:var(--accent); }
 
-/* Canvas area */
-.canvas-wrap {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
+.legend { max-height:200px; overflow-y:auto; margin-top:4px; }
+.legend-item { display:flex; align-items:center; gap:6px; padding:2px 0; cursor:pointer; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.legend-item.dimmed { opacity:.25; }
+.legend-swatch { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
 
-/* Tooltip */
-.tooltip {
-  position: absolute;
-  pointer-events: none;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 10px;
-  font-size: 11px;
-  max-width: 320px;
-  z-index: 100;
-  display: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-}
-.tooltip .tt-title {
-  font-weight: 600;
-  font-size: 12px;
-  margin-bottom: 4px;
-  color: var(--accent);
-}
-.tooltip .tt-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.tooltip .tt-key { color: var(--text-dim); }
-.tooltip .tt-val { font-family: var(--mono); font-size: 11px; text-align: right; }
+.canvas-wrap { flex:1; position:relative; overflow:hidden; }
+canvas { display:block; width:100%; height:100%; }
 
-/* Info panel (bottom) */
-.info-bar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 4px 16px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text-dim);
-  font-family: var(--mono);
-  flex-shrink: 0;
-}
-.info-bar .tag {
-  background: var(--accent-dim);
-  color: #fff;
-  padding: 1px 6px;
-  border-radius: 3px;
-  font-size: 10px;
-}
+.tooltip { position:absolute; pointer-events:none; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:11px; max-width:320px; z-index:100; display:none; box-shadow:0 4px 12px rgba(0,0,0,.5); }
+.tooltip .tt-title { font-weight:600; font-size:12px; margin-bottom:4px; color:var(--accent); }
+.tooltip .tt-row { display:flex; justify-content:space-between; gap:12px; }
+.tooltip .tt-key { color:var(--text-dim); }
+.tooltip .tt-val { font-family:var(--mono); font-size:11px; text-align:right; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+.info-bar { display:flex; align-items:center; gap:16px; padding:4px 16px; background:var(--surface); border-top:1px solid var(--border); font-size:11px; color:var(--text-dim); font-family:var(--mono); flex-shrink:0; }
+.info-bar .tag { background:var(--accent-dim); color:#fff; padding:1px 6px; border-radius:3px; font-size:10px; }
+.embed-status { color:var(--warn); }
+.embed-status.ready { color:var(--ok); }
+
+.year-slider { display:flex; align-items:center; gap:8px; }
+.year-slider input[type="range"] { flex:1; accent-color:var(--accent); }
+.year-slider span { font-family:var(--mono); font-size:11px; min-width:32px; text-align:center; }
+
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--text-dim); }
 </style>
 </head>
 <body>
 
 <header>
   <h1>True Human Atlas</h1>
-  <span class="stats" id="stats">loading…</span>
+  <span class="stats" id="stats">loading...</span>
+  <a href="globe/" id="globeLink">Globe View</a>
 </header>
 
 <div class="layout">
   <aside class="sidebar">
+    <section>
+      <label>Embedding dimensions</label>
+      <div class="dim-grid" id="dimGrid"></div>
+      <button id="reembed" style="margin-top:6px;width:100%;padding:4px;background:var(--accent-dim);color:#fff;border:1px solid var(--accent);border-radius:4px;cursor:pointer;font-size:11px;font-family:var(--font);">Re-embed</button>
+    </section>
     <section>
       <label>Color by</label>
       <select id="colorBy"></select>
@@ -213,7 +92,16 @@ canvas {
     </section>
     <section>
       <label>Search</label>
-      <input type="text" id="search" placeholder="name, tissue, disease…">
+      <input type="text" id="search" placeholder="name, tissue, disease...">
+    </section>
+    <section>
+      <label>Collection year</label>
+      <div class="year-slider">
+        <span id="yearMin">-</span>
+        <input type="range" id="yearSliderLo" min="2010" max="2026" value="2010">
+        <input type="range" id="yearSliderHi" min="2010" max="2026" value="2026">
+        <span id="yearMax">-</span>
+      </div>
     </section>
     <section>
       <label>Point size</label>
@@ -228,76 +116,152 @@ canvas {
 </div>
 
 <div class="info-bar">
-  <span id="infoVisible">–</span>
+  <span id="infoVisible">-</span>
+  <span class="embed-status" id="embedStatus">pre-computed</span>
   <span id="infoHover">hover a point</span>
   <span style="margin-left:auto">
-    <span class="tag">D3 + Canvas</span>
-    v4.0
+    <span class="tag">D3 + umap-js</span>
+    v5.0 WORD
   </span>
 </div>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="lib/umap-js.min.js"></script>
 <script>
 (async function() {
-  /* ── Load data ──────────────────────────────────────────── */
+
   const resp = await fetch('data/true_human_atlas.json');
   const atlas = await resp.json();
-  const records = atlas.records.filter(r => r.umap_x != null && r.umap_y != null);
   const allRecords = atlas.records;
 
+  const catFields = (atlas.categorical_fields || []).filter(f => f !== 'k_json' && f !== 'timestamp');
+  const numFields = (atlas.numeric_fields || []).filter(f => !f.startsWith('umap_'));
+
+  const EMBED_CANDIDATES = numFields.filter(f =>
+    !['has_confinement','n_cells','n_reads'].includes(f)
+  );
+  const DEFAULT_DIMS = ['k_rm','k_rn','k_rg','k_mn','k_mg','k_ng','det_k','ribo_indep'];
+
   document.getElementById('stats').textContent =
-    `${records.length} embedded / ${allRecords.length} total · v${atlas.version}`;
+    `${allRecords.length} records | v${atlas.version} | WORD`;
 
-  /* ── Scales ─────────────────────────────────────────────── */
-  const catFields = atlas.categorical_fields.filter(f => f !== 'k_json' && f !== 'timestamp');
-  const numFields = atlas.numeric_fields.filter(f => !f.startsWith('umap_'));
-  const colorFields = [...catFields, '──numeric──', ...numFields];
+  /* ---- Embedding state ---- */
+  let embedX = [];
+  let embedY = [];
+  let embeddedRecords = [];
+  let selectedDims = new Set(DEFAULT_DIMS);
 
-  const xExtent = d3.extent(records, d => d.umap_x);
-  const yExtent = d3.extent(records, d => d.umap_y);
-  const pad = 0.08;
-  const xRange = xExtent[1] - xExtent[0];
-  const yRange = yExtent[1] - yExtent[0];
+  function getEmbeddableRecords() {
+    return allRecords.filter(r => {
+      for (const d of selectedDims) {
+        if (r[d] == null || r[d] === 0) return false;
+      }
+      return true;
+    });
+  }
 
-  /* ── Canvas setup ───────────────────────────────────────── */
+  function usePrecomputed() {
+    embeddedRecords = allRecords.filter(r => r.umap_x != null && r.umap_y != null);
+    embedX = embeddedRecords.map(r => r.umap_x);
+    embedY = embeddedRecords.map(r => r.umap_y);
+    document.getElementById('embedStatus').textContent = 'pre-computed';
+    document.getElementById('embedStatus').className = 'embed-status ready';
+  }
+
+  function runClientUMAP() {
+    const recs = getEmbeddableRecords();
+    if (recs.length < 5) { usePrecomputed(); draw(); return; }
+
+    document.getElementById('embedStatus').textContent = 'embedding...';
+    document.getElementById('embedStatus').className = 'embed-status';
+
+    const dims = [...selectedDims];
+    const data = recs.map(r => dims.map(d => r[d] || 0));
+
+    const means = dims.map((_, i) => data.reduce((s, row) => s + row[i], 0) / data.length);
+    const stds = dims.map((_, i) => {
+      const m = means[i];
+      const v = data.reduce((s, row) => s + (row[i] - m) ** 2, 0) / data.length;
+      return Math.sqrt(v) || 1;
+    });
+    const normalized = data.map(row => row.map((v, i) => (v - means[i]) / stds[i]));
+
+    const nn = Math.min(15, recs.length - 1);
+
+    setTimeout(() => {
+      try {
+        const umap = new UMAP.UMAP({ nNeighbors: nn, minDist: 0.3, nComponents: 2 });
+        const embedding = umap.fit(normalized);
+        embeddedRecords = recs;
+        embedX = embedding.map(e => e[0]);
+        embedY = embedding.map(e => e[1]);
+        document.getElementById('embedStatus').textContent = `${dims.length}D -> 2D (${recs.length} pts)`;
+        document.getElementById('embedStatus').className = 'embed-status ready';
+      } catch(err) {
+        console.error('UMAP error:', err);
+        usePrecomputed();
+      }
+      recomputeScales();
+      draw();
+    }, 50);
+  }
+
+  /* ---- Dimension checkboxes ---- */
+  const dimGrid = document.getElementById('dimGrid');
+  EMBED_CANDIDATES.forEach(f => {
+    const lbl = document.createElement('label');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = f;
+    cb.checked = DEFAULT_DIMS.includes(f);
+    cb.addEventListener('change', () => {
+      if (cb.checked) selectedDims.add(f); else selectedDims.delete(f);
+    });
+    lbl.appendChild(cb);
+    lbl.appendChild(document.createTextNode(f));
+    dimGrid.appendChild(lbl);
+  });
+
+  document.getElementById('reembed').addEventListener('click', () => {
+    if (selectedDims.size < 2) { alert('Select at least 2 dimensions'); return; }
+    runClientUMAP();
+  });
+
+  /* ---- Canvas ---- */
   const wrap = document.getElementById('canvasWrap');
   const canvas = document.getElementById('atlas');
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-
   let W, H;
+
   function resize() {
-    W = wrap.clientWidth;
-    H = wrap.clientHeight;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
+    W = wrap.clientWidth; H = wrap.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   resize();
   window.addEventListener('resize', () => { resize(); draw(); });
 
   let transform = d3.zoomIdentity;
+  let xExt, yExt, xRng, yRng;
 
-  function xScaleRaw(v) {
-    return ((v - xExtent[0]) / xRange) * (W * 0.88) + W * 0.06;
+  function recomputeScales() {
+    xExt = d3.extent(embedX);
+    yExt = d3.extent(embedY);
+    xRng = (xExt[1] - xExt[0]) || 1;
+    yRng = (yExt[1] - yExt[0]) || 1;
   }
-  function yScaleRaw(v) {
-    return ((yExtent[1] - v) / yRange) * (H * 0.88) + H * 0.06;
-  }
+
+  function xScaleRaw(v) { return ((v - xExt[0]) / xRng) * (W * 0.88) + W * 0.06; }
+  function yScaleRaw(v) { return ((yExt[1] - v) / yRng) * (H * 0.88) + H * 0.06; }
   function xScale(v) { return transform.applyX(xScaleRaw(v)); }
   function yScale(v) { return transform.applyY(yScaleRaw(v)); }
 
-  const zoom = d3.zoom()
-    .scaleExtent([0.3, 30])
-    .on('zoom', (event) => {
-      transform = event.transform;
-      draw();
-    });
+  const zoom = d3.zoom().scaleExtent([0.3, 30]).on('zoom', e => { transform = e.transform; draw(); });
   d3.select(canvas).call(zoom);
 
-  /* ── Color palettes ────────────────────────────────────── */
+  /* ---- Color ---- */
   const catPalette = [
     '#58a6ff','#f85149','#3fb950','#d29922','#bc8cff',
     '#f778ba','#79c0ff','#ff7b72','#56d364','#e3b341',
@@ -305,102 +269,100 @@ canvas {
     '#ffc680','#b392f0','#ff9bce','#9ecbff','#ffdf5d',
   ];
   const seqPalette = d3.interpolateViridis;
+  const colorFields = [...catFields, '---numeric---', ...numFields];
 
-  let colorMode = 'category'; // 'categorical' or 'numeric'
+  let colorMode = 'categorical';
   let colorField = catFields.includes('category') ? 'category' : catFields[0] || 'species';
   let colorMap = {};
   let colorScaleNum = null;
-  let activeGroups = new Set(); // for legend toggling
+  let activeGroups = new Set();
   let filterField = '';
   let filterValue = '';
   let searchTerm = '';
   let pointRadius = 6;
+  let yearLo = 2010, yearHi = 2026;
 
-  /* ── Build UI ───────────────────────────────────────────── */
   const selColorBy = document.getElementById('colorBy');
   colorFields.forEach(f => {
     const opt = document.createElement('option');
-    opt.value = f;
-    opt.textContent = f;
-    if (f === '──numeric──') { opt.disabled = true; }
+    opt.value = f; opt.textContent = f;
+    if (f === '---numeric---') opt.disabled = true;
     selColorBy.appendChild(opt);
   });
   selColorBy.value = colorField;
   if (selColorBy.value !== colorField) selColorBy.selectedIndex = 0;
-  selColorBy.addEventListener('change', () => {
-    colorField = selColorBy.value;
-    buildColorMap();
-    draw();
-  });
+  selColorBy.addEventListener('change', () => { colorField = selColorBy.value; buildColorMap(); draw(); });
 
   const selFilterField = document.getElementById('filterField');
   const selFilterValue = document.getElementById('filterValue');
   const optNone = document.createElement('option');
-  optNone.value = '';
-  optNone.textContent = '(none)';
+  optNone.value = ''; optNone.textContent = '(none)';
   selFilterField.appendChild(optNone);
   catFields.forEach(f => {
     const opt = document.createElement('option');
-    opt.value = f;
-    opt.textContent = f;
+    opt.value = f; opt.textContent = f;
     selFilterField.appendChild(opt);
   });
-  selFilterField.addEventListener('change', () => {
-    filterField = selFilterField.value;
-    populateFilterValues();
-    draw();
-  });
-  selFilterValue.addEventListener('change', () => {
-    filterValue = selFilterValue.value;
-    draw();
-  });
+  selFilterField.addEventListener('change', () => { filterField = selFilterField.value; populateFilterValues(); draw(); });
+  selFilterValue.addEventListener('change', () => { filterValue = selFilterValue.value; draw(); });
 
   function populateFilterValues() {
     selFilterValue.innerHTML = '';
-    const optAll = document.createElement('option');
-    optAll.value = '';
-    optAll.textContent = '(all)';
-    selFilterValue.appendChild(optAll);
+    const o = document.createElement('option'); o.value = ''; o.textContent = '(all)';
+    selFilterValue.appendChild(o);
     if (!filterField) return;
-    const vals = [...new Set(records.map(r => r[filterField] || ''))].sort();
+    const vals = [...new Set(embeddedRecords.map(r => r[filterField] || ''))].sort();
     vals.forEach(v => {
       const opt = document.createElement('option');
-      opt.value = v;
-      opt.textContent = v || '(empty)';
+      opt.value = v; opt.textContent = v || '(empty)';
       selFilterValue.appendChild(opt);
     });
     filterValue = '';
   }
 
-  document.getElementById('search').addEventListener('input', e => {
-    searchTerm = e.target.value.toLowerCase();
+  document.getElementById('search').addEventListener('input', e => { searchTerm = e.target.value.toLowerCase(); draw(); });
+  document.getElementById('pointSize').addEventListener('input', e => { pointRadius = +e.target.value; draw(); });
+
+  /* ---- Year slider ---- */
+  const years = allRecords.map(r => r.collection_year).filter(y => y != null);
+  const yMin = d3.min(years) || 2010, yMax = d3.max(years) || 2026;
+  const slLo = document.getElementById('yearSliderLo');
+  const slHi = document.getElementById('yearSliderHi');
+  slLo.min = yMin; slLo.max = yMax; slLo.value = yMin;
+  slHi.min = yMin; slHi.max = yMax; slHi.value = yMax;
+  document.getElementById('yearMin').textContent = yMin;
+  document.getElementById('yearMax').textContent = yMax;
+  yearLo = yMin; yearHi = yMax;
+
+  slLo.addEventListener('input', () => {
+    yearLo = +slLo.value;
+    if (yearLo > yearHi) { yearLo = yearHi; slLo.value = yearLo; }
+    document.getElementById('yearMin').textContent = yearLo;
+    draw();
+  });
+  slHi.addEventListener('input', () => {
+    yearHi = +slHi.value;
+    if (yearHi < yearLo) { yearHi = yearLo; slHi.value = yearHi; }
+    document.getElementById('yearMax').textContent = yearHi;
     draw();
   });
 
-  document.getElementById('pointSize').addEventListener('input', e => {
-    pointRadius = +e.target.value;
-    draw();
-  });
-
-  /* ── Color computation ─────────────────────────────────── */
+  /* ---- Color map ---- */
   function buildColorMap() {
     const legend = document.getElementById('legend');
     legend.innerHTML = '';
 
     if (numFields.includes(colorField)) {
       colorMode = 'numeric';
-      const vals = records.map(r => r[colorField]).filter(v => v != null);
+      const vals = embeddedRecords.map(r => r[colorField]).filter(v => v != null);
       const ext = d3.extent(vals);
       colorScaleNum = d3.scaleSequential(seqPalette).domain(ext);
       activeGroups = new Set(['__all__']);
-
-      const steps = 5;
-      for (let i = 0; i <= steps; i++) {
-        const v = ext[0] + (ext[1] - ext[0]) * (i / steps);
+      for (let i = 0; i <= 5; i++) {
+        const v = ext[0] + (ext[1] - ext[0]) * (i / 5);
         const item = document.createElement('div');
         item.className = 'legend-item';
-        item.innerHTML = `<span class="legend-swatch" style="background:${colorScaleNum(v)}"></span>
-          <span>${v.toFixed(3)}</span>`;
+        item.innerHTML = `<span class="legend-swatch" style="background:${colorScaleNum(v)}"></span><span>${v.toFixed(3)}</span>`;
         legend.appendChild(item);
       }
       return;
@@ -408,31 +370,19 @@ canvas {
 
     colorMode = 'categorical';
     const groups = {};
-    records.forEach(r => {
-      const g = String(r[colorField] || '');
-      if (!groups[g]) groups[g] = 0;
-      groups[g]++;
-    });
-    const sorted = Object.keys(groups).sort((a, b) => groups[b] - groups[a]);
+    embeddedRecords.forEach(r => { const g = String(r[colorField] || ''); groups[g] = (groups[g]||0)+1; });
+    const sorted = Object.keys(groups).sort((a,b) => groups[b] - groups[a]);
     colorMap = {};
-    sorted.forEach((g, i) => {
-      colorMap[g] = catPalette[i % catPalette.length];
-    });
+    sorted.forEach((g,i) => { colorMap[g] = catPalette[i % catPalette.length]; });
     activeGroups = new Set(sorted);
 
     sorted.forEach(g => {
       const item = document.createElement('div');
       item.className = 'legend-item';
-      item.innerHTML = `<span class="legend-swatch" style="background:${colorMap[g]}"></span>
-        <span>${g || '(empty)'} (${groups[g]})</span>`;
+      item.innerHTML = `<span class="legend-swatch" style="background:${colorMap[g]}"></span><span>${g || '(empty)'} (${groups[g]})</span>`;
       item.addEventListener('click', () => {
-        if (activeGroups.has(g)) {
-          activeGroups.delete(g);
-          item.classList.add('dimmed');
-        } else {
-          activeGroups.add(g);
-          item.classList.remove('dimmed');
-        }
+        if (activeGroups.has(g)) { activeGroups.delete(g); item.classList.add('dimmed'); }
+        else { activeGroups.add(g); item.classList.remove('dimmed'); }
         draw();
       });
       legend.appendChild(item);
@@ -440,98 +390,70 @@ canvas {
   }
 
   function getColor(rec) {
-    if (colorMode === 'numeric') {
-      const v = rec[colorField];
-      return v != null ? colorScaleNum(v) : '#30363d';
-    }
-    const g = String(rec[colorField] || '');
-    return colorMap[g] || '#30363d';
+    if (colorMode === 'numeric') { const v = rec[colorField]; return v != null ? colorScaleNum(v) : '#30363d'; }
+    return colorMap[String(rec[colorField] || '')] || '#30363d';
   }
 
   function isVisible(rec) {
-    if (colorMode === 'categorical') {
-      const g = String(rec[colorField] || '');
-      if (!activeGroups.has(g)) return false;
-    }
-    if (filterField && filterValue) {
-      if (String(rec[filterField] || '') !== filterValue) return false;
-    }
-    if (searchTerm) {
-      const blob = JSON.stringify(rec).toLowerCase();
-      if (!blob.includes(searchTerm)) return false;
-    }
+    if (colorMode === 'categorical') { if (!activeGroups.has(String(rec[colorField] || ''))) return false; }
+    if (filterField && filterValue) { if (String(rec[filterField] || '') !== filterValue) return false; }
+    if (searchTerm) { if (!JSON.stringify(rec).toLowerCase().includes(searchTerm)) return false; }
+    const yr = rec.collection_year;
+    if (yr != null && (yr < yearLo || yr > yearHi)) return false;
     return true;
   }
 
-  /* ── Draw ───────────────────────────────────────────────── */
+  /* ---- Draw ---- */
   let visiblePoints = [];
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-
-    // Background dim pass
     visiblePoints = [];
     const dimmed = [];
-    records.forEach(r => {
-      if (isVisible(r)) {
-        visiblePoints.push(r);
-      } else {
-        dimmed.push(r);
-      }
+
+    embeddedRecords.forEach((r, i) => {
+      if (isVisible(r)) visiblePoints.push({rec: r, i});
+      else dimmed.push({rec: r, i});
     });
 
-    // Draw dimmed first
     ctx.globalAlpha = 0.07;
-    dimmed.forEach(r => {
+    dimmed.forEach(({i}) => {
       ctx.beginPath();
-      ctx.arc(xScale(r.umap_x), yScale(r.umap_y), pointRadius * 0.6, 0, Math.PI * 2);
+      ctx.arc(xScale(embedX[i]), yScale(embedY[i]), pointRadius * 0.6, 0, Math.PI * 2);
       ctx.fillStyle = '#484f58';
       ctx.fill();
     });
 
-    // Draw visible
     ctx.globalAlpha = 0.85;
-    visiblePoints.forEach(r => {
-      const cx = xScale(r.umap_x);
-      const cy = yScale(r.umap_y);
+    visiblePoints.forEach(({rec, i}) => {
       ctx.beginPath();
-      ctx.arc(cx, cy, pointRadius, 0, Math.PI * 2);
-      ctx.fillStyle = getColor(r);
+      ctx.arc(xScale(embedX[i]), yScale(embedY[i]), pointRadius, 0, Math.PI * 2);
+      ctx.fillStyle = getColor(rec);
       ctx.fill();
     });
     ctx.globalAlpha = 1;
 
-    document.getElementById('infoVisible').textContent =
-      `${visiblePoints.length} / ${records.length} visible`;
+    document.getElementById('infoVisible').textContent = `${visiblePoints.length} / ${embeddedRecords.length} visible`;
   }
 
-  /* ── Tooltip ────────────────────────────────────────────── */
+  /* ---- Tooltip ---- */
   const tooltip = document.getElementById('tooltip');
   const infoHover = document.getElementById('infoHover');
-
   const SHOW_FIELDS = [
     'name','tissue','disease','category','species','sex','age_range',
-    'dataset','condition','platform',
-    'k_rm','k_rg','k_rn','k_mg','k_mn','k_ng',
-    'det_k','ribo_indep',
+    'country','collection_year','dataset','condition',
+    'k_rm','k_rg','k_rn','k_mg','k_mn','k_ng','det_k','ribo_indep',
     'eigenvalue_1','eigenvalue_4','confinement_ratio','has_confinement',
   ];
 
   canvas.addEventListener('mousemove', e => {
     const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    let closest = null, closestI = -1, minDist = Infinity;
 
-    let closest = null;
-    let minDist = Infinity;
-    visiblePoints.forEach(r => {
-      const cx = xScale(r.umap_x);
-      const cy = yScale(r.umap_y);
-      const d = Math.hypot(cx - mx, cy - my);
-      if (d < minDist && d < pointRadius + 8) {
-        minDist = d;
-        closest = r;
-      }
+    visiblePoints.forEach(({rec, i}) => {
+      const d = Math.hypot(xScale(embedX[i]) - mx, yScale(embedY[i]) - my);
+      if (d < minDist && d < pointRadius + 8) { minDist = d; closest = rec; closestI = i; }
     });
 
     if (closest) {
@@ -540,31 +462,25 @@ canvas {
       SHOW_FIELDS.forEach(f => {
         const v = closest[f];
         if (v == null || v === '' || f === 'name') return;
-        const disp = typeof v === 'number' ? v.toFixed(4) : v;
-        html += `<div class="tt-row"><span class="tt-key">${f}</span><span class="tt-val">${disp}</span></div>`;
+        html += `<div class="tt-row"><span class="tt-key">${f}</span><span class="tt-val">${typeof v === 'number' ? v.toFixed(4) : v}</span></div>`;
       });
       tooltip.innerHTML = html;
       tooltip.style.display = 'block';
-
-      let tx = e.clientX - rect.left + 14;
-      let ty = e.clientY - rect.top - 10;
+      let tx = mx + 14, ty = my - 10;
       if (tx + 330 > W) tx = mx - 330;
       if (ty + 200 > H) ty = my - 200;
-      tooltip.style.left = tx + 'px';
-      tooltip.style.top = ty + 'px';
-
-      infoHover.textContent = `${name} · ${closest.tissue || ''} · ${closest.disease || ''}`;
+      tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
+      infoHover.textContent = `${name} | ${closest.country || ''} ${closest.collection_year || ''}`;
     } else {
       tooltip.style.display = 'none';
       infoHover.textContent = 'hover a point';
     }
   });
+  canvas.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
 
-  canvas.addEventListener('mouseleave', () => {
-    tooltip.style.display = 'none';
-  });
-
-  /* ── Init ───────────────────────────────────────────────── */
+  /* ---- Init ---- */
+  usePrecomputed();
+  recomputeScales();
   buildColorMap();
   draw();
 

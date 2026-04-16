@@ -31,6 +31,7 @@ canvas{display:block}
   <div class="ltog"><input type="checkbox" checked onchange="toggleLayer('oracle',this.checked)"> Oracle Sites (VADM anomalies)</div>
   <br><b>WGS84 Oblate Spheroid</b><br>
   <span style="color:#888">a = 6,378,137 m | b = 6,356,752 m<br>f = 1/298.257 | oblate by 21.4 km</span>
+  <br><br><a href="../" style="color:#0ff;text-decoration:none">UMAP Embedding View</a>
 </div>
 
 <div id="legend">
@@ -184,18 +185,32 @@ const cancerData = [
 ];
 cancerData.forEach(d => addPoint('cancer', d[1], d[2], 0xff0000, 0.015, d[0], d[3]));
 
-// Coupling tensor measurement sites
-const tensorData = [
-  ["Korean NSCLC (208K)",37.5,127.0,"R_ind 0.206-0.508. GSE131907."],
-  ["GBM 28 tumors",42.0,-71.0,"R_ind 0.765-0.982. Maximum decoupling."],
-  ["Meditation (388 bulk)",30.3,-97.7,"K_RM +40% at 3mo. GSE174083. Austin TX."],
-  ["WI-38 Fetal",39.3,-76.6,"K_RM negative in senescence. Baltimore."],
-  ["CellxGene Census",37.8,-122.4,"168K cells. 13 tissues. 10 diseases."],
-  ["Yeast tensor (6K)",51.5,-0.1,"MAXIMUM COUPLING: 0.105. GSE144820."],
-  ["Crypto tensor (1.4K)",39.28,-76.62,"0.224-0.567. Overlaps human. Baltimore."],
-  ["Hongyan viral",38.9,-77.0,"SARS-CoV-2: 0.039. HCV: 0.743."],
-];
-tensorData.forEach(d => addPoint('tensor', d[1], d[2], 0xff00ff, 0.012, d[0], d[3]));
+// Coupling tensor — loaded from WORD atlas JSON
+let atlasRecords = [];
+fetch('../data/true_human_atlas.json')
+  .then(r => r.json())
+  .then(atlas => {
+    atlasRecords = atlas.records || [];
+    const catColors = {
+      census_sweep: 0xaa88ff, fungal_pathogen: 0xff4444,
+      viral_host_infection: 0x44ff44, fungal_reference: 0x8844ff,
+      immune_celltype: 0x44aaff, aging: 0xff8800, cancer: 0xff0066,
+      senescent: 0xff44aa, normal: 0x44ffaa, fetal: 0xaa44ff,
+      population_comparison: 0xffff44, senolytic_experiment: 0xff8844,
+      proliferative: 0x44ff88, metastatic: 0xff2222,
+      coculture: 0x88aaff, transition: 0xaaff44, field_effect: 0xffaa44,
+    };
+    atlasRecords.forEach(r => {
+      if (r.lat == null || r.lon == null) return;
+      const cat = r.category || 'unknown';
+      const col = catColors[cat] || 0xff00ff;
+      const name = r.name || r.cell_state_id || '?';
+      const desc = `${r.species || ''} | ${cat} | ${r.country || ''} ${r.collection_year || ''} | ribo_indep=${(r.ribo_indep||0).toFixed(3)}`;
+      addPoint('tensor', r.lat, r.lon, col, 0.01, name, desc);
+    });
+    console.log(`Atlas: ${atlasRecords.length} records loaded onto globe`);
+  })
+  .catch(err => console.error('Atlas load failed:', err));
 
 // Aflatoxin belt
 const aflatoxinData = [
